@@ -1,9 +1,10 @@
-import RoomsPage from './RoomsPage';
+import MainPage from './MainPage';
+import Layout from './components/Layout';
 
 export default function Home() {
   return (
-    <main>
-      <RoomsPage />
-    </main>
+    <Layout>
+      <MainPage />
+    </Layout>
   );
 }

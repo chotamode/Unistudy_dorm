@@ -1,16 +1,17 @@
 import Image from 'next/image';
 import logo from '../../../public/logo.svg';
+import vkLogo from '../../../public/social_media/vk_logo.svg';
 import fbLogo from '../../../public/social_media/fb_logo.svg';
 import instaLogo from '../../../public/social_media/inst_logo.svg';
 
 const Footer = () => {
     return (
-        <footer className="bg-[#D9E8FB] p-4 mt-auto text-black flex flex-shrink flex-row justify-between items-center px-44 rounded-large">
-            <div className="flex justify-start items-center mr-10 ">
-                <Image src={logo} alt="Logo" className="mb-4 mr-20 " width={225} height={225}/>
+        <footer className="bg-[#D9E8FB] p-4 py-24 text-black flex flex-shrink flex-row justify-between items-center px-44 rounded-large">
+            <div className="flex justify-start items-center h-full">
+                <Image src={logo} alt="Logo" className="mb-4 mr-20 h-full" width={90} height={90}/>
 
-                <div className="text-center font-medium">
-                    <ul className="flex flex-col text-left font-montserrat gap-y-2 ">
+                <div className="text-center font-medium h-full">
+                    <ul className="flex flex-col text-left font-montserrat gap-y-2 h-full">
                         <li className="text-xl">
                             <div><a href="#booking" className="hover:underline">To book</a></div>
                             <div><a href="#contacts" className="hover:underline">Contacts</a></div>

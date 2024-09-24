@@ -28,8 +28,8 @@ const Footer = () => {
                 <p>+420 775 095 879</p>
                 <p>+420 773 037 688</p>
                 <div className={"flex flex-row justify-end gap-x-2"}>
-                    <Image src={instaLogo} alt="Instagram" width={30} height={30}/>
-                    <Image src={fbLogo} alt="Facebook" width={30} height={30}/>
+                    <Image src={instaLogo} alt="Instagram" width={40.5} height={40.5}/>
+                    <Image src={fbLogo} alt="Facebook" width={40.5} height={40.5}/>
                 </div>
             </div>
         </footer>

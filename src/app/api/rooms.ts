@@ -25,6 +25,7 @@ export const getRoomById = async (roomId: number) => {
 };
 
 // Function to reserve a room
+//test git
 export const reserveRoom = async (roomId: number, tenantId: number) => {
   const { data, error } = await supabase
     .from('bed')

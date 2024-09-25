@@ -7,6 +7,7 @@ import Button from './components/Button';
 import maleIcon from '@/assets/sex/male.svg';
 import femaleIcon from '@/assets/sex/female.svg';
 import Image from "next/image";
+import logo from "../../public/logo.svg";
 
 interface Room {
     id: number;
@@ -30,13 +31,16 @@ const MainPage = () => {
     return (
         <div className="min-h-screen bg-gray-100 p-8 px-64">
             <header className="text-center mb-8">
-                <h1 className="text-4xl font-bold text-black w-full">
-                    Аренда жилья для студентов — легко и удобно!
-                    <p className="text-sm font-light text-black w-1/2 mx-auto">
-                        Мы понимаем, как важно для студентов найти комфортное и доступное жилье, поэтому создали
-                        платформу, которая помогает вам быстро и эффективно выбрать квартиру, подходящую именно вам.
-                    </p>
-                </h1>
+                    <h1 className="text-4xl font-bold text-black w-full">
+                        <div>Student housing rentals</div>
+                        <div className="text-#A6D0FF"> — easy and convenient! </div>
+                        <p className="text-sm font-light text-black w-1/2 mx-auto">
+                            We understand how important it is for students to find comfortable and affordable housing,
+                            We understand how important it is for students to find comfortable and affordable housing,
+                            so we have created a platform that helps you quickly and efficiently choose an apartment that
+                            is right for you.
+                        </p>
+                    </h1>
             </header>
             <main>
                 <div className="flex justify-center space-x-4 mt-8">

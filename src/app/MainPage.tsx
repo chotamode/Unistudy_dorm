@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 import RoomCard from './components/RoomCard';
 import { getRooms } from './api/rooms';
 import Button from './components/Button';
-import maleIcon from '../../public/sex/male.svg';
-import femaleIcon from '../../public/sex/female.svg';
+import maleIcon from '@/assets/sex/male.svg';
+import femaleIcon from '@/assets/sex/female.svg';
 import Image from "next/image";
 
 interface Room {

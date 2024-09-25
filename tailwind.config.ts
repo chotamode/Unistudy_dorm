@@ -20,11 +20,16 @@ const config: Config = {
       borderRadius: {
         DEFAULT: '4px',
         'large': '45px',
+        'xl': '10px',
+      },
+      colors: {
+        'main-color': '#A6D0FF',
       },
       fontSize: {
         sm: ['14px', '20px'],
         base: ['16px', '24px'],
         lg: ['17px', '21px'],
+        bold: ['18.5px', '22.5px'],
         xl: ['23px', '28px'],
         xxl:['25px','30.5px']
       }

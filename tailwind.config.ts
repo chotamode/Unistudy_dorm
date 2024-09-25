@@ -16,6 +16,17 @@ const config: Config = {
       fontFamily: {
         // montserrat: ["Montserrat", "sans-serif"],
         sans: ["Montserrat", "sans-serif"]
+      },
+      borderRadius: {
+        DEFAULT: '4px',
+        'large': '45px',
+      },
+      fontSize: {
+        sm: ['14px', '20px'],
+        base: ['16px', '24px'],
+        lg: ['17px', '21px'],
+        xl: ['23px', '28px'],
+        xxl:['25px','30.5px']
       }
     },
   },

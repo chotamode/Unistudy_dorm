@@ -16,7 +16,7 @@ const Header = () => {
                     <div className="text-black">Contacts</div>
                 </div>
                 <div>
-                    <Button2>Home</Button2>
+                    <Button2>ЦHome</Button2>
                 </div>
             </nav>
         </header>

@@ -1,8 +1,7 @@
 import Image from 'next/image';
 import logo from '../../../public/logo.svg';
-import vkLogo from '../../../public/social_media/vk_logo.svg';
-import fbLogo from '../../../public/social_media/fb_logo.svg';
-import instaLogo from '../../../public/social_media/inst_logo.svg';
+import fbLogo from '../../assets/social_media/fb_logo.svg';
+import instaLogo from '../../assets/social_media/inst_logo.svg';
 
 const Footer = () => {
     return (

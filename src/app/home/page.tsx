@@ -13,7 +13,7 @@ const home = () => {
                     <House icon={house1} title={"PRAGUE CASTLE APARTMENTS"}
                            p1={"10 minutes walk from prague castle and schwarzenberg palace"}
                            p2={"70+ accommodation options including single, double and triple rooms"}></House>
-                    <div className={"w-0 h-full border-black border-r-2 mx-32"}>
+                    <div className={"w-0 h-full border-[#0F478D] border-r-2 mx-32"}>
                     </div>
                     <House icon={house2} title={"KAMYCKA APARTMENTS"}
                            p1={"Perfect location for czu students and people who want to live in one of the safest parts of prague"}

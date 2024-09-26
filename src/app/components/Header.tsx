@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import logo from '../../../public/logo.svg';
 import Button2 from "@/app/components/Button2";
+import Link from "next/link";
 
 const Header = () => {
     return (
@@ -10,13 +11,10 @@ const Header = () => {
                 <div className="flex-shrink-0">
                     <Image src={logo} alt="Logo" width={55} height={55}/>
                 </div>
-                {/*  navigation*/}
-                <div className="font-medium flex flex-row min-w-96 justify-around text-bold">
-                    <div className="text-black">To book</div>
-                    <div className="text-black">Contacts</div>
-                </div>
-                <div>
-                    <Button2>Home</Button2>
+                <div className={" text-bold font-medium"}>
+                    <Link href="/contacts">
+                        <div className="text-black cursor-pointer">Contacts</div>
+                    </Link>
                 </div>
             </nav>
         </header>

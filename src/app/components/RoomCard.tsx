@@ -1,6 +1,5 @@
 import React from 'react';
 import Button from "@/app/components/Button";
-import {white} from "next/dist/lib/picocolors";
 import Link from 'next/link';
 
 interface RoomCardProps {
@@ -11,7 +10,7 @@ interface RoomCardProps {
     image: string;
 }
 
-const RoomCard: React.FC<RoomCardProps> = ({name, address, description, price_month, image}) => {
+const RoomCard = ({ name, address, description, price_month, image }: RoomCardProps) => {
     return (
         <div className="border rounded-lg overflow-hidden bg-[#0F478D]">
             <div className="p-4 text-white">

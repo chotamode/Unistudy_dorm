@@ -7,7 +7,7 @@ const Footer = () => {
     return (
         <footer className="bg-[#D9E8FB] p-4 py-20 text-black flex flex-shrink flex-row justify-between items-center px-44 rounded-large">
             <div className="flex justify-start items-center mr-10 ">
-                <Image src={logo} alt="Logo" className="mb-4 mr-20 " width={90} height={90}/>
+                <Image src={logo} alt="Logo" className="mb-4 mr-48 " width={90} height={90}/>
 
                 <div className="text-center font-medium">
                     <ul className="flex flex-col text-left font-montserrat gap-y-2 ">

@@ -15,6 +15,7 @@ interface Room {
     address: string;
     description: string;
     price_month: number;
+    image: string;
 }
 
 const MainPage = () => {
@@ -29,12 +30,12 @@ const MainPage = () => {
     }, []);
 
     return (
-        <div className="min-h-screen bg-gray-100 p-8 px-64">
+        <div className="min-h-screen bg-gray-100 p-8 px-34">
             <header className="text-center mb-8">
-                    <h1 className="text-4xl font-bold text-black w-full">
+                    <h1 className="text-6xl font-bold text-black w-full">
                         <div>Student housing rentals</div>
-                        <div className="text-#A6D0FF"> — easy and convenient! </div>
-                        <p className="text-sm font-light text-black w-1/2 mx-auto">
+                        <div className="text-main-text"> — easy and convenient! </div>
+                        <p className="text-lg font-medium text-black w-1/2 mx-auto">
                             We understand how important it is for students to find comfortable and affordable housing,
                             We understand how important it is for students to find comfortable and affordable housing,
                             so we have created a platform that helps you quickly and efficiently choose an apartment that
@@ -55,12 +56,12 @@ const MainPage = () => {
                     </button>
                 </div>
                 <h2 className="text-2xl font-bold text-black mb-8 text-center">Свободные комнаты</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 justify-items-center mx-64 gap-4">
                     {rooms.map((room) => (
                         <RoomCard
                             key={room.id}
                             name={room.name}
-                            image={"https://placehold.co/600x600/png"}
+                            background={room.image}
                             address={room.address}
                             description={room.description}
                             price_month={room.price_month}

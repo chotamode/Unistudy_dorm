@@ -6,6 +6,7 @@ import Button from "@/app/components/Button";
 import Image from "next/image";
 
 interface RoomCardProps {
+    id?: number;
     name?: string;
     address?: string;
     description?: string;
@@ -14,6 +15,7 @@ interface RoomCardProps {
 }
 
 const RoomCard: React.FC<RoomCardProps> = ({
+    id = 1,
                                                name = "Default Room Name",            // Default value for name
                                                address = "Default Address",            // Default value for address
                                                description = "No description provided", // Default value for description
@@ -22,13 +24,13 @@ const RoomCard: React.FC<RoomCardProps> = ({
                                            }) => {
     return (
         <div
-            className="rounded-xxl overflow-hidden bg-cover bg-center min-h-120 w-full"
+            className="rounded-xxl flex-col overflow-hidden bg-cover bg-center min-h-120 w-full"
             style={{ backgroundImage: `url(${background})` }}  // Dynamic or default background
         >
-            <div className="p-4 text-white">
-                <h2 className="text-xl font-bold mb-2">{name}</h2>
-                <p>Только для мальчиков</p>
-                <Link href="../rooms">
+            <div className="p-4 flex flex-col align-bottom text-white">
+                <h2 className="text-xl flex font-bold mb-2">{name}</h2>
+                <p className={"flex"}>Только для мальчиков</p>
+                <Link className="flex" href={`../rooms/${id}`}>
                     <Button2>Узнать подробнее</Button2>
                 </Link>
                 {/* You can uncomment these lines if you want to display other props */}

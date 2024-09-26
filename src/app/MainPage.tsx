@@ -33,13 +33,13 @@ const MainPage = () => {
             <header className="text-center mb-8">
                     <h1 className="text-4xl font-bold text-black w-full">
                         <div>Student housing rentals</div>
-                        <div className="text-#A6D0FF"> — easy and convenient! </div>
+                        <div className="text-main-color"> — easy and convenient! </div>
                         <p className="text-sm font-light text-black w-1/2 mx-auto">
-                            We understand how important it is for students to find comfortable and affordable housing,
-                            We understand how important it is for students to find comfortable and affordable housing,
-                            so we have created a platform that helps you quickly and efficiently choose an apartment that
-                            is right for you.
-                        </p>
+
+                        </p> We understand how important it is for students to find comfortable and affordable housing,
+                        We understand how important it is for students to find comfortable and affordable housing,
+                        so we have created a platform that helps you quickly and efficiently choose an apartment that
+                        is right for you.
                     </h1>
             </header>
             <main>

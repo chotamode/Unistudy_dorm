@@ -12,6 +12,7 @@ interface Room {
     address: string;
     description: string;
     price_month: number;
+    image: string;
 }
 
 const MainPage = () => {

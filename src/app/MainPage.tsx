@@ -48,14 +48,15 @@ const MainPage = () => {
                     </h1>
                 </div>
             </div>
-            <div className="min-h-screen bg-gray-100 p-8 px-64">
+            <div className="min-h-screen bg-gray-100 p-8 px-64 pt-28">
                 <main>
                     <IconSwitch />
-                    <h2 className="text-2xl font-bold text-black mb-8 text-center">Свободные комнаты</h2>
+                    <h2 className="text-8xl font-semibold text-black mb-20 text-cente mt-24 text-center">Spare rooms</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {rooms.map((room) => (
                             <RoomCard
                                 key={room.id}
+                                id={room.id}
                                 name={room.name}
                                 background={room.image}
                                 address={room.address}

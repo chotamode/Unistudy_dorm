@@ -15,7 +15,7 @@ const Button = ({
 }: ButtonProps) => {
     return (
         <button
-            className={`px-12 py-2 rounded-full h-fit ${backgroundColor} ${textColor} inline-flex items-center justify-center text-${textSize}`}
+            className={`px-12 py-2 rounded-xl h-fit ${backgroundColor} ${textColor} inline-flex items-center justify-center text-${textSize}`}
         >
             {children}
         </button>

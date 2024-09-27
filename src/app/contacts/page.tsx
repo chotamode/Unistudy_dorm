@@ -6,6 +6,7 @@ import Image from "next/image";
 import instagramLogo from "@/assets/social_media/inst_logo.svg";
 import facebookLogo from "@/assets/social_media/fb_logo.svg";
 import arrowRight from "@/assets/arrow_right.svg";
+import GoToMainPageButton from "@/app/components/GoMainPageButton";
 
 const contacts = () => {
     return (
@@ -44,19 +45,8 @@ const contacts = () => {
                     </div>
                 </div>
 
-                <div className={"w-80 h-16 flex flex-row ml-16"}>
-                    <div className={"bg-[#0F478D] p-4 rounded-xl h-full w-full mr-[2px] flex justify-center items-center"}>
-                        <p className={"text-white font-medium"}>
-                            Go back to the main page
-                        </p>
-                    </div>
-                    <div className={"bg-[#0F478D] p-4 rounded-xl h-full aspect-square flex justify-center items-center"}>
-                        <Image src={arrowRight} alt="Arrow right"/>
-                    </div>
-                </div>
-
+                <GoToMainPageButton text="Go back to the main page" />
             </div>
-
         </Layout>
     );
 }

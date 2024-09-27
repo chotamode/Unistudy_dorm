@@ -18,7 +18,7 @@ interface RoomCardProps {
 }
 
 const RoomCard: React.FC<RoomCardProps> = ({
-    id = 1,
+                                               id = 1,
                                                name = "Default Room Name",            // Default value for name
                                                address = "Default Address",            // Default value for address
                                                description = "No description provided",
@@ -27,12 +27,11 @@ const RoomCard: React.FC<RoomCardProps> = ({
                                                apart_name = "Penthouse Apratment",
                                                background = "/images/rommbg.png",
                                                floor = "Fifth Floor",
-
                                            }) => {
     return (
         <div
             className="rounded-xxl flex flex-col justify-end overflow-hidden bg-cover bg-center min-h-120 max-w-110 filter grayscale-[28%]"
-            style={{ backgroundImage: `url(${background})` }}  // Dynamic or default background
+            style={{backgroundImage: `url(${background})`}}  // Dynamic or default background
         >
             <div className="p-4 text-white mb-12 filter font-semibold">
                 <h2 className="text-xxl font-black mb-2">{name}</h2>

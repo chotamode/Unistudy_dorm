@@ -56,7 +56,7 @@ const MainPage = () => {
                     </button>
                 </div>
                 <h2 className="text-2xl font-bold text-black mb-8 text-center">Свободные комнаты</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3  place-items-center justify-items-center mx-64 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3  mx-64 gap-4">
                     {rooms.map((room) => (
                         <RoomCard
                             key={room.id}

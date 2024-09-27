@@ -1,0 +1,33 @@
+import React, { useState } from 'react';
+import Image from 'next/image';
+import maleIcon from '@/assets/sex/male.svg';
+import femaleIcon from '@/assets/sex/female.svg';
+
+const IconSwitch = () => {
+    const [activeIndex, setActiveIndex] = useState<number>(0);
+
+    const handleClick = (index: number) => {
+        setActiveIndex(index);
+    };
+
+    return (
+        <div className="relative rounded-3xl px-14 py-6 flex justify-center space-x-8 mt-8 bg-[#FEF9F6] w-fit mx-auto shadow-2xl" style={{ boxShadow: '0 0px 30px rgba(0, 0, 0, 0.4)' }}>
+            {['female', 'male'].map((gender, index) => (
+                <button
+                    key={gender}
+                    className={`w-36 h-36 rounded-lg flex items-center justify-center relative transition-all duration-300 z-10`}
+                    onClick={() => handleClick(index)}
+                >
+                    <Image src={gender === 'male' ? maleIcon : femaleIcon}
+                           alt={`Только для ${gender === 'male' ? 'мальчиков' : 'девочек'}`} className="w-full h-full p-6"/>
+                </button>
+            ))}
+            <div
+                className="absolute mt-6 top-0 w-36 h-36 rounded-3xl transition-transform duration-300 bg-[#FEF9F6] z-0 p-12"
+                style={{ boxShadow: '0 0px 30px rgba(0, 0, 0, 0.4)', transform: `translateX(calc(${activeIndex} * 11rem - 6.5rem))` }}
+            />
+        </div>
+    );
+};
+
+export default IconSwitch;

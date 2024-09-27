@@ -3,11 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import RoomCard from './components/RoomCard';
 import { getRooms } from './api/rooms';
-import Button from './components/Button';
-import maleIcon from '@/assets/sex/male.svg';
-import femaleIcon from '@/assets/sex/female.svg';
-import Image from "next/image";
-import logo from "../../public/logo.svg";
+import Image from 'next/image';
+import IconSwitch from './components/IconSwitch';
 
 interface Room {
     id: number;
@@ -29,45 +26,45 @@ const MainPage = () => {
     }, []);
 
     return (
-        <div className="min-h-screen bg-gray-100 p-8 px-64">
-            <header className="text-center mb-8">
-                    <h1 className="text-4xl font-bold text-black w-full">
-                        <div>Student housing rentals</div>
-                        <div className="text-main-color"> — easy and convenient! </div>
-                        <p className="text-sm font-light text-black w-1/2 mx-auto">
-
-                        </p> We understand how important it is for students to find comfortable and affordable housing,
-                        We understand how important it is for students to find comfortable and affordable housing,
-                        so we have created a platform that helps you quickly and efficiently choose an apartment that
-                        is right for you.
+        <div>
+            <div className="relative">
+                <Image
+                    src="/images/mpage_hero.svg"
+                    alt="Background"
+                    objectFit="cover"
+                    width={1920}
+                    height={1080}
+                />
+                <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center">
+                    <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-8xl font-bold text-black p-4 sm:p-12 md:p-16 rounded-xl text-center">
+                        <div className="text-white">Student housing rentals</div>
+                        <div className="text-[#A6D0FF]"> — easy and convenient!</div>
+                        <p className="text-white text-xs sm:text-sm md:text-base lg:text-lg font-light w-2/12 sm:w-2/3 md:w-1/2 mx-auto">
+                            We understand how important it is for students to find comfortable and affordable housing,
+                            so we have created a platform that helps you quickly and efficiently choose an apartment
+                            that is right for you.
+                        </p>
                     </h1>
-            </header>
-            <main>
-                <div className="flex justify-center space-x-4 mt-8">
-                    <button className="w-16 h-16 rounded-lg flex items-center justify-center">
-                        <Image src={maleIcon} alt={"Только для мальчиков"} className={"w-full h-full"}/>
-                    </button>
-                    <button className="w-16 h-16 rounded-lg flex items-center justify-center">
-                        <Image src={femaleIcon} alt={"Только для девочек"} className={"w-full h-full"}/>
-                    </button>
-                    <button className="w-16 h-16 rounded-lg flex items-center justify-center">
-                        <Image src={maleIcon} alt={"Только для мальчиков"} className={"w-full h-full"}/>
-                    </button>
                 </div>
-                <h2 className="text-2xl font-bold text-black mb-8 text-center">Свободные комнаты</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {rooms.map((room) => (
-                        <RoomCard
-                            key={room.id}
-                            name={room.name}
-                            image={"https://placehold.co/600x600/png"}
-                            address={room.address}
-                            description={room.description}
-                            price_month={room.price_month}
-                        />
-                    ))}
-                </div>
-            </main>
+            </div>
+            <div className="min-h-screen bg-gray-100 p-8 px-64">
+                <main>
+                    <IconSwitch />
+                    <h2 className="text-2xl font-bold text-black mb-8 text-center">Свободные комнаты</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {rooms.map((room) => (
+                            <RoomCard
+                                key={room.id}
+                                name={room.name}
+                                image={"https://placehold.co/600x600/png"}
+                                address={room.address}
+                                description={room.description}
+                                price_month={room.price_month}
+                            />
+                        ))}
+                    </div>
+                </main>
+            </div>
         </div>
     );
 };

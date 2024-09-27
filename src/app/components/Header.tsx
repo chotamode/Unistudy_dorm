@@ -9,7 +9,9 @@ const Header = () => {
             <nav className="mt-2 flex flex-row justify-between items-center font-montserrat w-full">
                 {/*  logo*/}
                 <div className="flex-shrink-0">
-                    <Image src={logo} alt="Logo" width={55} height={55}/>
+                    <Link href="/">
+                        <Image src={logo} alt="Logo" width={55} height={55} />
+                    </Link>
                 </div>
                 <div className={" text-bold font-medium"}>
                     <Link href="/contacts">

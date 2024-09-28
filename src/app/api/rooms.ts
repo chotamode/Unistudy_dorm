@@ -1,4 +1,4 @@
-import { supabase } from '@/supabaseClient';
+import {supabase} from '@/supabaseClient';
 
 // Function to get all rooms
 export const getRooms = async () => {
@@ -24,37 +24,68 @@ export const getRoomById = async (roomId: number) => {
   return data;
 };
 
-// Function to reserve a room
-//test git
-export const reserveRoom = async (roomId: number, tenantId: number) => {
+export const getBedsByRoomId = async (roomId: number) => {
   const { data, error } = await supabase
-    .from('bed')
-    .update({ reserved_by: tenantId })
-    .eq('room', roomId)
-    .is('reserved_by', null); // Ensure the bed is not already reserved
+      .from('bed')
+      .select(`
+      id,
+      room,
+      reservations:reservation (
+        from,
+        to,
+        confirmed
+      )
+    `)
+      .eq('room', roomId);
+
   if (error) {
-    console.error('Error reserving room:', error);
+    console.error('Error fetching beds:', error);
+    return [];
+  }
+
+  return data.map(bed => {
+    const isOccupied = bed.reservations.some(reservation => {
+      const fromDate = new Date(reservation.from);
+      const toDate = new Date(reservation.to);
+      const now = new Date();
+      return reservation.confirmed && now >= fromDate && now <= toDate;
+    });
+
+    return {
+      id: bed.id,
+      room: bed.room,
+      occupied: isOccupied
+    };
+  });
+};
+
+export const createReservation = async (
+    tenantName: string,
+    tenantSurname: string,
+    tenantGender: string,
+    tenantEmail: string,
+    tenantDateOfBirth: string,
+    roomId: number,
+    bedId: number,
+    reservationFrom: string,
+    reservationTo: string
+) => {
+  const { data, error } = await supabase.rpc('create_reservation', {
+    tenant_name: tenantName,
+    tenant_surname: tenantSurname,
+    tenant_gender: tenantGender,
+    tenant_email: tenantEmail,
+    tenant_date_of_birth: tenantDateOfBirth,
+    room_id: roomId,
+    bed_id: bedId,
+    reservation_from: reservationFrom,
+    reservation_to: reservationTo
+  });
+
+  if (error) {
+    console.error('Error creating reservation:', error);
     return null;
   }
-  return data;
-};
 
-// Function to get all reservations
-export const getReservations = async () => {
-  const { data, error } = await supabase.from('reservation').select('*');
-  if (error) {
-    console.error('Error fetching reservations:', error);
-    return [];
-  }
-  return data;
-};
-
-// Function to get all tenants
-export const getTenants = async () => {
-  const { data, error } = await supabase.from('tenant').select('*');
-  if (error) {
-    console.error('Error fetching tenants:', error);
-    return [];
-  }
   return data;
 };

@@ -2,16 +2,22 @@
 
 import React, { useState } from 'react';
 import Layout from "@/app/components/Layout";
+import { useParams } from "next/navigation";
+import { createReservation } from '@/app/api/rooms';
 
 const FeedbackForm = () => {
     const [formData, setFormData] = useState({
         name: '',
+        surname: '',
         phoneNumber: '',
         email: '',
         gender: '',
         dateOfBirth: '',
         consent: false,
     });
+
+    const { bedID, id } = useParams();
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value, type, checked } = e.target;
@@ -21,11 +27,28 @@ const FeedbackForm = () => {
         });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Handle form submission
-        console.log(formData);
+        // Call createReservation function
+        const result = await createReservation(
+            formData.name,
+            formData.surname,
+            formData.gender,
+            formData.email,
+            formData.dateOfBirth,
+            Number(id), // roomId
+            Number(bedID), // bedId
+            new Date().toISOString(), // reservationFrom
+            new Date().toISOString() // reservationTo
+        );
+        if (result) {
+            setIsSubmitted(true);
+        }
     };
+
+    if (isSubmitted) {
+        return <p>Thank you for your reservation!</p>;
+    }
 
     return (
         <form onSubmit={handleSubmit}
@@ -41,15 +64,24 @@ const FeedbackForm = () => {
                     required
                 />
                 <input
-                    type="tel"
-                    name="phoneNumber"
-                    placeholder="Phone Number"
-                    value={formData.phoneNumber}
+                    type="text"
+                    name="surname"
+                    placeholder="Surname"
+                    value={formData.surname}
                     onChange={handleChange}
                     className="p-2 border rounded-xl w-full h-14"
                     required
                 />
             </div>
+            <input
+                type="tel"
+                name="phoneNumber"
+                placeholder="Phone Number"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                className="p-2 border rounded-xl w-full h-14"
+                required
+            />
             <input
                 type="email"
                 name="email"
@@ -69,7 +101,6 @@ const FeedbackForm = () => {
                 <option value="" disabled>Select Gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
-                <option value="other">Other</option>
             </select>
             <input
                 type="date"

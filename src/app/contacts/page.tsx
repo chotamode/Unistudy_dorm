@@ -16,7 +16,7 @@ const contacts = () => {
                     Our contacts
                 </h1>
 
-                <div className={"flex flex-row gap-60 justify-center items-center"}>
+                <div className={"flex flex-row gap-60 justify-center items-center flex-wrap"}>
                     <div className={"flex flex-col items-center gap-11"}>
                         <Image src={phoneIcon} alt="Phone icon"/>
                         <div className={"flex flex-col justify-center items-center"}>

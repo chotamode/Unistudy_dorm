@@ -7,8 +7,8 @@ const Footer = () => {
     return (
         <footer
             className="bg-[#D9E8FB] p-4 py-20 text-black flex flex-shrink flex-row flex-wrap justify-between items-center px-44 rounded-large">
-            <div className="flex justify-between ">
-                <div className="flex justify-start items-center mr-10 ">
+            <div className="flex justify-between w-full">
+                <div className="flex justify-start items-center mr-10">
                     <Image src={logo} alt="Logo" className="mb-4 mr-20 " width={90} height={90}/>
 
                     <div className="text-center font-medium">
@@ -37,14 +37,14 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
-                <div className="flex flex-row m-w-16 justify-between  pt-40">
-                    <div className="flex">
-                        <div>Copyright 2022 UniStudy</div>
-                        <a>Privacy policy</a>
-                        <a>Offer Agreement</a>
-                    </div>
-                    <div className="flex">Made in Solonabeach</div>
-                </div>
+                {/*<div className="flex flex-row m-w-16 justify-between  pt-40">*/}
+                {/*    <div className="flex">*/}
+                {/*        <div>Copyright 2022 UniStudy</div>*/}
+                {/*        <a>Privacy policy</a>*/}
+                {/*        <a>Offer Agreement</a>*/}
+                {/*    </div>*/}
+                {/*    <div className="flex">Made in Solonabeach</div>*/}
+                {/*</div>*/}
 
         </footer>
     );

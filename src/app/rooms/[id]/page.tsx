@@ -1,14 +1,14 @@
-// src/app/rooms/[id]/page.tsx
+// src/app/rooms/asd/page.tsx
 "use client";
 
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { getRoomById } from '../../api/rooms';
+import { getRoomById, getBedsByRoomId } from '../../api/rooms';
 import Image from 'next/image';
 import Layout from "@/app/components/Layout";
 import placeholderImage from '@/assets/placeholder_room.jpg';
-import Button from "@/app/components/Button";
 import Button2 from "@/app/components/Button2";
+import Link from "next/link";
 
 interface Room {
     id: number;
@@ -19,9 +19,15 @@ interface Room {
     image: string;
 }
 
+interface Bed {
+    id: number;
+    occupied: boolean;
+}
+
 const RoomDetails = () => {
     const { id } = useParams();
     const [room, setRoom] = useState<Room | null>(null);
+    const [beds, setBeds] = useState<Bed[]>([]);
 
     useEffect(() => {
         if (id) {
@@ -30,6 +36,12 @@ const RoomDetails = () => {
                 setRoom(roomData);
             };
             fetchRoom().then(r => r);
+
+            const fetchBeds = async () => {
+                const bedsData = await getBedsByRoomId(Number(id));
+                setBeds(bedsData);
+            };
+            fetchBeds().then(r => r);
         }
     }, [id]);
 
@@ -51,7 +63,7 @@ const RoomDetails = () => {
                 </div>
                 <div className="w-1/2 px-16 h-full flex flex-col justify-center gap-6">
                     <h1 className="text-4xl font-bold">
-                        Penthouse Apartment fifth floor
+                        {room.name}
                     </h1>
                     <ul className="list-disc list-inside">
                         <h3 className="font-bold mb-2">
@@ -74,14 +86,18 @@ const RoomDetails = () => {
                         Available places:
                     </h3>
                     <div className={"flex flex-col"}>
-                        <p>Double room with access to the balcony | </p>
-                        <p>1 place is free • 8500kh per month per place Double</p>
-                        <p>room without access to the balcony | </p>
-                        <p>2 places are free • 8000kh per month per place</p>
+                        {beds.map((bed) => (
+                            <p key={bed.id}>
+                                Bed {bed.id} is {bed.occupied ? 'occupied' : 'free'}
+                            </p>
+                        ))}
+
+                        <Link href={`/rooms/${id}/reservation`}>
+                            <Button2 className={"w-60"}>
+                                Book a bed
+                            </Button2>
+                        </Link>
                     </div>
-                    <Button2 className={"w-60"}>
-                        Book a bed
-                    </Button2>
                 </div>
             </div>
         </Layout>

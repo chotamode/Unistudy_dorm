@@ -12,20 +12,15 @@ const IconSwitch = () => {
 
     return (
         <div>
-            {/*when boys clicked will be shown h1 "Boys' room" and when girls clicked will be shown "Gtils' room"*/}
             <h1 className="text-7xl font-normal text-black mb-8 text-center">
-                {activeIndex === 0 ?
-                    'Boys\' room' :
-                    'Girls\' room'
-                }
+                {activeIndex === 0 ? 'Boys\' room' : 'Girls\' room'}
             </h1>
             <div
                 className="relative rounded-3xl px-14 py-6 flex justify-center space-x-8 bg-[#FEF9F6] w-fit mx-auto shadow-2xl mt-16"
                 style={{boxShadow: '0 0px 30px rgba(0, 0, 0, 0.4)'}}>
                 {['female', 'male'].map((gender, index) => (
-                    <div>
+                    <div key={gender}>
                         <button
-                            key={gender}
                             className={`w-36 h-36 rounded-lg flex items-center justify-center relative transition-all duration-300 z-10`}
                             onClick={() => handleClick(index)}
                         >
@@ -33,6 +28,9 @@ const IconSwitch = () => {
                                    alt={`Только для ${gender === 'male' ? 'мальчиков' : 'девочек'}`}
                                    className="w-full h-full p-6"/>
                         </button>
+                        <p className="text-lg font-normal text-center mt-4">
+                            {gender === 'male' ? 'I\'m a girl' : 'I\'m a boy'}
+                        </p>
                     </div>
                 ))}
                 <div

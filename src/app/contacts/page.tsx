@@ -18,15 +18,20 @@ const contacts = () => {
 
                 <div className={"flex flex-row gap-60 justify-center items-center flex-wrap"}>
                     <div className={"flex flex-col items-center gap-11"}>
-                        <Image src={phoneIcon} alt="Phone icon"/>
+                        <div>
+                            <Image src={phoneIcon} alt="Phone icon"/>
+                        </div>
                         <div className={"flex flex-col justify-center items-center"}>
                             <p>+420 775 095 879</p>
                             <p>+420 773 037 688</p>
                             <p>(WhatsApp, Viber, Telegram)</p>
                         </div>
                     </div>
-                    <div className={"flex flex-col items-center gap-11"}>
-                        <Image src={locationIcon} alt="Location icon"/>
+                    <div className={"flex flex-col w-56 items-center gap-11"}>
+                        <div>
+                            <Image src={locationIcon} alt="Location icon"/>
+                        </div>
+
                         <div className={"flex flex-col justify-center items-center"}>
                             <p>
                                 Jaurisova 515/4,
@@ -36,8 +41,10 @@ const contacts = () => {
                             </p>
                         </div>
                     </div>
-                    <div className={"flex flex-col items-center gap-11"}>
-                        <Image src={socialIcon} alt="Social icon"/>
+                    <div className={"flex flex-col w-56 items-center gap-11"}>
+                        <div>
+                            <Image src={socialIcon} alt="Social icon"/>
+                        </div>
                         <div className={"flex flex-row gap-4"}>
                             <Image src={instagramLogo} alt="Instagram logo"/>
                             <Image src={facebookLogo} alt="Facebook logo"/>

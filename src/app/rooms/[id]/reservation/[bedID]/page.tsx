@@ -52,6 +52,7 @@ const FeedbackForm = () => {
                 new Date().toISOString(), // reservationFrom
                 new Date().toISOString() // reservationTo
             );
+            router.push(`/rooms/${id}/reservation/${bedID}/end`);
 
             console.log("Reservation result:", result);
 
@@ -142,9 +143,7 @@ const FeedbackForm = () => {
                 />
                 I consent to data processing
             </label>
-            <Link href={`/rooms/${id}/reservation/${bedID}/end`}>
-                <button type="submit" className="p-2 bg-blue-500 text-white rounded">Confirm</button>
-            </Link>
+            <button type="submit" className="p-2 bg-blue-500 text-white rounded">Confirm</button>
         </form>
     );
 };

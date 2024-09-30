@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Layout from "@/app/components/Layout";
 import {useParams, useRouter} from "next/navigation";
 import { createReservation } from '@/app/api/rooms';
+import Link from "next/link";
 
 const FeedbackForm = () => {
     const [formData, setFormData] = useState({
@@ -30,21 +31,32 @@ const FeedbackForm = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Call createReservation function
-        const result = await createReservation(
-            formData.name,
-            formData.surname,
-            formData.gender,
-            formData.email,
-            formData.dateOfBirth,
-            Number(id), // roomId
-            Number(bedID), // bedId
-            new Date().toISOString(), // reservationFrom
-            new Date().toISOString() // reservationTo
-        );
-        if (result) {
-            setIsSubmitted(true);
-            router.push('/rooms/[id]/reservation/[bedID]/end', `rooms/${id}/reservation/${bedID}/end`);
+        console.log("Submitting form with data:", formData);
+
+        try {
+            const result = await createReservation(
+                formData.name,
+                formData.surname,
+                formData.gender,
+                formData.email,
+                formData.dateOfBirth,
+                Number(id), // roomId
+                Number(bedID), // bedId
+                new Date().toISOString(), // reservationFrom
+                new Date().toISOString() // reservationTo
+            );
+
+            console.log("Reservation result:", result);
+
+            if (result) {
+                setIsSubmitted(true);
+                console.log("Redirecting to:", `/rooms/${id}/reservation/${bedID}/end`);
+                router.push(`/rooms/${id}/reservation/${bedID}/end`);
+            } else {
+                console.error("Reservation failed");
+            }
+        } catch (error) {
+            console.error("Error during reservation:", error);
         }
     };
 
@@ -123,7 +135,9 @@ const FeedbackForm = () => {
                 />
                 I consent to data processing
             </label>
-            <button type="submit" className="p-2 bg-blue-500 text-white rounded">Confirm</button>
+            <Link href={`/rooms/${id}/reservation/${bedID}/end`}>
+                <button type="submit" className="p-2 bg-blue-500 text-white rounded">Confirm</button>
+            </Link>
         </form>
     );
 };

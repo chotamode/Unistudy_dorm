@@ -127,14 +127,19 @@ type Reservation = {
   from: string;
   to: string;
   confirmed: boolean;
-  roomId: number;
+  room: number;
   tenant: Tenant;
+};
+
+type Bed = {
+  id: number;
+  room: number;
 };
 
 export const getReservations = async (): Promise<Reservation[]> => {
   const { data, error } = await supabase
-    .from('reservation')
-    .select(`
+      .from('reservation')
+      .select(`
       id,
       from,
       to,
@@ -156,20 +161,27 @@ export const getReservations = async (): Promise<Reservation[]> => {
     return [];
   }
 
-  return data.map(reservation => ({
-    id: reservation.id,
-    from: reservation.from,
-    to: reservation.to,
-    confirmed: reservation.confirmed,
-    roomId: reservation.bed.room,
-    bedId: reservation.bed.id,
-    tenant: {
-      id: reservation.tenant.id,
-      name: reservation.tenant.name,
-      surname: reservation.tenant.surname,
-      email: reservation.tenant.email
-    }
-  }));
+  return data.map((reservation: any) => {
+    const beds = Array.isArray(reservation.bed) ? reservation.bed.map((bed: any) => ({
+      id: bed.id,
+      room: bed.room
+    })) : [];
+
+    return {
+      id: reservation.id,
+      from: reservation.from,
+      to: reservation.to,
+      confirmed: reservation.confirmed,
+      room: reservation.bed[0]?.room, // Assuming each reservation has at least one bed and using the room from the first bed
+      beds: beds,
+      tenant: {
+        id: reservation.tenant.id,
+        name: reservation.tenant.name,
+        surname: reservation.tenant.surname,
+        email: reservation.tenant.email
+      }
+    };
+  });
 };
 
 export const updateReservationStatus = async (reservationId: number, confirmed: boolean) => {

@@ -36,6 +36,7 @@ const MainPage = () => {
                         objectFit="cover"
                         width={3840}
                         height={2160}
+
                    />
                 <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center">
                     <h1 className="text-1xl phonexs:text-2xl phone:text-3xl md:text-5xl lg:text-[4.2rem] xl:text-[5rem] font-bold text-black p-4 sm:p-12 md:p-16 rounded-xl text-center">

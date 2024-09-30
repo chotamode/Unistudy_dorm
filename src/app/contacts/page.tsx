@@ -18,7 +18,7 @@ const contacts = () => {
 
                 <div className={"flex flex-row gap-10 sm:gap-28 md:gap-60 justify-center items-center flex-wrap"}>
                     <div className={"flex flex-col items-center gap-5 md:gap-6 lg:gap-10"}>
-                        <div className="phone:max-lg:w-32">
+                        <div className="phone:max-lg:w-32 ">
                             <Image src={phoneIcon} alt="Phone icon"/>
                         </div>
                         <div className={"flex flex-col justify-center items-center"}>

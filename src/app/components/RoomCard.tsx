@@ -61,7 +61,6 @@ const RoomCard: React.FC<RoomCardProps> = ({
 
             </div>
 
-
             <div
                 className="md:hidden  rounded-xxl flex flex-col justify-end items-center
                            bg-white overflow-hidden

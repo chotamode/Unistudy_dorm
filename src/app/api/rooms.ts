@@ -133,13 +133,13 @@ type Reservation = {
 
 export const getReservations = async (): Promise<Reservation[]> => {
   const { data, error } = await supabase
-      .from('reservation')
-      .select(`
+    .from('reservation')
+    .select(`
       id,
       from,
       to,
       confirmed,
-      bed (
+      bed:bed (
         id,
         room
       ),

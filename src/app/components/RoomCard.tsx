@@ -34,21 +34,23 @@ const RoomCard: React.FC<RoomCardProps> = ({
         <div>
             <div
                 className="hidden rounded-xxl md:flex flex-col justify-end overflow-hidden
-                           bg-cover bg-center min-h-120 w-110 filter grayscale-[28%]
+                           bg-cover bg-center min-h-120 w-110 filter grayscale-[1%]
                            lg:w-110
                            "
                 style={{backgroundImage: `url(${background})`}}
             >
-                <div className=" p-4 text-white mb-12 filter font-semibold">
+                <div className="absolute inset-0 bg-black opacity-50 z-0"></div>
+                <div className=" px-4 text-white mb-8 filter z-10 relative font-semibold">
                     <h2 className="text-xxl font-black mb-2">{name}</h2>
 
-                    <div className="text-xs my-4">
+                    <div className="text-adxs my-4">
                         <p>{floor} | {apart_name}</p>
                         <p>{sex}</p>
-                        <p>
-                            -Two–storey apartment accommodates 6 people <br/>
-                            - Private bathroom for 6 residents <br/>
-                            - Access to a private balcony with a beautiful view
+                        <p className="py-2">
+                            {description}
+                        </p>
+                        <p className="text-xl">
+                            {price_month} $
                         </p>
                     </div>
 
@@ -56,7 +58,9 @@ const RoomCard: React.FC<RoomCardProps> = ({
                         <Button2 className="h-10 w-40 text-xs">learn more</Button2>
                     </Link>
                 </div>
+
             </div>
+
 
             <div
                 className="md:hidden  rounded-xxl flex flex-col justify-end items-center

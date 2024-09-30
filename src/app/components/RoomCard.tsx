@@ -17,6 +17,7 @@ interface RoomCardProps {
     floor?: string;
     apart_name?: string;
 }
+// vercel pls
 
 const RoomCard: React.FC<RoomCardProps> = ({
                                                id = 1,

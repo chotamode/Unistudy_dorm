@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Layout from "@/app/components/Layout";
-import { useParams } from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 import { createReservation } from '@/app/api/rooms';
 
 const FeedbackForm = () => {
@@ -18,6 +18,7 @@ const FeedbackForm = () => {
 
     const { bedID, id } = useParams();
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const router = useRouter();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value, type, checked } = e.target;
@@ -43,6 +44,7 @@ const FeedbackForm = () => {
         );
         if (result) {
             setIsSubmitted(true);
+            router.push('/rooms/[id]/reservation/[bedID]/end', `rooms/${id}/reservation/${bedID}/end`);
         }
     };
 
@@ -125,6 +127,7 @@ const FeedbackForm = () => {
         </form>
     );
 };
+
 
 const Stage3Page = () => {
     return (

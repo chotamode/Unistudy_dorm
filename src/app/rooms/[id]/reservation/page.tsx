@@ -1,144 +1,186 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
+import { useParams } from 'next/navigation';
+import Image from 'next/image';
+import planDefault from '../../../../assets/room_plans/plan_default.svg';
 import Layout from "@/app/components/Layout";
-import { useParams } from "next/navigation";
-import { createReservation } from '@/app/api/rooms';
+import chosenBed from '../../../../assets/beds/chosen_bed.svg';
+import freeBed from '../../../../assets/beds/free_bed.svg';
+import occupiedBed from '../../../../assets/beds/occupied_bed.svg';
+import finger from '../../../../assets/finger.svg';
+import Button2 from "@/app/components/Button2";
+import { getBedsByRoomId } from '@/app/api/rooms';
+import freeHorizontalBed from '../../../../assets/beds/free_horizontal_bed.svg';
+import chosenHorizontalBed from '../../../../assets/beds/chosen_horizontal_bed.svg';
+import occupiedHorizontalBed from '../../../../assets/beds/occupied_horizontal_bed.svg';
 
-const FeedbackForm = () => {
-    const [formData, setFormData] = useState({
-        name: '',
-        surname: '',
-        phoneNumber: '',
-        email: '',
-        gender: '',
-        dateOfBirth: '',
-        consent: false,
-    });
 
-    const { bedID, id } = useParams();
-    const [isSubmitted, setIsSubmitted] = useState(false);
+import plan1 from '../../../../assets/room_plans/plan1.svg';
+import Link from "next/link";
+// import plan2 from '../../../../assets/room_plans/plan2.svg';
+// import plan3 from '../../../../assets/room_plans/plan3.svg';
+// import plan4 from '../../../../assets/room_plans/plan4.svg';
+// import plan5 from '../../../../assets/room_plans/plan5.svg';
+// import plan6 from '../../../../assets/room_plans/plan6.svg';
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value, type, checked } = e.target;
-        setFormData({
-            ...formData,
-            [name]: type === 'checkbox' ? checked : value,
-        });
-    };
+interface Bed {
+    id: number;
+    occupied: boolean;
+    x?: number;
+    y?: number;
+    horizontal?: boolean;
+    room?: number;
+}
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        // Call createReservation function
-        const result = await createReservation(
-            formData.name,
-            formData.surname,
-            formData.gender,
-            formData.email,
-            formData.dateOfBirth,
-            Number(id), // roomId
-            Number(bedID), // bedId
-            new Date().toISOString(), // reservationFrom
-            new Date().toISOString() // reservationTo
-        );
-        if (result) {
-            setIsSubmitted(true);
+interface PlanProps {
+    beds: Bed[];
+    roomPlan?: string;
+}
+
+const plansMapping: { [key: string]: string } = {
+    '1': plan1,
+    // '2': plan2,
+    // '3': plan3,
+    // '4': plan4,
+    // '5': plan5,
+    // '6': plan6,
+};
+
+const bedsMapping: Bed[] = [
+    // room1
+    { id: 1, occupied: true, x: 20, y: 20, horizontal: false, room: 1 },
+    { id: 2, occupied: true, x: 20, y: 350, horizontal: true, room: 1 },
+    // room2
+];
+
+const Plan: React.FC<PlanProps> = ({ beds = [] }) => {
+    const { id } = useParams();
+    const planImage = plansMapping[id as string] || planDefault;
+    const bedsForPlan = bedsMapping
+        .filter(bed => bed.room === Number(id))
+        .map(bed => ({
+            ...bed,
+            occupied: beds.find(dbBed => dbBed.id === bed.id)?.occupied ?? bed.occupied
+        }));
+
+    const [selectedBed, setSelectedBed] = useState<Bed | null>(null);
+    const [showMessage, setShowMessage] = useState(false);
+    const messageRef = useRef<HTMLDivElement>(null);
+
+    const handleBedClick = (bed: Bed) => {
+        if (!bed.occupied) {
+            setSelectedBed(bed);
+            setShowMessage(true);
         }
     };
 
-    if (isSubmitted) {
-        return <p>Thank you for your reservation!</p>;
-    }
+    const handleClickOutside = (event: MouseEvent) => {
+        if (messageRef.current && !messageRef.current.contains(event.target as Node)) {
+            setShowMessage(false);
+            setSelectedBed(null);
+        }
+    };
+
+    useEffect(() => {
+        if (showMessage) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showMessage]);
 
     return (
-        <form onSubmit={handleSubmit}
-              className="flex flex-col gap-4 w-1/2 bg-[#0F478D] rounded-2xl p-8 px-20 h-full mr-16 justify-evenly">
-            <div className={"flex flex-row gap-4 w-full"}>
-                <input
-                    type="text"
-                    name="name"
-                    placeholder="Name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="p-2 border rounded-xl w-full h-14"
-                    required
-                />
-                <input
-                    type="text"
-                    name="surname"
-                    placeholder="Surname"
-                    value={formData.surname}
-                    onChange={handleChange}
-                    className="p-2 border rounded-xl w-full h-14"
-                    required
-                />
+        <div className={"flex justify-center bg-[#F6F4F2] px-44 py-24 rounded-3xl relative"}
+             style={{ boxShadow: 'inset 0 7px 10px rgba(0, 0, 0, 0.3), 0 7px 10px rgba(0, 0, 0, 0.2)' }}>
+            <div
+                className="absolute top-[-30px] left-1/2 transform -translate-x-1/2 px-6 pr-2 w-80 h-16 bg-[#0F478D] rounded-2xl flex flex-row items-center">
+                <p className="w-3/4 text-white text-center font-semibold whitespace-nowrap text-sm">
+                    To book a bed, click on the bed
+                </p>
+                <div className="relative w-1/4 h-4">
+                    <Image src={finger} alt="Finger" layout="fill" objectFit="contain" />
+                </div>
             </div>
-            <input
-                type="tel"
-                name="phoneNumber"
-                placeholder="Phone Number"
-                value={formData.phoneNumber}
-                onChange={handleChange}
-                className="p-2 border rounded-xl w-full h-14"
-                required
-            />
-            <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={formData.email}
-                onChange={handleChange}
-                className="p-2 border rounded-xl w-full h-14"
-                required
-            />
-            <select
-                name="gender"
-                value={formData.gender}
-                onChange={handleChange}
-                className="p-2 border rounded-xl w-full h-14"
-                required
-            >
-                <option value="" disabled>Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-            </select>
-            <input
-                type="date"
-                name="dateOfBirth"
-                value={formData.dateOfBirth}
-                onChange={handleChange}
-                className="p-2 border rounded-xl w-full h-14"
-                required
-            />
-            <label className="flex items-center">
-                <input
-                    type="checkbox"
-                    name="consent"
-                    checked={formData.consent}
-                    onChange={handleChange}
-                    className="mr-2"
-                    required
-                />
-                I consent to data processing
-            </label>
-            <button type="submit" className="p-2 bg-blue-500 text-white rounded">Confirm</button>
-        </form>
+            <div className="relative">
+                <Image src={planImage} alt="Plan" width={600} height={400} />
+                {bedsForPlan.map((bed) => (
+                    <button
+                        key={bed.id}
+                        onClick={() => handleBedClick(bed)}
+                        className="absolute"
+                        style={{
+                            left: bed.x,
+                            top: bed.y,
+                            width: bed.horizontal ? '50px' : '100px',
+                            height: bed.horizontal ? '100px' : '50px'
+                        }} // Set the desired width and height conditionally
+                    >
+                        <Image
+                            src={bed.occupied
+                                ? (bed.horizontal ? occupiedHorizontalBed : occupiedBed)
+                                : (selectedBed?.id === bed.id
+                                    ? (bed.horizontal ? chosenHorizontalBed : chosenBed)
+                                    : (bed.horizontal ? freeHorizontalBed : freeBed))}
+                            alt={`Bed ${bed.id}`}
+                            layout="fill" // Use layout="fill" to make the image fill the button
+                            objectFit="contain" // Ensure the image maintains its aspect ratio
+                        />
+                    </button>
+                ))}
+                {selectedBed && showMessage && (
+                    <div ref={messageRef} className="absolute bg-white rounded-2xl shadow-2xl p-8 flex flex-col gap-3 items-center"
+                         style={{left: (selectedBed.x ?? 0) + 20, top: (selectedBed.y ?? 0) + 20}}>
+                        <p className={"text-3xl font-normal text-center"}>
+                            The bed is free
+                        </p>
+                        <Link href={`/rooms/${id}/reservation/${selectedBed.id}`}>
+                            <Button2 className={"w-28 h-12 mt-2"} color={"bg-[#14803F]"}>
+                                Book
+                            </Button2>
+                        </Link>
+                    </div>
+                )}
+            </div>
+        </div>
     );
 };
 
-const Stage3Page = () => {
+const BedSelect: React.FC = () => {
+    const {id} = useParams();
+    const [beds, setBeds] = useState<Bed[]>([]);
+
+    useEffect(() => {
+        if (id) {
+            const fetchBeds = async () => {
+                const bedsData = await getBedsByRoomId(Number(id));
+                setBeds(bedsData);
+            };
+            fetchBeds().then(r => r);
+        }
+    }, [id]);
+
     return (
         <Layout>
-            <div className={"flex flex-row justify-center items-center h-screen bg-blue-100 rounded-3xl mx-20 py-24"}>
-                <div
-                    className={"flex flex-col w-1/2 justify-center items-center text-white bg-bg-stage3 bg-[length:105%_100%] bg-no-repeat h-full bg-left"}>
-                    <h1 className=" mb-4 text-5xl font-medium">Here you can leave your</h1>
-                    <h1 className=" mb-4 text-5xl font-medium">details for feedback!</h1>
+            <div className={"flex justify-center flex-col items-center"}>
+                <Plan beds={beds} />
+                <div className={"flex flex-row gap-4 mt-14"}>
+                    <div className={"flex flex-col items-center text-xl"}>
+                        <Image src={freeBed} alt="Free bed" width={160} height={160} />
+                        <p>Bed is free</p>
+                    </div>
+                    <div className={"flex flex-col items-center text-xl"}>
+                        <Image src={chosenBed} alt="Chosen bed" width={160} height={160} />
+                        <p>Bed is booked</p>
+                    </div>
                 </div>
-                <FeedbackForm />
             </div>
         </Layout>
     );
-}
+};
 
-export default Stage3Page;
+export default BedSelect;

@@ -1,9 +1,8 @@
-// src/app/rooms/asd/page.tsx
 "use client";
 
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { getRoomById, getBedsByRoomId } from '../../api/rooms';
+import { getRoomById, getBedsByRoomId, getRoomDetailsByRoomId, getRoomType } from '../../api/rooms';
 import Image from 'next/image';
 import Layout from "@/app/components/Layout";
 import placeholderImage from '@/assets/placeholder_room.jpg';
@@ -11,6 +10,7 @@ import Button2 from "@/app/components/Button2";
 import Link from "next/link";
 
 interface Room {
+    area: number;
     id: number;
     name: string;
     address: string;
@@ -24,10 +24,17 @@ interface Bed {
     occupied: boolean;
 }
 
+interface RoomDetail {
+    id: number;
+    detail: string;
+}
+
 const RoomDetails = () => {
     const { id } = useParams();
     const [room, setRoom] = useState<Room | null>(null);
     const [beds, setBeds] = useState<Bed[]>([]);
+    const [details, setDetails] = useState<RoomDetail[]>([]);
+    const [roomType, setRoomType] = useState<string>('both');
 
     useEffect(() => {
         if (id) {
@@ -42,6 +49,18 @@ const RoomDetails = () => {
                 setBeds(bedsData);
             };
             fetchBeds().then(r => r);
+
+            const fetchDetails = async () => {
+                const detailsData = await getRoomDetailsByRoomId(Number(id));
+                setDetails(detailsData);
+            };
+            fetchDetails().then(r => r);
+
+            const fetchRoomType = async () => {
+                const type = await getRoomType(Number(id));
+                setRoomType(type);
+            };
+            fetchRoomType().then(r => r);
         }
     }, [id]);
 
@@ -67,20 +86,17 @@ const RoomDetails = () => {
                     </h1>
                     <ul className="list-disc list-inside">
                         <h3 className="font-bold mb-2">
-                            For boys only
+                            {roomType === 'both' ? 'For both boys and girls' : `For ${roomType === 'male' ? 'boys' : 'girls'} only`}
                         </h3>
-                        <li>The two-storey apartment accommodates 6 people</li>
-                        <li>Private bathroom for 6 residents</li>
-                        <li>Access to a private balcony with a beautiful view</li>
+                        {details.map((detail) => (
+                            <li key={detail.id}>{detail.detail}</li>
+                        ))}
                     </ul>
                     <p className="bg-[#DBE9FB] py-6 px-4 rounded-3xl">
-                        Features of living: sorting of garbage (plastic, glass, and paper) is mandatory in the house.
-                        Those who have just moved to the Czech Republic usually need to get used to a lower temperature
-                        regime at home. Turning on the heating at full capacity is fraught with overspending of
-                        electricity and additional expenses.
+                        {room.description}
                     </p>
                     <p className={"border-b-2 border-[#0F478D] w-fit pr-12 font-medium"}>
-                        Area: 75.2 sq2
+                        Area: {room.area} m²
                     </p>
                     <h3 className={"font-bold"}>
                         Available places:

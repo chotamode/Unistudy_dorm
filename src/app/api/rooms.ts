@@ -140,6 +140,7 @@ export const getReservations = async (): Promise<Reservation[]> => {
       to,
       confirmed,
       bed,
+      room_id,
       tenant:reserved_by (
         id,
         name,
@@ -158,6 +159,7 @@ export const getReservations = async (): Promise<Reservation[]> => {
     from: reservation.from,
     to: reservation.to,
     confirmed: reservation.confirmed,
+    roomId: reservation.room_id,
     bedId: reservation.bed,
     tenant: {
       id: reservation.tenant.id,

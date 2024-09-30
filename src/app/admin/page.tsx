@@ -1,20 +1,10 @@
+// src/app/admin/page.tsx
 "use client";
 
 import React, { useState, useEffect } from 'react';
 import Layout from '@/app/components/Layout';
 import { getReservations, updateReservationStatus } from '@/app/api/rooms';
-
-type Reservation = {
-    id: number;
-    tenant: { name: string };
-    surname: string;
-    email: string;
-    roomId: number;
-    bedId: number;
-    from: string;
-    to: string;
-    confirmed: boolean;
-};
+import { Reservation } from '@/app/types';
 
 const AdminPage = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);

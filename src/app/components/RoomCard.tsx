@@ -49,13 +49,13 @@ const RoomCard: React.FC<RoomCardProps> = ({
                         <p className="py-2">
                             {description}
                         </p>
-                        <p className="text-xl">
+                        <p className="text-xl font-semibold">
                             {price_month} $
                         </p>
                     </div>
 
                     <Link href={`../rooms/${id}`}>
-                        <Button2 className="h-10 w-40 text-xs">learn more</Button2>
+                        <Button2 className="h-10 w-40 text-xs">Book now</Button2>
                     </Link>
                 </div>
 
@@ -80,7 +80,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
                     <div className="flex flex-col">
                         <h2 className="text-xxl font-black mb-2">{name}</h2>
 
-                        <div className="text-xs my-4">
+                        <div className="text-bold font-semibold my-2">
                             <p>{price_month} $</p>
                         </div>
                     </div>

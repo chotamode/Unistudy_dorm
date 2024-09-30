@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import maleIcon from '@/assets/sex/male.svg';
 import femaleIcon from '@/assets/sex/female.svg';
+import{motion} from 'framer-motion'
 
 const IconSwitch = () => {
     const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -24,7 +25,7 @@ const IconSwitch = () => {
                             className={`w-36 h-36 rounded-lg flex items-center justify-center relative transition-all duration-300 z-10`}
                             onClick={() => handleClick(index)}
                         >
-                            <Image src={gender === 'male' ? maleIcon : femaleIcon}
+                            <Image src={gender === 'female' ? maleIcon : femaleIcon}
                                    alt={`Только для ${gender === 'male' ? 'мальчиков' : 'девочек'}`}
                                    className="w-full h-full p-6"/>
                         </button>

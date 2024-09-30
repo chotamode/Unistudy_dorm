@@ -11,22 +11,27 @@ import GoToMainPageButton from "@/app/components/GoMainPageButton";
 const contacts = () => {
     return (
         <Layout>
-            <div className={"flex flex-col gap-16 justify-center items-center"}>
-                <h1 className={"text-7xl font-bold"}>
+            <div className={"flex flex-col gap-10 sm:gap-16 justify-center items-center"}>
+                <h1 className={"text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold"}>
                     Our contacts
                 </h1>
 
-                <div className={"flex flex-row gap-60 justify-center items-center flex-wrap"}>
-                    <div className={"flex flex-col items-center gap-11"}>
-                        <Image src={phoneIcon} alt="Phone icon"/>
+                <div className={"flex flex-row gap-10 sm:gap-28 md:gap-60 justify-center items-center flex-wrap"}>
+                    <div className={"flex flex-col items-center gap-5 md:gap-6 lg:gap-10"}>
+                        <div className="phone:max-lg:w-32">
+                            <Image src={phoneIcon} alt="Phone icon"/>
+                        </div>
                         <div className={"flex flex-col justify-center items-center"}>
                             <p>+420 775 095 879</p>
                             <p>+420 773 037 688</p>
                             <p>(WhatsApp, Viber, Telegram)</p>
                         </div>
                     </div>
-                    <div className={"flex flex-col items-center gap-11"}>
-                        <Image src={locationIcon} alt="Location icon"/>
+                    <div className={"flex flex-col w-56 items-center gap-5 md:gap-6 lg:gap-10 "}>
+                        <div className="phone:max-lg:w-32">
+                            <Image src={locationIcon} alt="Location icon"/>
+                        </div>
+
                         <div className={"flex flex-col justify-center items-center"}>
                             <p>
                                 Jaurisova 515/4,
@@ -36,8 +41,10 @@ const contacts = () => {
                             </p>
                         </div>
                     </div>
-                    <div className={"flex flex-col items-center gap-11"}>
-                        <Image src={socialIcon} alt="Social icon"/>
+                    <div className={"flex flex-col w-56 mb-8 items-center gap-5 md:gap-6 lg:gap-10"}>
+                        <div className="phone:max-lg:w-32">
+                            <Image src={socialIcon} alt="Social icon"/>
+                        </div>
                         <div className={"flex flex-row gap-4"}>
                             <Image src={instagramLogo} alt="Instagram logo"/>
                             <Image src={facebookLogo} alt="Facebook logo"/>

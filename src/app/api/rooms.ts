@@ -114,3 +114,70 @@ export const getRoomType = async (roomId: number) => {
 
   return data;
 };
+
+type Tenant = {
+  id: number;
+  name: string;
+  surname: string;
+  email: string;
+};
+
+type Reservation = {
+  id: number;
+  from: string;
+  to: string;
+  confirmed: boolean;
+  roomId: number;
+  tenant: Tenant;
+};
+
+export const getReservations = async (): Promise<Reservation[]> => {
+  const { data, error } = await supabase
+      .from('reservation')
+      .select(`
+      id,
+      from,
+      to,
+      confirmed,
+      bed,
+      tenant:reserved_by (
+        id,
+        name,
+        surname,
+        email
+      )
+    `);
+
+  if (error) {
+    console.error('Error fetching reservations:', error);
+    return [];
+  }
+
+  return data.map(reservation => ({
+    id: reservation.id,
+    from: reservation.from,
+    to: reservation.to,
+    confirmed: reservation.confirmed,
+    bedId: reservation.bed,
+    tenant: {
+      id: reservation.tenant.id,
+      name: reservation.tenant.name,
+      surname: reservation.tenant.surname,
+      email: reservation.tenant.email
+    }
+  }));
+};
+
+export const updateReservationStatus = async (reservationId: number, confirmed: boolean) => {
+  const { data, error } = await supabase
+    .from('reservation')
+    .update({ confirmed })
+    .eq('id', reservationId);
+
+  if (error) {
+    console.error('Error updating reservation status:', error);
+    return null;
+  }
+
+  return data;
+};

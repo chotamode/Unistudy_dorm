@@ -11,6 +11,6 @@ export type Reservation = {
   from: string;
   to: string;
   confirmed: boolean;
-  roomId: number;
+  room: number;
   tenant: Tenant;
 };

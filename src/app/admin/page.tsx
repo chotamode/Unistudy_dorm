@@ -50,10 +50,11 @@ const AdminPage = () => {
                         <ul>
                             {reservations.map(reservation => (
                                 <li key={reservation.id} className="mb-4 p-4 border rounded">
-                                    <p><strong>Tenant:</strong> {reservation.tenant.name} {reservation.surname}</p>
-                                    <p><strong>Email:</strong> {reservation.email}</p>
+                                    <p><strong>Tenant:</strong> {reservation.tenant.name} {reservation.tenant.surname}
+                                    </p>
+                                    <p><strong>Email:</strong> {reservation.tenant.email}</p>
                                     <p><strong>Room ID:</strong> {reservation.roomId}</p>
-                                    <p><strong>Bed ID:</strong> {reservation.bedId}</p>
+                                    <p><strong>Bed ID:</strong> {reservation.roomId}</p>
                                     <p><strong>From:</strong> {reservation.from}</p>
                                     <p><strong>To:</strong> {reservation.to}</p>
                                     <p><strong>Status:</strong> {reservation.confirmed ? 'Confirmed' : 'Pending'}</p>

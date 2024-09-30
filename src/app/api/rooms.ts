@@ -114,3 +114,86 @@ export const getRoomType = async (roomId: number) => {
 
   return data;
 };
+
+type Tenant = {
+  id: number;
+  name: string;
+  surname: string;
+  email: string;
+};
+
+type Reservation = {
+  id: number;
+  from: string;
+  to: string;
+  confirmed: boolean;
+  room: number;
+  tenant: Tenant;
+};
+
+type Bed = {
+  id: number;
+  room: number;
+};
+
+export const getReservations = async (): Promise<Reservation[]> => {
+  const { data, error } = await supabase
+      .from('reservation')
+      .select(`
+      id,
+      from,
+      to,
+      confirmed,
+      bed:bed (
+        id,
+        room
+      ),
+      tenant:reserved_by (
+        id,
+        name,
+        surname,
+        email
+      )
+    `);
+
+  if (error) {
+    console.error('Error fetching reservations:', error);
+    return [];
+  }
+
+  return data.map((reservation: any) => {
+    const beds = Array.isArray(reservation.bed) ? reservation.bed.map((bed: any) => ({
+      id: bed.id,
+      room: bed.room
+    })) : [];
+
+    return {
+      id: reservation.id,
+      from: reservation.from,
+      to: reservation.to,
+      confirmed: reservation.confirmed,
+      room: reservation.bed[0]?.room, // Assuming each reservation has at least one bed and using the room from the first bed
+      beds: beds,
+      tenant: {
+        id: reservation.tenant.id,
+        name: reservation.tenant.name,
+        surname: reservation.tenant.surname,
+        email: reservation.tenant.email
+      }
+    };
+  });
+};
+
+export const updateReservationStatus = async (reservationId: number, confirmed: boolean) => {
+  const { data, error } = await supabase
+    .from('reservation')
+    .update({ confirmed })
+    .eq('id', reservationId);
+
+  if (error) {
+    console.error('Error updating reservation status:', error);
+    return null;
+  }
+
+  return data;
+};

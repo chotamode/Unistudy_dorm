@@ -89,3 +89,28 @@ export const createReservation = async (
 
   return data;
 };
+
+export const getRoomDetailsByRoomId = async (roomId: number) => {
+    const { data, error } = await supabase
+        .from('room_details')
+        .select('*')
+        .eq('room_id', roomId);
+
+    if (error) {
+        console.error('Error fetching room details:', error);
+        return [];
+    }
+
+    return data;
+}
+
+export const getRoomType = async (roomId: number) => {
+  const { data, error } = await supabase.rpc('get_room_type', { room_id: roomId });
+
+  if (error) {
+    console.error('Error fetching room type:', error);
+    return 'both';
+  }
+
+  return data;
+};

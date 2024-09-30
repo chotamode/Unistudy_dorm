@@ -53,8 +53,8 @@ const AdminPage = () => {
                                     <p><strong>Tenant:</strong> {reservation.tenant.name} {reservation.tenant.surname}
                                     </p>
                                     <p><strong>Email:</strong> {reservation.tenant.email}</p>
-                                    <p><strong>Room ID:</strong> {reservation.roomId}</p>
-                                    <p><strong>Bed ID:</strong> {reservation.roomId}</p>
+                                    <p><strong>Room ID:</strong> {reservation.room}</p>
+                                    <p><strong>Bed ID:</strong> {reservation.room}</p>
                                     <p><strong>From:</strong> {reservation.from}</p>
                                     <p><strong>To:</strong> {reservation.to}</p>
                                     <p><strong>Status:</strong> {reservation.confirmed ? 'Confirmed' : 'Pending'}</p>

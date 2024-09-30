@@ -4,11 +4,23 @@ import React, { useState, useEffect } from 'react';
 import Layout from '@/app/components/Layout';
 import { getReservations, updateReservationStatus } from '@/app/api/rooms';
 
+type Reservation = {
+    id: number;
+    tenant: { name: string };
+    surname: string;
+    email: string;
+    roomId: number;
+    bedId: number;
+    from: string;
+    to: string;
+    confirmed: boolean;
+};
+
 const AdminPage = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [reservations, setReservations] = useState([]);
+    const [reservations, setReservations] = useState<Reservation[]>([]);
 
     useEffect(() => {
         const fetchReservations = async () => {

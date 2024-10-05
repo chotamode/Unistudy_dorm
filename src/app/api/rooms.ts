@@ -60,16 +60,24 @@ export const getBedsByRoomId = async (roomId: number) => {
 };
 
 export const createReservation = async (
-    tenantName: string,
-    tenantSurname: string,
-    tenantGender: string,
-    tenantEmail: string,
-    tenantDateOfBirth: string,
-    roomId: number,
-    bedId: number,
-    reservationFrom: string,
-    reservationTo: string
+  tenantName: string,
+  tenantSurname: string,
+  tenantGender: string,
+  tenantEmail: string,
+  tenantDateOfBirth: string,
+  roomId: number,
+  bedId: number
 ) => {
+  const today = new Date();
+  const startDate = new Date(today);
+  startDate.setDate(today.getDate() - 1);
+
+  const endDate = new Date(startDate);
+  endDate.setFullYear(startDate.getFullYear() + 1);
+
+  const reservationFrom = startDate.toISOString().split('T')[0];
+  const reservationTo = endDate.toISOString().split('T')[0];
+
   const { data, error } = await supabase.rpc('create_reservation', {
     tenant_name: tenantName,
     tenant_surname: tenantSurname,

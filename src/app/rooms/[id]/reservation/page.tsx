@@ -40,7 +40,7 @@ interface PlanProps {
 
 const plansMapping: { [key: string]: string } = {
     '1': plan1,
-    // '2': plan2,
+    '5': plan1,
     // '3': plan3,
     // '4': plan4,
     // '5': plan5,
@@ -51,12 +51,16 @@ const bedsMapping: Bed[] = [
     // room1
     { id: 1, occupied: true, x: 20, y: 20, horizontal: false, room: 1 },
     { id: 2, occupied: true, x: 20, y: 350, horizontal: true, room: 1 },
-    // room2
+    // room5
+    { id: 3, occupied: true, x: 20, y: 20, horizontal: false, room: 5 },
+    { id: 4, occupied: true, x: 20, y: 350, horizontal: true, room: 5 },
 ];
 
 const Plan: React.FC<PlanProps> = ({ beds = [] }) => {
     const { id } = useParams();
     const planImage = plansMapping[id as string] || planDefault;
+
+    // Map the beds data from the API to the bedsForPlan array
     const bedsForPlan = bedsMapping
         .filter(bed => bed.room === Number(id))
         .map(bed => ({

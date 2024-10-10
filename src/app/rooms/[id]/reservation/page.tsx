@@ -85,7 +85,7 @@ const Plan: React.FC<PlanProps> = ({beds = []}) => {
     }, [showMessage]);
 
     return (
-        <div className={"flex justify-center bg-[#F6F4F2] px-44 py-24 rounded-3xl relative w-full min-h-full"}
+        <div className={"flex justify-center bg-[#F6F4F2] rounded-3xl relative w-full h-full"}
              style={{boxShadow: 'inset 0 7px 10px rgba(0, 0, 0, 0.3), 0 7px 10px rgba(0, 0, 0, 0.2)'}}>
             <div
                 className="absolute top-[-30px] left-1/2 transform -translate-x-1/2 px-6 pr-2 w-80 h-16 bg-[#0F478D] rounded-2xl flex flex-row items-center">
@@ -152,7 +152,7 @@ const BedSelect: React.FC = () => {
 
     return (
         <Layout>
-            <div className={"flex justify-center flex-col items-center"}>
+            <div className={"flex justify-center flex-col items-center h-[85vh] mx-56"}>
                 <Plan beds={beds}/>
                 <div className={"flex flex-row gap-4 mt-14"}>
                     <div className={"flex flex-col items-center text-xl"}>

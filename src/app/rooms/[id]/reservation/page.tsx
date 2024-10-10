@@ -98,7 +98,7 @@ const Plan: React.FC<PlanProps> = ({beds = []}) => {
             </div>
             <div className="relative w-full h-full">
                 <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100"
-                     preserveAspectRatio="xMidYMid slice">
+                     preserveAspectRatio="xMidYMid meet">
                     <image href={planImage.src} width="100%" height="100%"/>
                     {bedsForPlan.map((bed) => (
                         <image

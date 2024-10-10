@@ -71,14 +71,10 @@ const RoomDetails = () => {
     return (
         <Layout>
             <div className="px-48 rounded-3xl flex flex-row">
-                <div className="w-1/2">
-                    <Image
-                        src={room.image || placeholderImage}
-                        alt={room.name}
-                        className="rounded-3xl w-[594px] h-[522px] object-cover"
-                        width={594}
-                        height={522}
-                    />
+                <div className="relative rounded-xxl
+                           bg-cover bg-center min-h-[40rem] w-110
+
+                           " style={{backgroundImage: `url(${room.image})`}} >
                 </div>
                 <div className="w-1/2  h-full flex flex-col justify-center gap-6">
                     <h1 className="text-3xl px-[4px] font-bold">

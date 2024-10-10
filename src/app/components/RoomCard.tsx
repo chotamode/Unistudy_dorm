@@ -35,7 +35,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
             <div
                 className="hidden rounded-xxl md:flex flex-col justify-end overflow-hidden
                            bg-cover bg-center min-h-120 w-110 filter grayscale-[1%]
-                           lg:w-110
+                           large-desktop:min-h-[37rem] large-desktop:w-[32rem]
                            "
                 style={{backgroundImage: `url(${background})`}}
             >
@@ -52,6 +52,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
                         <p className="text-xl font-semibold">
                             {price_month} $
                         </p>
+
                     </div>
 
                     <Link href={`../rooms/${id}`}>

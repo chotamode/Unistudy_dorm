@@ -32,7 +32,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
                                                floor = "Fifth Floor",
                                            }) => {
     return (
-        <div>
+        <div className="mb-10">
             <div
                 className="hidden rounded-xxl md:flex flex-col justify-end overflow-hidden
                            bg-cover bg-center min-h-120 w-110 filter grayscale-[1%]

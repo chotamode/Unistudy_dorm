@@ -5,6 +5,8 @@ import Link from 'next/link';
 import Button from "@/app/components/Button";
 import Image from "next/image";
 import arrowButton from "../../assets/arrow_button.svg"
+import arrowButton from "../../assets/arrow_button.svg"
+import classNames from 'classnames';
 
 interface RoomCardProps {
     id?: number;
@@ -17,7 +19,6 @@ interface RoomCardProps {
     floor?: string;
     apart_name?: string;
 }
-// vercel pls
 
 const RoomCard: React.FC<RoomCardProps> = ({
                                                id = 1,
@@ -25,7 +26,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
                                                address = "Default Address",            // Default value for address
                                                description = "No description provided",
                                                sex = "Girls only",
-                                               price_month = 0,
+                                               price_month = 0 ,
                                                apart_name = "Penthouse Apratment",
                                                background = "/images/rommbg.png",
                                                floor = "Fifth Floor",
@@ -78,10 +79,39 @@ const RoomCard: React.FC<RoomCardProps> = ({
                 <div className="flex flex-row justify-between items-end w-[368px] px-2 text-black   mb-2 filter font-semibold">
 
                     <div className="flex flex-col">
-                        <h2 className="text-xxl font-black mb-2">{name}</h2>
+                            <h2 className="text-xxl font-black mb-2">{name}</h2>
 
                         <div className="text-bold font-semibold my-2">
                             <p>{price_month} $</p>
+                        </div>
+                    </div>
+
+                    <Link href={`../rooms/${id}`}>
+                        <Button2 className="h-10 w-40 text-xs">learn more</Button2>
+                    </Link>
+                </div>
+            </div>
+
+            <div
+                className="md:hidden  rounded-xxl flex flex-col justify-end items-center
+                           bg-white overflow-hidden
+                           h-mlg w-mlg"
+            >
+                <div className="flex bg-cover bg-no-repeat bg-center rounded-xl
+                                my-2 bg-clip-content w-[22rem] h-[13.5rem]"
+                     style={{backgroundImage: `url(${background})`}}
+                >
+
+                </div>
+
+
+                <div className="flex flex-row justify-between items-end w-[368px] px-2 text-black   mb-2 filter font-semibold">
+
+                    <div className="flex flex-col">
+                        <h2 className="text-xxl font-black mb-2">{name}</h2>
+
+                        <div className="text-xs my-4">
+                            <p>{price_month}</p>
                         </div>
                     </div>
 
@@ -95,6 +125,8 @@ const RoomCard: React.FC<RoomCardProps> = ({
 
                 </div>
             </div>
+
+
         </div>
 
     );

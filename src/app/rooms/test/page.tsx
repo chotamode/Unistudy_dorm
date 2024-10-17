@@ -1,5 +1,5 @@
 import React from 'react';
-import backgroundSvg from '../../../assets/room_plans/plan1.svg';
+import backgroundSvg from '../../../assets/room_plans/sokol_plan1.svg';
 import insideSvg from '../../../assets/beds/free_bed.svg';
 
 const TestPage: React.FC = () => {

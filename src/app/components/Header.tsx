@@ -5,15 +5,15 @@ import Link from "next/link";
 
 const Header = () => {
     return (
-        <header className="bg-none text-white py-8 px-20">
+        <header className="bg-none text-white py-3 tablet:py-8 px-5 tablet:px-20">
             <nav className="mt-2 flex flex-row justify-between items-center font-montserrat w-full">
                 {/*  logo*/}
-                <div className="flex-shrink-0">
+                <div className="relative w-10 h-10 tablet:w-14 tablet:h-14 flex-shrink-0">
                     <Link href="/">
-                        <Image src={logo} alt="Logo" width={55} height={55} />
+                        <Image src={logo} alt="Logo" fill />
                     </Link>
                 </div>
-                <div className={" text-bold font-medium"}>
+                <div className={" text-sm tablet:text-bold font-medium"}>
                     <Link href="/contacts">
                         <div className="text-black cursor-pointer">Contacts</div>
                     </Link>

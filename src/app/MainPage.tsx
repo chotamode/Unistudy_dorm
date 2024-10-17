@@ -6,7 +6,6 @@ import { getRooms } from './api/rooms';
 import Image from 'next/image';
 import IconSwitch from './components/IconSwitch';
 
-
 interface Room {
     id: number;
     name: string;
@@ -51,8 +50,8 @@ const MainPage = () => {
             </div>
             <div className="min-h-screen bg-gray-100 p-8 md:px-0 lg:px-18 xl:px-52 pt-28">
                 <main>
-                    <div className=" my-10 sm:my-0"> <IconSwitch/> </div>
-                    <h2 className="sm:block lg:text-8xl md:text-7xl sm:text-6xl hidden font-semibold text-black mb-20 mt-24 text-center">Available rooms</h2>
+                    <IconSwitch />
+                    <h2 className="lg:text-8xl md:text-7xl sm:text-6xl text- font-semibold text-black mb-20 mt-24 text-center">Spare rooms</h2>
                     <div className="grid grid-cols-1 justify-items-center lg:grid-cols-2
                                     xl:justify-items-stretch 2xl:grid-cols-3">
                         {rooms.map((room) => (

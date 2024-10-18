@@ -4,8 +4,7 @@ import {white} from "next/dist/lib/picocolors";
 import Link from 'next/link';
 import Button from "@/app/components/Button";
 import Image from "next/image";
-import arrowButton from "../../assets/arrow_button.svg"
-import arrowButton from "../../assets/arrow_button.svg"
+import arrowButton from "../../assets/arrow_button.svg";
 import classNames from 'classnames';
 
 interface RoomCardProps {

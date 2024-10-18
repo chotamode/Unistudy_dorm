@@ -7,6 +7,10 @@ export type Tenant = {
 };
 
 export type Reservation = {
+  bed: {
+    id: number;
+    room: number;
+  };
   id: number;
   from: string;
   to: string;

@@ -406,7 +406,7 @@ const Plan: React.FC<PlanProps> = ({beds = []}) => {
                 {selectedBed && showMessage && (
                     <div ref={messageRef}
                          className="absolute bg-white rounded-2xl shadow-2xl p-8 flex flex-col gap-3 items-center"
-                         style={{left: (selectedBed.x ?? 0) + 20, top: (selectedBed.y ?? 0) + 20}}>
+                         style={{left: (selectedBed.x ?? 0) + 20 , top: (selectedBed.y ?? 0) + 10}}>
                         <p className={"text-3xl font-normal text-center"}>
                             The bed is free
                         </p>

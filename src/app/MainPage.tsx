@@ -4,7 +4,8 @@ import React, { useEffect, useState } from 'react';
 import RoomCard from './components/RoomCard';
 import { getRooms } from './api/rooms';
 import Image from 'next/image';
-import IconSwitch from './components/IconSwitch';
+import IconSwitch from '@/app/components/IconSwitch';
+import YearSwitch from "@/app/components/YearSwitch";
 
 interface Room {
     id: number;
@@ -51,6 +52,7 @@ const MainPage = () => {
             <div className="min-h-screen bg-gray-100 p-8 md:px-0 lg:px-18 xl:px-52 pt-28">
                 <main>
                     <IconSwitch />
+                    <YearSwitch />
                     <h2 className="lg:text-8xl md:text-7xl sm:text-6xl text- font-semibold text-black mb-20 mt-24 text-center">Spare rooms</h2>
                     <div className="grid grid-cols-1 justify-items-center lg:grid-cols-2
                                     xl:justify-items-stretch 2xl:grid-cols-3">

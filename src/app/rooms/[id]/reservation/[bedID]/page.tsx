@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Layout from "@/app/components/Layout";
 import {useParams, useRouter} from "next/navigation";
-import { createReservation } from '@/app/api/rooms';
+import { createDefaultReservation } from '@/app/api/rooms';
 import Link from "next/link";
 
 const FeedbackForm = () => {
@@ -41,7 +41,7 @@ const FeedbackForm = () => {
         console.log("Submitting form with data:", formData);
 
         try {
-            const result = await createReservation(
+            const result = await createDefaultReservation(
                 formData.name,
                 formData.surname,
                 formData.gender,

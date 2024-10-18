@@ -41,6 +41,16 @@ import sokol_plan7 from '../../../../assets/room_plans/sokol_plan7.svg'
 import sokol_plan8 from '../../../../assets/room_plans/sokol_plan8.svg'
 import sokol_plan9 from '../../../../assets/room_plans/sokol_plan9.svg'
 import kamcka_plan1 from '../../../../assets/room_plans/kamcka_plan1.svg'
+import kamcka_plan2 from '../../../../assets/room_plans/kamcka_plan2.svg'
+import kamcka_plan3 from '../../../../assets/room_plans/kamcka_plan3.svg'
+import kamcka_plan4 from '../../../../assets/room_plans/kamcka_plan4.svg'
+import kamcka_plan5 from '../../../../assets/room_plans/kamcka_plan5.svg'
+import kamcka_plan6 from '../../../../assets/room_plans/kamcka_plan6.svg'
+import kamcka_plan7 from '../../../../assets/room_plans/kamcka_plan7.svg'
+import kamcka_plan8 from '../../../../assets/room_plans/kamcka_plan8.svg'
+import kamcka_plan9 from '../../../../assets/room_plans/kamcka_plan9.svg'
+import kamcka_plan10 from '../../../../assets/room_plans/kamcka_plan10.svg'
+import kamcka_plan11 from '../../../../assets/room_plans/kamcka_plan11.svg'
 
 interface Bed {
     id: number;
@@ -107,6 +117,16 @@ const plansMapping: { [key: string]: string } = {
     // Kamcka plans
 
     '39': kamcka_plan1,
+    '40': kamcka_plan2,
+    '41': kamcka_plan3,
+    '42': kamcka_plan4,
+    '43': kamcka_plan5,
+    '44': kamcka_plan6,
+    '45': kamcka_plan7,
+    '46': kamcka_plan8,
+    '47': kamcka_plan9,
+    '48': kamcka_plan10,
+    '49': kamcka_plan11,
 
 
 
@@ -121,7 +141,6 @@ const bedsMapping: Bed[] = [
 
     {id: 3, occupied: true, x: 5, y: 14, horizontal: false, room: 2, plan: 'standard'},
     {id: 4, occupied: true, x: 5, y: 64, horizontal: true, room: 2, plan: 'standard'},
-
 
     // Castle apps
 
@@ -253,7 +272,47 @@ const bedsMapping: Bed[] = [
 
     // Kamcka Apartments
 
-    {id: 96, occupied: true, x:5, y: 13, horizontal: true, room: 39, plan: 'standard'},
+    {id: 96, occupied: true, x:22, y: 2, horizontal: true, room: 39, plan: 'standard'},
+
+    {id: 97, occupied: true, x:69, y: 4, horizontal: true, room: 40, plan: 'standard'},
+    {id: 98, occupied: true, x:57, y: 4, horizontal: true, room: 40, plan: 'standard'},
+
+    {id: 99, occupied: true, x:21, y: 4, horizontal: true, room: 41, plan: 'standard'},
+    {id: 100, occupied: true, x:34, y: 4, horizontal: true, room: 41, plan: 'standard'},
+
+    {id: 101, occupied: true, x:4, y: 67, horizontal: true, room: 42, plan: 'standard'},
+    {id: 102, occupied: true, x:32, y: 67, horizontal: true, room: 42, plan: 'standard'},
+    {id: 103, occupied: true, x:4, y: 20, horizontal: false, room: 42, plan: 'standard'},
+
+    {id: 104, occupied: true, x:20, y: 5, horizontal: true, room: 43, plan: 'standard'},
+    {id: 105, occupied: true, x:12, y: 76, horizontal: true, room: 43, plan: 'standard'},
+    {id: 106, occupied: true, x:30, y: 76, horizontal: true, room: 43, plan: 'standard'},
+
+    {id: 107, occupied: true, x:10, y: 3, horizontal: false, room: 44, plan: 'standard'},
+    {id: 108, occupied: true, x:10, y: 17, horizontal: false, room: 44, plan: 'standard'},
+
+    {id: 109, occupied: true, x:55, y: 33, horizontal: false, room: 45, plan: 'small'},
+    {id: 110, occupied: true, x:55, y: 45, horizontal: false, room: 45, plan: 'small'},
+    {id: 111, occupied: true, x:55, y: 86, horizontal: false, room: 45, plan: 'small'},
+
+    {id: 112, occupied: true, x:82, y: 53, horizontal: true, room: 46, plan: 'standard'},
+    {id: 113, occupied: true, x:68, y: 53, horizontal: true, room: 46, plan: 'standard'},
+
+    {id: 114, occupied: true, x:68, y: 77, horizontal: true, room: 47, plan: 'standard'},
+    {id: 115, occupied: true, x:58, y: 16, horizontal: false, room: 47, plan: 'standard'},
+    {id: 116, occupied: true, x:58, y: 4, horizontal: false, room: 47, plan: 'standard'},
+
+    {id: 117, occupied: true, x:64, y: 64, horizontal: true, room: 48, plan: 'small'},
+    {id: 118, occupied: true, x:47, y: 64, horizontal: true, room: 48, plan: 'small'},
+    {id: 119, occupied: true, x:4, y: 20, horizontal: true, room: 48, plan: 'small'},
+    {id: 120, occupied: true, x:22, y: 49, horizontal: false, room: 48, plan: 'small'},
+
+    {id: 121, occupied: true, x:32, y: 81, horizontal: true, room: 49, plan: 'small'},
+    {id: 122, occupied: true, x:52, y: 90, horizontal: false, room: 49, plan: 'small'},
+    {id: 123, occupied: true, x:52, y: 80, horizontal: false, room: 49, plan: 'small'},
+    {id: 124, occupied: true, x:56, y: 65, horizontal: false, room: 49, plan: 'small'},
+
+
 
 
 

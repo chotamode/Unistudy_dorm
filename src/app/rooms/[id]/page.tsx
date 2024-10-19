@@ -17,6 +17,7 @@ interface Room {
     description: string;
     price_month: number;
     image: string;
+    mini_description: string;
 }
 
 interface Bed {

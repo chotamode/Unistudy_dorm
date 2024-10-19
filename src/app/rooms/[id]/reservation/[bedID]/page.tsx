@@ -49,8 +49,6 @@ const FeedbackForm = () => {
                 formData.dateOfBirth,
                 Number(id), // roomId
                 Number(bedID), // bedId
-                new Date().toISOString(), // reservationFrom
-                new Date().toISOString() // reservationTo
             );
             router.push(`/rooms/${id}/reservation/${bedID}/end`);
 

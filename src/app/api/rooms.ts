@@ -184,7 +184,7 @@ export const getReservations = async (): Promise<Reservation[]> => {
             id: reservation.bed.id,
             room: reservation.bed.room,
             cost: reservation.bed.cost
-        } : null;
+        } : undefined
 
         return {
             id: reservation.id,

@@ -155,24 +155,24 @@ type Room = {
 };
 
 export const getReservations = async (): Promise<Reservation[]> => {
-    const {data, error} = await supabase
+    const { data, error } = await supabase
         .from('reservation')
         .select(`
-      id,
-      from,
-      to,
-      confirmed,
-      bed (
-        id,
-        room
-      ),
-      tenant:reserved_by (
-        id,
-        name,
-        surname,
-        email
-      )
-    `);
+            id,
+            from,
+            to,
+            confirmed,
+            bed (
+                id,
+                room
+            ),
+            tenant:reserved_by (
+                id,
+                name,
+                surname,
+                email
+            )
+        `);
 
     if (error) {
         console.error('Error fetching reservations:', error);
@@ -182,7 +182,8 @@ export const getReservations = async (): Promise<Reservation[]> => {
     return data.map((reservation: any) => {
         const bed = reservation.bed ? {
             id: reservation.bed.id,
-            room: reservation.bed.room
+            room: reservation.bed.room,
+            cost: reservation.bed.cost
         } : null;
 
         return {

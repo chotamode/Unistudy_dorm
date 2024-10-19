@@ -9,6 +9,7 @@ export type Tenant = {
 export interface Reservation {
     id: number;
     tenant: {
+        id: number;
         name: string;
         surname: string;
         email: string;

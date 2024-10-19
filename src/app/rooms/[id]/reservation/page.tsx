@@ -89,12 +89,11 @@ const plansMapping: { [key: string]: string } = {
     '16': castle_plan7,
     '17': castle_plan8,
     '18': castle_plan9,
-    '19': castle_plan10,
     '20': castle_plan11,
     '21': castle_plan12,
     '22': castle_plan13,
     '23': castle_plan14,
-    '24': castle_plan12,
+    '24': castle_plan10,
 
     // Continued Sokol Plans
 
@@ -201,9 +200,6 @@ const bedsMapping: Bed[] = [
     {id: 47, occupied: true, x: 23, y: 62, horizontal: false, room: 18, plan: 'small'},
     {id: 48, occupied: true, x: 2, y: 40, horizontal: false, room: 18, plan: 'small'},
     {id: 49, occupied: true, x: 2, y: 29, horizontal: false, room: 18, plan: 'small'},
-
-    {id: 50, occupied: true, x: 7, y: 85, horizontal: false, room: 19, plan: 'standard'},
-    {id: 51, occupied: true, x: 72, y: 85, horizontal: false, room: 19, plan: 'standard'},
 
     {id: 52, occupied: true, x: 28, y: 42, horizontal: false, room: 20, plan: 'small'},
     {id: 53, occupied: true, x: 58, y: 42, horizontal: false, room: 20, plan: 'small'},

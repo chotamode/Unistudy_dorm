@@ -1,4 +1,5 @@
 import {supabase} from '@/supabaseClient';
+import { Reservation } from '@/app/types';
 
 // Function to get all rooms
 export const getRooms = async () => {
@@ -136,15 +137,6 @@ type Tenant = {
     name: string;
     surname: string;
     email: string;
-};
-
-type Reservation = {
-    id: number;
-    from: string;
-    to: string;
-    confirmed: boolean;
-    room: number;
-    tenant: Tenant;
 };
 
 type Bed = {

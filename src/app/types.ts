@@ -1,9 +1,9 @@
 // src/app/types.ts
 export type Tenant = {
-  id: number;
-  name: string;
-  surname: string;
-  email: string;
+    id: number;
+    name: string;
+    surname: string;
+    email: string;
 };
 
 export interface Reservation {
@@ -20,16 +20,19 @@ export interface Reservation {
 }
 
 export type Bed = {
-  cost: number;
-  id: number;
-  room: number;
+    cost: number;
+    id: number;
+    room: number;
 };
 
 export type Room = {
-  address: string;
-  description: string;
-  id: number;
-  image: string;
-  name: string;
-  price_month: number;
+    address: string;
+    description: string;
+    id: number;
+    image: string;
+    name: string;
+    price_month: number;
+    mini_description: string;
+    area: number;
+    floor: number;
 };

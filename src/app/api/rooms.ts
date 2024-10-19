@@ -1,4 +1,5 @@
 import {supabase} from '@/supabaseClient';
+import { Reservation } from '@/app/types';
 
 // Function to get all rooms
 export const getRooms = async () => {
@@ -43,7 +44,7 @@ export const getBedsByRoomId = async (roomId: number) => {
         console.error('Error fetching beds:', error);
         return [];
     }
-
+    // git pls work
     return data.map(bed => {
         const isOccupied = bed.reservations.some(reservation => {
             const fromDate = new Date(reservation.from);
@@ -136,15 +137,6 @@ type Tenant = {
     name: string;
     surname: string;
     email: string;
-};
-
-type Reservation = {
-    id: number;
-    from: string;
-    to: string;
-    confirmed: boolean;
-    room: number;
-    tenant: Tenant;
 };
 
 type Bed = {

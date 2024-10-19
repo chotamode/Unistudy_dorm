@@ -43,7 +43,7 @@ export const getBedsByRoomId = async (roomId: number) => {
         console.error('Error fetching beds:', error);
         return [];
     }
-
+    // git pls work
     return data.map(bed => {
         const isOccupied = bed.reservations.some(reservation => {
             const fromDate = new Date(reservation.from);

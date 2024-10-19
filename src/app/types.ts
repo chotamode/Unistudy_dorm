@@ -18,3 +18,18 @@ export type Reservation = {
   room: number;
   tenant: Tenant;
 };
+
+export type Bed = {
+  cost: number;
+  id: number;
+  room: number;
+};
+
+export type Room = {
+  address: string;
+  description: string;
+  id: number;
+  image: string;
+  name: string;
+  price_month: number;
+};

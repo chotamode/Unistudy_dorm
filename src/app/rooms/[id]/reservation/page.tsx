@@ -197,10 +197,10 @@ const bedsMapping: Bed[] = [
     {id: 44, occupied: true, x: 5, y: 55, horizontal: false, room: 17, plan: 'standard'},
     {id: 45, occupied: true, x: 5, y: 48, horizontal: false, room: 17, plan: 'standard'},
 
-    {id: 46, occupied: true, x: 91, y: 53, horizontal: true, room: 18, plan: 'small'},
-    {id: 47, occupied: true, x: 81, y: 72, horizontal: false, room: 18, plan: 'small'},
-    {id: 48, occupied: true, x: 82, y: 21, horizontal: false, room: 18, plan: 'small'},
-    {id: 49, occupied: true, x: 62, y: 21, horizontal: false, room: 18, plan: 'small'},
+    {id: 46, occupied: true, x: 23, y: 52, horizontal: false, room: 18, plan: 'small'},
+    {id: 47, occupied: true, x: 23, y: 62, horizontal: false, room: 18, plan: 'small'},
+    {id: 48, occupied: true, x: 2, y: 40, horizontal: false, room: 18, plan: 'small'},
+    {id: 49, occupied: true, x: 2, y: 29, horizontal: false, room: 18, plan: 'small'},
 
     {id: 50, occupied: true, x: 7, y: 85, horizontal: false, room: 19, plan: 'standard'},
     {id: 51, occupied: true, x: 72, y: 85, horizontal: false, room: 19, plan: 'standard'},
@@ -310,16 +310,6 @@ const bedsMapping: Bed[] = [
     {id: 121, occupied: true, x:32, y: 81, horizontal: true, room: 49, plan: 'small'},
     {id: 122, occupied: true, x:52, y: 90, horizontal: false, room: 49, plan: 'small'},
     {id: 123, occupied: true, x:52, y: 80, horizontal: false, room: 49, plan: 'small'},
-    {id: 124, occupied: true, x:56, y: 65, horizontal: false, room: 49, plan: 'small'},
-
-
-
-
-
-
-
-
-
 
 
 ];
@@ -402,6 +392,7 @@ const Plan: React.FC<PlanProps> = ({beds = []}) => {
                             className="cursor-pointer"
                         />
                     ))}
+
                 </svg>
                 {selectedBed && showMessage && (
                     <div ref={messageRef}
@@ -417,6 +408,7 @@ const Plan: React.FC<PlanProps> = ({beds = []}) => {
                         </Link>
                     </div>
                 )}
+
             </div>
         </div>
     );

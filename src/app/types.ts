@@ -6,18 +6,18 @@ export type Tenant = {
   email: string;
 };
 
-export type Reservation = {
-  bed: {
+export interface Reservation {
     id: number;
-    room: number;
-  };
-  id: number;
-  from: string;
-  to: string;
-  confirmed: boolean;
-  room: number;
-  tenant: Tenant;
-};
+    tenant: {
+        name: string;
+        surname: string;
+        email: string;
+    };
+    from: string;
+    to: string;
+    confirmed: boolean;
+    bed?: Bed; // Make bed optional
+}
 
 export type Bed = {
   cost: number;

@@ -1,9 +1,17 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import Layout from '@/app/components/Layout';
-import { getReservations, updateReservationStatus, updateReservationDates, getRooms, updateRoomDetails, getBedsByRoomId, updateBedCost } from '@/app/api/rooms';
-import { Reservation, Room, Bed } from '@/app/types';
+import {
+    getReservations,
+    updateReservationStatus,
+    updateReservationDates,
+    getRooms,
+    updateRoomDetails,
+    getBedsByRoomId,
+    updateBedCost
+} from '@/app/api/rooms';
+import {Reservation, Room, Bed} from '@/app/types';
 // git pls work
 const AdminPage = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -50,7 +58,7 @@ const AdminPage = () => {
     const handleUpdateReservation = async (reservationId: number, confirmed: boolean) => {
         await updateReservationStatus(reservationId, confirmed);
         setReservations(reservations.map(reservation =>
-            reservation.id === reservationId ? { ...reservation, confirmed } : reservation
+            reservation.id === reservationId ? {...reservation, confirmed} : reservation
         ));
     };
 
@@ -64,7 +72,7 @@ const AdminPage = () => {
         if (editReservationId !== null) {
             await updateReservationDates(editReservationId, newFromDate, newToDate);
             setReservations(reservations.map(reservation =>
-                reservation.id === editReservationId ? { ...reservation, from: newFromDate, to: newToDate } : reservation
+                reservation.id === editReservationId ? {...reservation, from: newFromDate, to: newToDate} : reservation
             ));
             setEditReservationId(null);
         }
@@ -81,7 +89,7 @@ const AdminPage = () => {
         if (editRoomId !== null) {
             await updateRoomDetails(editRoomId, newRoomDetails);
             setRooms(rooms.map(room =>
-                room.id === editRoomId ? { ...room, ...newRoomDetails } : room
+                room.id === editRoomId ? {...room, ...newRoomDetails} : room
             ));
             setEditRoomId(null);
         }
@@ -96,7 +104,7 @@ const AdminPage = () => {
         if (editBedId !== null && newBedCost !== null) {
             await updateBedCost(editBedId, newBedCost);
             setBeds(beds.map(bed =>
-                bed.id === editBedId ? { ...bed, cost: newBedCost } : bed
+                bed.id === editBedId ? {...bed, cost: newBedCost} : bed
             ));
             setEditBedId(null);
         }
@@ -129,13 +137,19 @@ const AdminPage = () => {
                                 <ul>
                                     {reservations.map(reservation => (
                                         <li key={reservation.id} className="mb-4 p-4 border rounded">
-                                            <p><strong>Tenant:</strong> {reservation.tenant.name} {reservation.tenant.surname}</p>
+                                            <p>
+                                                <strong>Tenant:</strong> {reservation.tenant.name} {reservation.tenant.surname}
+                                            </p>
                                             <p><strong>Email:</strong> {reservation.tenant.email}</p>
-                                            <p><strong>Room ID:</strong> {reservation.bed ? reservation.bed.room : 'N/A'}</p>
-                                            <p><strong>Bed ID:</strong> {reservation.bed ? reservation.bed.id : 'N/A'}</p>
+                                            <p><strong>Room
+                                                ID:</strong> {reservation.bed ? reservation.bed.room : 'N/A'}</p>
+                                            <p><strong>Bed ID:</strong> {reservation.bed ? reservation.bed.id : 'N/A'}
+                                            </p>
                                             <p><strong>From:</strong> {reservation.from}</p>
                                             <p><strong>To:</strong> {reservation.to}</p>
-                                            <p><strong>Status:</strong> {reservation.confirmed ? 'Confirmed' : 'Pending'}</p>
+                                            <p>
+                                                <strong>Status:</strong> {reservation.confirmed ? 'Confirmed' : 'Pending'}
+                                            </p>
                                             <button
                                                 onClick={() => handleUpdateReservation(reservation.id, true)}
                                                 className="bg-green-500 text-white px-4 py-2 rounded mr-2"
@@ -213,7 +227,10 @@ const AdminPage = () => {
                                                         <input
                                                             type="text"
                                                             value={newRoomDetails.name ?? ''}
-                                                            onChange={(e) => setNewRoomDetails({ ...newRoomDetails, name: e.target.value })}
+                                                            onChange={(e) => setNewRoomDetails({
+                                                                ...newRoomDetails,
+                                                                name: e.target.value
+                                                            })}
                                                             className="ml-2 p-2 border rounded"
                                                         />
                                                     </label>
@@ -222,7 +239,10 @@ const AdminPage = () => {
                                                         <input
                                                             type="text"
                                                             value={newRoomDetails.address ?? ''}
-                                                            onChange={(e) => setNewRoomDetails({ ...newRoomDetails, address: e.target.value })}
+                                                            onChange={(e) => setNewRoomDetails({
+                                                                ...newRoomDetails,
+                                                                address: e.target.value
+                                                            })}
                                                             className="ml-2 p-2 border rounded"
                                                         />
                                                     </label>
@@ -231,7 +251,10 @@ const AdminPage = () => {
                                                         <input
                                                             type="text"
                                                             value={newRoomDetails.mini_description ?? ''}
-                                                            onChange={(e) => setNewRoomDetails({ ...newRoomDetails, mini_description: e.target.value })}
+                                                            onChange={(e) => setNewRoomDetails({
+                                                                ...newRoomDetails,
+                                                                mini_description: e.target.value
+                                                            })}
                                                             className="ml-2 p-2 border rounded"
                                                         />
                                                     </label>
@@ -240,7 +263,10 @@ const AdminPage = () => {
                                                         <input
                                                             type="number"
                                                             value={newRoomDetails.floor ?? ''}
-                                                            onChange={(e) => setNewRoomDetails({ ...newRoomDetails, floor: Number(e.target.value) })}
+                                                            onChange={(e) => setNewRoomDetails({
+                                                                ...newRoomDetails,
+                                                                floor: Number(e.target.value)
+                                                            })}
                                                             className="ml-2 p-2 border rounded"
                                                         />
                                                     </label>
@@ -249,7 +275,10 @@ const AdminPage = () => {
                                                         <input
                                                             type="number"
                                                             value={newRoomDetails.area ?? ''}
-                                                            onChange={(e) => setNewRoomDetails({ ...newRoomDetails, area: Number(e.target.value) })}
+                                                            onChange={(e) => setNewRoomDetails({
+                                                                ...newRoomDetails,
+                                                                area: Number(e.target.value)
+                                                            })}
                                                             className="ml-2 p-2 border rounded"
                                                         />
                                                     </label>
@@ -258,7 +287,10 @@ const AdminPage = () => {
                                                         <input
                                                             type="text"
                                                             value={newRoomDetails.description ?? ''}
-                                                            onChange={(e) => setNewRoomDetails({ ...newRoomDetails, description: e.target.value })}
+                                                            onChange={(e) => setNewRoomDetails({
+                                                                ...newRoomDetails,
+                                                                description: e.target.value
+                                                            })}
                                                             className="ml-2 p-2 border rounded"
                                                         />
                                                     </label>

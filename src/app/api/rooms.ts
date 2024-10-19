@@ -69,7 +69,8 @@ export const createDefaultReservation = async (
     tenantEmail: string,
     tenantDateOfBirth: string,
     roomId: number,
-    bedId: number
+    bedId: number,
+
 ) => {
     const today = new Date();
     const currentYear = today.getFullYear();

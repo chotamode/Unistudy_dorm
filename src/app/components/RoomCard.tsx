@@ -34,7 +34,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
         <div className="mb-10">
             <div
                 className="hidden rounded-xxl md:flex flex-col justify-end overflow-hidden
-                           bg-cover bg-center min-h-120 w-110 filter grayscale-[1%]
+                           bg-cover bg-center min-h-120 w-full md:w-110 filter grayscale-[1%]
                            large-desktop:min-h-[37rem] large-desktop:w-[32rem]
                            "
                 style={{backgroundImage: `url(${background})`}}

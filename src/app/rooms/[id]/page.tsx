@@ -71,35 +71,35 @@ const RoomDetails = () => {
 
     return (
         <Layout>
-            <div className="px-48 rounded-3xl flex flex-row">
+            <div className="px-4 md:px-48 rounded-3xl flex flex-col md:flex-row">
                 <div className="relative rounded-xxl
-                           bg-cover bg-center min-h-[40rem] w-110
+                           bg-cover bg-center min-h-[20rem] md:min-h-[40rem] w-full md:w-110
 
                            " style={{backgroundImage: `url(${room.image})`}} >
                 </div>
-                <div className="w-1/2  h-full flex flex-col justify-center gap-6">
-                    <h1 className="text-3xl px-[4px] font-bold">
+                <div className="w-full md:w-1/2  h-full flex flex-col justify-center gap-6 mt-6 md:mt-0">
+                    <h1 className="text-2xl md:text-3xl px-1.5 md:px-[4px] font-bold">
                         {room.name}
                     </h1>
-                    <ul className="list-disc text-adxs px-2 list-inside">
-                        <h3 className="font-bold text-adxs mb-2">
+                    <ul className="list-disc text-sm md:text-adxs px-2 list-inside">
+                        <h3 className="font-bold text-sm md:text-adxs mb-2">
                             {roomType === 'both' ? 'For boys and girls ' : `For ${roomType === 'male' ? 'boys' : 'girls'} only`}
                         </h3>
                         {details.map((detail) => (
                             <li key={detail.id}>{detail.detail}</li>
-                        ))}
+                            ))}
                     </ul>
-                    <p className="bg-[#DBE9FB] text-adxs py-6 px-4 rounded-3xl">
+                    <p className="bg-[#DBE9FB] text-adxs py-5 md:py-6 px-5 md:px-4 rounded-3xl">
                         {room.description}
                     </p>
-                    <p className={"border-b-2 border-[#0F478D] w-fit pr-12 font-medium"}>
+                    <p className={"border-b-2 border-[#0F478D] w-fit pr-1 md:pr-12 font-medium"}>
                         Area: {room.area} m²
                     </p>
                     <h3 className={"font-bold"}>
                         Available places:
                     </h3>
                     <div className={"flex flex-col"}>
-                        <p className="text-start text-adxs  max-w-[450px] font-medium py-4">
+                        <p className="text-start text-adxs  w-full md:max-w-[450px] font-medium py-4">
                             Double room with access to the balcony |
                             1 place is free • 8500kh per month per place Double room
                             without access to the balcony |
@@ -107,7 +107,7 @@ const RoomDetails = () => {
                         </p>
 
                         <Link href={`/rooms/${id}/reservation`}>
-                            <Button2 className={"w-60"}>
+                            <Button2 className={"w-full md:w-60 mt-5 md:mt-0"}>
                                 Book a bed
                             </Button2>
                         </Link>

@@ -64,7 +64,6 @@ const MainPage = () => {
                                 background={room.image}
                                 address={room.address}
                                 description={room.description}
-                                price_month={room.price_month}
                             />
                         ))}
                     </div>

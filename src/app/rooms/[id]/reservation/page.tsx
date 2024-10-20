@@ -51,6 +51,7 @@ import kamcka_plan8 from '../../../../assets/room_plans/kamcka_plan8.svg'
 import kamcka_plan9 from '../../../../assets/room_plans/kamcka_plan9.svg'
 import kamcka_plan10 from '../../../../assets/room_plans/kamcka_plan10.svg'
 import kamcka_plan11 from '../../../../assets/room_plans/kamcka_plan11.svg'
+import sokol_plan10 from '../../../../assets/room_plans/sokol_plan10.svg'
 
 interface Bed {
     id: number;
@@ -126,6 +127,11 @@ const plansMapping: { [key: string]: string } = {
     '47': kamcka_plan9,
     '48': kamcka_plan10,
     '49': kamcka_plan11,
+
+    // Sokol Plans last added
+
+    '50': sokol_plan10,
+    '51': sokol_plan10,
 
 
 
@@ -306,6 +312,12 @@ const bedsMapping: Bed[] = [
     {id: 121, occupied: true, x:32, y: 81, horizontal: true, room: 49, plan: 'small'},
     {id: 122, occupied: true, x:52, y: 90, horizontal: false, room: 49, plan: 'small'},
     {id: 123, occupied: true, x:52, y: 80, horizontal: false, room: 49, plan: 'small'},
+
+    {id: 125, occupied: true, x:3, y: 50, horizontal: true, room: 50, plan: 'standard'},
+    {id: 126, occupied: true, x:48, y: 66, horizontal: false, room: 50, plan: 'standard'},
+
+    {id: 127, occupied: true, x:3, y: 50, horizontal: true, room: 51, plan: 'standard'},
+    {id: 128, occupied: true, x:48, y: 66, horizontal: false, room: 51, plan: 'standard'},
 
 
 ];

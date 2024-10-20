@@ -13,7 +13,6 @@ interface RoomCardProps {
     address?: string;
     sex?: string;
     description?: string;
-    price_month?: number;
     background?: string;
     floor?: string;
     apart_name?: string;
@@ -25,13 +24,13 @@ const RoomCard: React.FC<RoomCardProps> = ({
                                                address = "Default Address",            // Default value for address
                                                description = "No description provided",
                                                sex = "Girls only",
-                                               price_month = 0 ,
                                                apart_name = "Penthouse Apratment",
                                                background = "/images/rommbg.png",
                                                floor = "Fifth Floor",
                                            }) => {
     return (
         <div className="mb-10">
+
             <div
                 className="hidden rounded-xxl md:flex flex-col justify-end overflow-hidden
                            bg-cover bg-center min-h-120 w-110 filter grayscale-[1%]
@@ -39,6 +38,8 @@ const RoomCard: React.FC<RoomCardProps> = ({
                            "
                 style={{backgroundImage: `url(${background})`}}
             >
+
+                <Link href={`../rooms/${id}`}>
                 <div className="absolute inset-0 bg-black opacity-50 z-0"></div>
                 <div className=" px-4 text-white mb-8 filter z-10 relative font-semibold">
                     <h2 className="text-xxl font-black mb-2">{name}</h2>
@@ -49,53 +50,25 @@ const RoomCard: React.FC<RoomCardProps> = ({
                         <p className="py-2">
                             {description}
                         </p>
-                        <p className="text-xl font-semibold">
-                            {price_month} $
-                        </p>
 
                     </div>
-
-                    <Link href={`../rooms/${id}`}>
                         <Button2 className="h-10 w-40 text-xs">Book now</Button2>
-                    </Link>
+
                 </div>
 
+                </Link>
+
             </div>
+
+
 
             <div
                 className="md:hidden  rounded-xxl flex flex-col justify-end items-center
                            bg-white overflow-hidden
                            h-mlg w-mlg"
             >
-                <div className="flex bg-cover bg-no-repeat bg-center rounded-xl
-                                my-2 bg-clip-content w-[22rem] h-[13.5rem]"
-                     style={{backgroundImage: `url(${background})`}}
-                >
+                <Link href={`../rooms/${id}`}>
 
-                </div>
-
-
-                <div className="flex flex-row justify-between items-end w-[368px] px-2 text-black   mb-2 filter font-semibold">
-
-                    <div className="flex flex-col">
-                            <h2 className="text-xxl font-black mb-2">{name}</h2>
-
-                        <div className="text-bold font-semibold my-2">
-                            <p>{price_month} $</p>
-                        </div>
-                    </div>
-
-                    <Link href={`../rooms/${id}`}>
-                        <Button2 className="h-10 w-40 text-xs">learn more</Button2>
-                    </Link>
-                </div>
-            </div>
-
-            <div
-                className="md:hidden  rounded-xxl flex flex-col justify-end items-center
-                           bg-white overflow-hidden
-                           h-mlg w-mlg"
-            >
                 <div className="flex bg-cover bg-no-repeat bg-center rounded-xl
                                 my-2 bg-clip-content w-[22rem] h-[13.5rem]"
                      style={{backgroundImage: `url(${background})`}}
@@ -109,20 +82,20 @@ const RoomCard: React.FC<RoomCardProps> = ({
                     <div className="flex flex-col">
                         <h2 className="text-xxl font-black mb-2">{name}</h2>
 
-                        <div className="text-xs my-4">
-                            <p>{price_month}</p>
-                        </div>
                     </div>
 
                     <div className="flex flex-col ">
-                        <Link href={`../rooms/${id}`}>
-                                <Image src={arrowButton} alt={arrowButton}></Image>
-                        </Link>
+
+                                <Image src={arrowButton} width={40} height={40} alt={arrowButton}></Image>
+
                     </div>
 
 
 
                 </div>
+
+            </Link>
+
             </div>
 
 

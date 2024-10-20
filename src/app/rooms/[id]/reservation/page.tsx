@@ -52,6 +52,7 @@ import kamcka_plan9 from '../../../../assets/room_plans/kamcka_plan9.svg'
 import kamcka_plan10 from '../../../../assets/room_plans/kamcka_plan10.svg'
 import kamcka_plan11 from '../../../../assets/room_plans/kamcka_plan11.svg'
 import sokol_plan10 from '../../../../assets/room_plans/sokol_plan10.svg'
+import sokol_plan11 from '../../../../assets/room_plans/sokol_plan11.svg'
 
 interface Bed {
     id: number;
@@ -132,6 +133,7 @@ const plansMapping: { [key: string]: string } = {
 
     '50': sokol_plan10,
     '51': sokol_plan10,
+    '52': sokol_plan11,
 
 
 
@@ -319,6 +321,9 @@ const bedsMapping: Bed[] = [
     {id: 127, occupied: true, x:3, y: 50, horizontal: true, room: 51, plan: 'standard'},
     {id: 128, occupied: true, x:48, y: 66, horizontal: false, room: 51, plan: 'standard'},
 
+    {id: 129, occupied: true, x:4, y: 34, horizontal: true, room: 52, plan: 'standard'},
+    {id: 130, occupied: true, x:85, y: 74, horizontal: true, room: 52, plan: 'standard'},
+
 
 ];
 
@@ -367,7 +372,7 @@ const Plan: React.FC<PlanProps> = ({beds = []}) => {
         <div className={"flex justify-center bg-[#F6F4F2] rounded-3xl relative w-full h-full"}
              style={{boxShadow: 'inset 0 7px 10px rgba(0, 0, 0, 0.3), 0 7px 10px rgba(0, 0, 0, 0.2)'}}>
             <div
-                className="absolute top-[-30px] left-1/2 transform -translate-x-1/2 px-6 pr-2 w-80 h-16 bg-[#0F478D] rounded-2xl flex flex-row items-center">
+                className="absolute  top-[-30px] left-1/2 transform -translate-x-1/2 px-6 pr-2 w-80 h-16 bg-[#0F478D] rounded-2xl flex flex-row items-center">
                 <p className="w-3/4 text-white text-center font-semibold whitespace-nowrap text-sm">
                     To book a bed, click on the bed
                 </p>

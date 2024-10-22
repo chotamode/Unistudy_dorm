@@ -12,6 +12,7 @@ import {
     updateBedCost
 } from '@/app/api/rooms';
 import {Reservation, Room, Bed} from '@/app/types';
+import Image from "next/image";
 // git pls work
 const AdminPage = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -112,7 +113,7 @@ const AdminPage = () => {
 
     return (
         <Layout>
-            <div className="px-16 py-8">
+            <div className="flex flex-col px-16 py-8">
                 {isLoggedIn ? (
                     <>
                         <h1 className="text-4xl font-bold mb-4">Admin Dashboard</h1>
@@ -132,42 +133,142 @@ const AdminPage = () => {
                             </button>
                         </div>
                         {activeTab === 'reservations' && (
-                            <div>
-                                <h2 className="text-2xl font-bold mt-8">Reservations</h2>
-                                <ul>
+                            <div className="flex flex-row flex-wrap gap-5 ">
+
+
+                                <div className="flex justify-center flex-wrap mt-10 gap-5">
                                     {reservations.map(reservation => (
-                                        <li key={reservation.id} className="mb-4 p-4 border rounded">
-                                            <p>
-                                                <strong>Tenant:</strong> {reservation.tenant.name} {reservation.tenant.surname}
-                                            </p>
-                                            <p><strong>Email:</strong> {reservation.tenant.email}</p>
-                                            <p><strong>Room
-                                                ID:</strong> {reservation.bed ? reservation.bed.room : 'N/A'}</p>
-                                            <p><strong>Bed ID:</strong> {reservation.bed ? reservation.bed.id : 'N/A'}
-                                            </p>
-                                            <p><strong>From:</strong> {reservation.from}</p>
-                                            <p><strong>To:</strong> {reservation.to}</p>
-                                            <p>
-                                                <strong>Status:</strong> {reservation.confirmed ? 'Confirmed' : 'Pending'}
-                                            </p>
-                                            <button
-                                                onClick={() => handleUpdateReservation(reservation.id, true)}
-                                                className="bg-green-500 text-white px-4 py-2 rounded mr-2"
-                                            >
-                                                Confirm
-                                            </button>
-                                            <button
-                                                onClick={() => handleUpdateReservation(reservation.id, false)}
-                                                className="bg-red-500 text-white px-4 py-2 rounded"
-                                            >
-                                                Decline
-                                            </button>
-                                            <button
-                                                onClick={() => handleEditDates(reservation)}
-                                                className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
-                                            >
-                                                Edit Dates
-                                            </button>
+                                        <div key={reservation.id}
+                                             className=" mb-4 w-[740px] flex flex-col gap-5 items-center rounded-admin-large h-[940px] bg-[#EAF1F9] p-4 border ">
+
+
+                                            <div className="w-[132px] mt-6 h-[132px]">
+                                                <Image
+                                                    src="/images/profile-icon-admin.svg"
+                                                    alt="Background"
+                                                    objectFit="cover"
+                                                    width={132}
+                                                    height={132}
+                                                />
+
+                                            </div>
+
+                                            <div className="flex gap-6 mt-4 flex-col w-96 ">
+
+
+                                                <div>
+                                                    <div className="flex flex-row gap-2">
+
+                                                        <p className="border-[#32648B] text-xs w-[50%] rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
+                                                            {reservation.tenant.name} {reservation.tenant.surname}
+                                                        </p>
+
+                                                        <p className="border-[#32648B] text-xs w-[50%] rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
+                                                             {reservation.confirmed ? 'Confirmed' : 'Pending'}
+                                                        </p>
+
+                                                    </div>
+
+                                                </div>
+
+                                                <div>
+
+                                                    <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
+                                                        +420 777 777 777
+                                                    </p>
+
+                                                </div>
+
+                                                <div>
+
+                                                    <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
+                                                        {reservation.tenant.email}
+                                                    </p>
+
+                                                </div>
+
+                                                <div>
+
+                                                    <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
+                                                        Male/Female
+                                                    </p>
+
+                                                </div>
+
+                                                <div>
+
+                                                    <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
+                                                        01.01.1999
+                                                    </p>
+
+                                                </div>
+
+                                            </div>
+
+
+
+                                            <div className="flex flex-row justify-between my-5 items-center  w-[540px]">
+
+                                                <div className="flex flex-col gap-4">
+
+                                                    Address and bed number
+
+                                                    <div className="bg-[#FFFFFF] flex flex-col gap-2 rounded-2xl p-5">
+                                                        <p className="font-medium text-adxs">
+                                                          <strong>From:</strong>  {reservation.from}
+                                                        </p>
+
+                                                        <p className="font-medium text-adxs">
+                                                          <strong>To:</strong> {reservation.to}
+                                                        </p>
+
+
+                                                    </div>
+
+                                                </div>
+
+
+                                                <div className="w-80 h-44 border-solid border-4">
+
+                                                </div>
+
+                                            </div>
+
+
+                                            {/*
+
+                                            <div>
+                                                <strong>Room ID:</strong> {reservation.bed ? reservation.bed.room : 'N/A'}
+                                            </div>
+
+                                            <div>
+                                                <strong>Bed ID:</strong> {reservation.bed ? reservation.bed.id : 'N/A'}
+                                            </div>
+
+                                            */}
+
+
+                                            <div className="flex flex-row flex-wrap justify-center w-[540px] gap-4">
+                                                <button
+                                                    onClick={() => handleUpdateReservation(reservation.id, true)}
+                                                    className="bg-[#0F478D]  w-64 h-16 text-white px-4 py-2 rounded-xl mr-2"
+                                                >
+                                                    Booking Confirmations
+                                                </button>
+                                                <button
+                                                    onClick={() => handleUpdateReservation(reservation.id, false)}
+                                                    className="bg-[#0F478D] w-64 h-16 text-white px-4 py-2 rounded-xl"
+                                                >
+                                                    Cancellation of reservations
+                                                </button>
+                                                <button
+                                                    onClick={() => handleEditDates(reservation)}
+                                                    className="bg-[#0F478D] w-64 h-16 text-white px-4 py-2 rounded-xl ml-2"
+                                                >
+                                                    Сhange the date
+                                                </button>
+                                            </div>
+
                                             {editReservationId === reservation.id && (
                                                 <div className="mt-4">
                                                     <label>
@@ -196,11 +297,13 @@ const AdminPage = () => {
                                                     </button>
                                                 </div>
                                             )}
-                                        </li>
+                                        </div>
                                     ))}
-                                </ul>
+                                </div>
                             </div>
                         )}
+
+
                         {activeTab === 'rooms' && (
                             <div>
                                 <h2 className="text-2xl font-bold mt-8">Rooms</h2>

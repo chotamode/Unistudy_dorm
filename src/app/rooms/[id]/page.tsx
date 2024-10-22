@@ -16,9 +16,11 @@ interface Room {
     address: string;
     description: string;
     price_month: number;
-    image: string;
+    image?: string;
     mini_description: string;
 }
+
+
 
 interface Bed {
     id: number;
@@ -30,12 +32,14 @@ interface RoomDetail {
     detail: string;
 }
 
-const RoomDetails = () => {
+const RoomDetails: React.FC<Room > = ({ image }) => {
+
     const { id } = useParams();
     const [room, setRoom] = useState<Room | null>(null);
     const [beds, setBeds] = useState<Bed[]>([]);
     const [details, setDetails] = useState<RoomDetail[]>([]);
     const [roomType, setRoomType] = useState<string>('both');
+
 
     useEffect(() => {
         if (id) {
@@ -62,6 +66,7 @@ const RoomDetails = () => {
                 setRoomType(type);
             };
             fetchRoomType().then(r => r);
+
         }
     }, [id]);
 
@@ -71,11 +76,10 @@ const RoomDetails = () => {
 
     return (
         <Layout>
-            <div className="px-48 rounded-3xl flex flex-row">
-                <div className="relative rounded-xxl
-                           bg-cover bg-center min-h-[40rem] w-110
-
-                           " style={{backgroundImage: `url(${room.image})`}} >
+            <div className="px-48 rounded-3xl gap-10 flex flex-row">
+                <div className="flex flex-row rounded-xxl
+                           bg-cover bg-center min-h-[40rem] w-[700px]
+                           " style={{backgroundImage: `url(${placeholderImage.src})`}} >
                 </div>
                 <div className="w-1/2  h-full flex flex-col justify-center gap-6">
                     <h1 className="text-3xl px-[4px] font-bold">

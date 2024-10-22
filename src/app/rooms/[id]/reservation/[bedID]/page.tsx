@@ -151,7 +151,7 @@ const Stage3Page = () => {
     return (
         <Layout>
             <div className={"relative flex flex-col md:flex-row justify-center items-center h-screen bg-blue-100 rounded-3xl mx-10 md:mx-20 py-24"}>
-                <div className={"bg-bg-stage3 bg-[length:105%_200%] bg-no-repeat h-full bg-left z-10 left-0 top-0 "}>
+                <div className={"bg-bg-stage3 bg-[length:205%_200%] bg-no-repeat h-full bg-left z-10 left-0 top-0 "}>
                     <div
                         className={"relative flex flex-col w-full md:w-1/2 justify-center items-center text-center text-white "}>
                         <h1 className="mb-4 text-2xl md:text-5xl font-medium">Here you can leave your</h1>

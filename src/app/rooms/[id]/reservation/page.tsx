@@ -367,15 +367,16 @@ const Plan: React.FC<PlanProps> = ({beds = []}) => {
         <div className={"flex justify-center bg-[#F6F4F2] rounded-3xl relative w-full h-full"}
              style={{boxShadow: 'inset 0 7px 10px rgba(0, 0, 0, 0.3), 0 7px 10px rgba(0, 0, 0, 0.2)'}}>
             <div
-                className="absolute top-[-30px] left-1/2 transform -translate-x-1/2 px-6 pr-2 w-full md:w-80 h-16 md:h-16 bg-[#0F478D] rounded-2xl flex flex-col md:flex-row items-center">
-                <p className="w-3/4 text-white text-center font-semibold whitespace-nowrap text-sm">
+                className="absolute top-[-30px] left-1/2 transform -translate-x-1/2 px-6 pr-2 w-full md:w-80 h-16 md:h-16 bg-transparent md:bg-[#0F478D] rounded-2xl flex flex-col md:flex-row items-center">
+                <p className="w-3/4 text-black md:text-white text-center font-semibold whitespace-nowrap text-lg md:text-sm">
                     To book a bed, click on the bed
                 </p>
-                <div className="relative w-1/4 h-4">
-                    <Image src={finger} alt="Finger" layout="fill" objectFit="contain"/>
-                </div>
+
             </div>
-            <div className="relative w-full h-full">
+            <div className="relative w-1/4 h-4 hidden md:block">
+                <Image src={finger} alt="Finger" layout="fill" objectFit="contain"/>
+            </div>
+            <div className="absolute w-full h-full">
                 <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100"
                      preserveAspectRatio="xMidYMid meet">
                     <image href={planImage.src} width="100%" height="100%"/>
@@ -405,7 +406,7 @@ const Plan: React.FC<PlanProps> = ({beds = []}) => {
                 {selectedBed && showMessage && (
                     <div ref={messageRef}
                          className="absolute bg-white rounded-2xl shadow-2xl p-4 md:p-8 flex flex-col gap-2 md:gap-3 items-center"
-                         style={{left: (selectedBed.x ?? 0) + 20 , top: (selectedBed.y ?? 0) + 10}}>
+                         style={{left: (selectedBed.x ?? 0) + 20, top: (selectedBed.y ?? 0) + 10}}>
                         <p className={"text-sm md:text-3xl font-normal text-center"}>
                             The bed is free
                         </p>
@@ -445,14 +446,20 @@ const BedSelect: React.FC = () => {
                 </div>
                 <div className={"flex flex-row gap-2 md:gap-4 mt-8 md:mt-14"}>
                     <div className={"flex flex-col items-center text-lg md:text-xl "}>
-                        <Image className="w-20 h-20 md:w-auto md:h-auto" src={freeBed} alt="Free bed" width={160} height={160}/>
+                        <Image src={freeBed} alt="Free bed" width={160} height={160}/>
                         <p>Bed is free</p>
                     </div>
                     <div className={"flex flex-col items-center text-lg md:text-xl"}>
-                        <Image className="w-20 h-20 md:w-auto md:h-auto" src={chosenBed} alt="Chosen bed" width={160} height={160}/>
+                        <Image src={chosenBed} alt="Chosen bed" width={160} height={160}/>
                         <p>Bed is booked</p>
                     </div>
                 </div>
+
+                <Link href={`/rooms/${id}`}>
+                <Button2 className={"w-full md:w-60 mt-12 md:mt-0"}>
+                    Go back
+                </Button2>
+                </Link>
             </div>
         </Layout>
     );

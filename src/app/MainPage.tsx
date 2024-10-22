@@ -12,7 +12,6 @@ interface Room {
     name: string;
     address: string;
     description: string;
-    price_month: number;
     image: string;
 }
 

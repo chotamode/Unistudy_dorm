@@ -367,7 +367,7 @@ const Plan: React.FC<PlanProps> = ({beds = []}) => {
         <div className={"flex justify-center bg-[#F6F4F2] rounded-3xl relative w-full h-full"}
              style={{boxShadow: 'inset 0 7px 10px rgba(0, 0, 0, 0.3), 0 7px 10px rgba(0, 0, 0, 0.2)'}}>
             <div
-                className="absolute top-[-30px] left-1/2 transform -translate-x-1/2 px-6 pr-2 w-80 h-16 bg-[#0F478D] rounded-2xl flex flex-row items-center">
+                className="absolute top-[-30px] left-1/2 transform -translate-x-1/2 px-6 pr-2 w-full md:w-80 h-16 md:h-16 bg-[#0F478D] rounded-2xl flex flex-col md:flex-row items-center">
                 <p className="w-3/4 text-white text-center font-semibold whitespace-nowrap text-sm">
                     To book a bed, click on the bed
                 </p>
@@ -404,13 +404,13 @@ const Plan: React.FC<PlanProps> = ({beds = []}) => {
                 </svg>
                 {selectedBed && showMessage && (
                     <div ref={messageRef}
-                         className="absolute bg-white rounded-2xl shadow-2xl p-8 flex flex-col gap-3 items-center"
+                         className="absolute bg-white rounded-2xl shadow-2xl p-4 md:p-8 flex flex-col gap-2 md:gap-3 items-center"
                          style={{left: (selectedBed.x ?? 0) + 20 , top: (selectedBed.y ?? 0) + 10}}>
-                        <p className={"text-3xl font-normal text-center"}>
+                        <p className={"text-sm md:text-3xl font-normal text-center"}>
                             The bed is free
                         </p>
                         <Link href={`/rooms/${id}/reservation/${selectedBed.id}`}>
-                            <Button2 className={"w-28 h-12 mt-2"} color={"bg-[#14803F]"}>
+                            <Button2 className={"w-20 md:w-28 h-10 md:h-12 mt-0 md:mt-2"} color={"bg-[#14803F]"}>
                                 Book
                             </Button2>
                         </Link>
@@ -438,15 +438,18 @@ const BedSelect: React.FC = () => {
 
     return (
         <Layout>
-            <div className={"flex justify-center flex-col items-center h-[85vh] mx-0 phone:mx-56"}>
-                <Plan beds={beds}/>
-                <div className={"flex flex-row gap-4 mt-14"}>
-                    <div className={"flex flex-col items-center text-xl"}>
-                        <Image src={freeBed} alt="Free bed" width={160} height={160}/>
+            <div className={"flex justify-center flex-col items-center h-[70vh] md:h-[85vh] mx-2 md:mx-60 px-10"}>
+                <div className="relative w-[24rem] h-[15rem] md:w-full md:h-full bg-white rounded-3xl"
+                     style={{boxShadow: 'inset 0 7px 10px rgba(0, 0, 0, 0.3), 0 7px 10px rgba(0, 0, 0, 0.2)'}}>
+                    <Plan beds={beds}/>
+                </div>
+                <div className={"flex flex-row gap-2 md:gap-4 mt-8 md:mt-14"}>
+                    <div className={"flex flex-col items-center text-lg md:text-xl "}>
+                        <Image className="w-20 h-20 md:w-auto md:h-auto" src={freeBed} alt="Free bed" width={160} height={160}/>
                         <p>Bed is free</p>
                     </div>
-                    <div className={"flex flex-col items-center text-xl"}>
-                        <Image src={chosenBed} alt="Chosen bed" width={160} height={160}/>
+                    <div className={"flex flex-col items-center text-lg md:text-xl"}>
+                        <Image className="w-20 h-20 md:w-auto md:h-auto" src={chosenBed} alt="Chosen bed" width={160} height={160}/>
                         <p>Bed is booked</p>
                     </div>
                 </div>

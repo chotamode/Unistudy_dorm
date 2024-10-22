@@ -13,7 +13,7 @@ const Button2 = ({
                  }: Button2Props) => {
     return (
         <button
-            className={`px-8 py-3 rounded-xl text-xl inline-flex items-center justify-center ${color} text-white ${className}`}
+            className={`px-8 py-3 rounded-xl text-sm md:text-xl inline-flex items-center justify-center ${color} text-white ${className}`}
         >
             {children}
         </button>

@@ -13,6 +13,9 @@ export interface Reservation {
         name: string;
         surname: string;
         email: string;
+        phone: string;
+        gender: string;
+        date_of_birth: string;
     };
     from: string;
     to: string;

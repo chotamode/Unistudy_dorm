@@ -11,8 +11,12 @@ import {
     getBedsByRoomId,
     updateBedCost
 } from '@/app/api/rooms';
-import {Reservation, Room, Bed} from '@/app/types';
+import {Reservation, Room} from '@/app/types';
 import Image from "next/image";
+import {Plan} from "@/app/components/Plan";
+import { Bed as PlanBed } from '@/app/components/Plan';
+import { Bed as TypesBed } from '@/app/types';
+
 // git pls work
 const AdminPage = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -21,14 +25,33 @@ const AdminPage = () => {
     const [activeTab, setActiveTab] = useState<'reservations' | 'rooms'>('reservations');
     const [reservations, setReservations] = useState<Reservation[]>([]);
     const [rooms, setRooms] = useState<Room[]>([]);
-    const [beds, setBeds] = useState<Bed[]>([]);
+    const [beds, setBeds] = useState<TypesBed[]>([]);
     const [editReservationId, setEditReservationId] = useState<number | null>(null);
     const [newFromDate, setNewFromDate] = useState<string>('');
     const [newToDate, setNewToDate] = useState<string>('');
     const [editRoomId, setEditRoomId] = useState<number | null>(null);
     const [newRoomDetails, setNewRoomDetails] = useState<Partial<Room>>({});
     const [editBedId, setEditBedId] = useState<number | null>(null);
-    const [newBedCost, setNewBedCost] = useState<number | null>(null);
+    const [newBedCost, setNewBedCost] = useState<number | null>(null)
+    const [planBeds, setPlanBeds] = useState<PlanBed[]>([]);
+
+    // useEffect(() => {
+    //     const fetchBedsForReservations = async () => {
+    //         const bedsData = await Promise.all(
+    //             reservations.map(async (reservation) => {
+    //                 if (reservation.bed) {
+    //                     return getBedsByRoomId(reservation.bed.room);
+    //                 }
+    //                 return [];
+    //             })
+    //         );
+    //         setBeds(bedsData.flat());
+    //     };
+    //
+    //     if (reservations.length > 0) {
+    //         fetchBedsForReservations();
+    //     }
+    // }, [reservations]);
 
     useEffect(() => {
         const fetchReservations = async () => {
@@ -96,7 +119,7 @@ const AdminPage = () => {
         }
     };
 
-    const handleEditBed = (bed: Bed) => {
+    const handleEditBed = (bed: TypesBed) => {
         setEditBedId(bed.id);
         setNewBedCost(bed.cost);
     };
@@ -174,7 +197,7 @@ const AdminPage = () => {
                                                 <div>
 
                                                     <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
-                                                        +420 777 777 777
+                                                        {reservation.tenant.phone}
                                                     </p>
 
                                                 </div>
@@ -190,7 +213,7 @@ const AdminPage = () => {
                                                 <div>
 
                                                     <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
-                                                        Male/Female
+                                                        {reservation.tenant.gender}
                                                     </p>
 
                                                 </div>
@@ -198,7 +221,7 @@ const AdminPage = () => {
                                                 <div>
 
                                                     <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
-                                                        01.01.1999
+                                                        {reservation.tenant.date_of_birth}
                                                     </p>
 
                                                 </div>
@@ -229,7 +252,10 @@ const AdminPage = () => {
 
 
                                                 <div className="w-80 h-44 border-solid border-4">
+                                                    <Plan beds={getBedsByRoomId(reservation.bed ? reservation.bed.room : 0)}
+                                                          takenBedId={reservation.bed ? reservation.bed.id : undefined}>
 
+                                                    </Plan>
                                                 </div>
 
                                             </div>

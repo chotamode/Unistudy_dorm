@@ -133,6 +133,18 @@ export const getRoomType = async (roomId: number) => {
     return data;
 };
 
+//If at least one bed has free period until 30 august of year
+export const getRoomAvailability = async (roomId: number, year: number) => {
+    const {data, error} = await supabase.rpc('get_room_availability', {room_id: roomId, year});
+
+    if (error) {
+        console.error('Error fetching room availability:', error);
+        return false;
+    }
+
+    return data;
+}
+
 type Tenant = {
     id: number;
     name: string;

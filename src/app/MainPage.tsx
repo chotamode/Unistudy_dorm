@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import RoomCard from './components/RoomCard';
-import { getRooms } from './api/rooms';
+import { getRooms, getRoomType, getRoomAvailability } from './api/rooms';
 import Image from 'next/image';
 import IconSwitch from '@/app/components/IconSwitch';
 import YearSwitch from "@/app/components/YearSwitch";
@@ -18,6 +18,9 @@ interface Room {
 
 const MainPage = () => {
     const [rooms, setRooms] = useState<Room[]>([]);
+    const [filteredRooms, setFilteredRooms] = useState<Room[]>([]);
+    const [gender, setGender] = useState<'male' | 'female' | 'both'>('both');
+    const [year, setYear] = useState<number>(new Date().getFullYear());
 
     useEffect(() => {
         const fetchRooms = async () => {
@@ -27,16 +30,31 @@ const MainPage = () => {
         fetchRooms().then(r => r);
     }, []);
 
+    useEffect(() => {
+        const filterRooms = async () => {
+            const filtered = await Promise.all(
+                rooms.map(async (room) => {
+                    const roomType = await getRoomType(room.id);
+                    const isAvailable = await getRoomAvailability(room.id, year);
+                    const matchesGender = gender === 'both' || roomType === gender || roomType === 'both';
+                    return matchesGender && (isAvailable) ? room : null;
+                })
+            );
+            setFilteredRooms(filtered.filter(room => room !== null) as Room[]);
+        };
+        filterRooms();
+    }, [rooms, gender, year]);
+
     return (
         <div>
             <div className="relative">
-                   <Image
-                        src="/images/mpage_hero.svg"
-                        alt="Background"
-                        objectFit="cover"
-                        width={3840}
-                        height={2160}
-                   />
+                <Image
+                    src="/images/mpage_hero.svg"
+                    alt="Background"
+                    objectFit="cover"
+                    width={3840}
+                    height={2160}
+                />
                 <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center">
                     <h1 className="text-1xl phonexs:text-2xl phone:text-3xl md:text-5xl lg:text-[4.2rem] xl:text-[5rem] font-bold text-black p-4 sm:p-12 md:p-16 rounded-xl text-center">
                         <div className="text-white">Student housing rentals</div>
@@ -51,12 +69,11 @@ const MainPage = () => {
             </div>
             <div className="min-h-screen bg-gray-100 p-8 md:px-0 lg:px-18 xl:px-52 pt-28">
                 <main>
-                    <IconSwitch />
-                    <YearSwitch />
+                    <IconSwitch activeIndex={gender === 'male' ? 0 : 1} onClick={setGender} />
+                    <YearSwitch activeIndex={year === new Date().getFullYear() ? 0 : 1} onClick={setYear} />
                     <h2 className="lg:text-8xl md:text-7xl sm:text-6xl text- font-semibold text-black mb-20 mt-24 text-center">Spare rooms</h2>
-                    <div className="grid grid-cols-1 justify-items-center lg:grid-cols-2
-                                    xl:justify-items-stretch 2xl:grid-cols-3">
-                        {rooms.map((room) => (
+                    <div className="grid grid-cols-1 justify-items-center lg:grid-cols-2 xl:justify-items-stretch 2xl:grid-cols-3">
+                        {filteredRooms.map((room) => (
                             <RoomCard
                                 key={room.id}
                                 id={room.id}
@@ -64,7 +81,8 @@ const MainPage = () => {
                                 background={room.image}
                                 address={room.address}
                                 description={room.description}
-                                price_month={room.price_month}
+                                gender={gender}
+                                year={year}
                             />
                         ))}
                     </div>

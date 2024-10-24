@@ -52,6 +52,7 @@ import kamcka_plan9 from '../../../../assets/room_plans/kamcka_plan9.svg'
 import kamcka_plan10 from '../../../../assets/room_plans/kamcka_plan10.svg'
 import kamcka_plan11 from '../../../../assets/room_plans/kamcka_plan11.svg'
 import sokol_plan10 from '../../../../assets/room_plans/sokol_plan10.svg'
+import sokol_plan11 from '../../../../assets/room_plans/sokol_plan11.svg'
 
 interface Bed {
     id: number;
@@ -132,6 +133,7 @@ const plansMapping: { [key: string]: string } = {
 
     '50': sokol_plan10,
     '51': sokol_plan10,
+    '52': sokol_plan11,
 
 
 
@@ -319,6 +321,9 @@ const bedsMapping: Bed[] = [
     {id: 127, occupied: true, x:3, y: 50, horizontal: true, room: 51, plan: 'standard'},
     {id: 128, occupied: true, x:48, y: 66, horizontal: false, room: 51, plan: 'standard'},
 
+    {id: 129, occupied: true, x:4, y: 34, horizontal: true, room: 52, plan: 'standard'},
+    {id: 130, occupied: true, x:85, y: 74, horizontal: true, room: 52, plan: 'standard'},
+
 
 ];
 
@@ -413,6 +418,7 @@ const Plan: React.FC<PlanProps> = ({beds = []}) => {
                             width={bed.plan === 'small'
                                 ? (bed.horizontal ? 8 : 16)
                                 : (bed.horizontal ? 10 : 20)}
+
                             height={bed.plan === 'small'
                                 ? (bed.horizontal ? 16 : 8)
                                 : (bed.horizontal ? 20 : 10)}
@@ -420,6 +426,7 @@ const Plan: React.FC<PlanProps> = ({beds = []}) => {
                             className="cursor-pointer"
                         />
                     ))}
+
                 </svg>
 
             </div>

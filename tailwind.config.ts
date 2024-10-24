@@ -24,6 +24,7 @@ const config: Config = {
             borderRadius: {
                 DEFAULT: '4px',
                 'large': '45px',
+                'admin-large': '150px',
                 'xl': '10px',
                 'xxl': '17px',
             },

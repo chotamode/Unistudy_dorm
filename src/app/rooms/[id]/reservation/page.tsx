@@ -364,21 +364,13 @@ const Plan: React.FC<PlanProps> = ({beds = []}) => {
     }, [showMessage]);
 
     return (
-        <div className={"flex justify-center bg-[#F6F4F2] rounded-3xl relative w-full h-full"}
-             style={{boxShadow: 'inset 0 7px 10px rgba(0, 0, 0, 0.3), 0 7px 10px rgba(0, 0, 0, 0.2)'}}>
-            <div
-                className="absolute top-[-30px] left-1/2 transform -translate-x-1/2 px-6 pr-2 w-full md:w-80 h-16 md:h-16 bg-transparent md:bg-[#0F478D] rounded-2xl flex flex-col md:flex-row items-center">
-                <p className="w-3/4 text-black md:text-white text-center font-semibold whitespace-nowrap text-lg md:text-sm">
-                    To book a bed, click on the bed
-                </p>
-
-            </div>
+        <div className="flex justify-center bg-[#F6F4F2] rounded-3xl relative w-full h-full">
             <div className="relative w-1/4 h-4 hidden md:block">
                 <Image src={finger} alt="Finger" layout="fill" objectFit="contain"/>
             </div>
-            <div className="absolute w-full h-full">
-                <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100"
-                     preserveAspectRatio="xMidYMid meet">
+
+            <div className="md:hidden"> {/* Mobile version */}
+                <svg className="relative inset-0 w-72 h-72" viewBox="0 10 100 100" preserveAspectRatio="xMidYMid meet">
                     <image href={planImage.src} width="100%" height="100%"/>
                     {bedsForPlan.map((bed) => (
                         <image
@@ -393,7 +385,6 @@ const Plan: React.FC<PlanProps> = ({beds = []}) => {
                             width={bed.plan === 'small'
                                 ? (bed.horizontal ? 8 : 16)
                                 : (bed.horizontal ? 10 : 20)}
-
                             height={bed.plan === 'small'
                                 ? (bed.horizontal ? 16 : 8)
                                 : (bed.horizontal ? 20 : 10)}
@@ -401,24 +392,61 @@ const Plan: React.FC<PlanProps> = ({beds = []}) => {
                             className="cursor-pointer"
                         />
                     ))}
-
                 </svg>
-                {selectedBed && showMessage && (
-                    <div ref={messageRef}
-                         className="absolute bg-white rounded-2xl shadow-2xl p-4 md:p-8 flex flex-col gap-2 md:gap-3 items-center"
-                         style={{left: (selectedBed.x ?? 0) + 20, top: (selectedBed.y ?? 0) + 10}}>
-                        <p className={"text-sm md:text-3xl font-normal text-center"}>
-                            The bed is free
-                        </p>
-                        <Link href={`/rooms/${id}/reservation/${selectedBed.id}`}>
-                            <Button2 className={"w-20 md:w-28 h-10 md:h-12 mt-0 md:mt-2"} color={"bg-[#14803F]"}>
-                                Book
-                            </Button2>
-                        </Link>
-                    </div>
-                )}
 
             </div>
+
+
+            <div className="absolute hidden md:block w-full h-full"> {/* Desktop version */}
+                <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+                    <image href={planImage.src} width="100%" height="100%"/>
+                    {bedsForPlan.map((bed) => (
+                        <image
+                            key={bed.id}
+                            href={bed.occupied
+                                ? (bed.horizontal ? occupiedHorizontalBed.src : occupiedBed.src)
+                                : (selectedBed?.id === bed.id
+                                    ? (bed.horizontal ? chosenHorizontalBed.src : chosenBed.src)
+                                    : (bed.horizontal ? freeHorizontalBed.src : freeBed.src))}
+                            x={bed.x}
+                            y={bed.y}
+                            width={bed.plan === 'small'
+                                ? (bed.horizontal ? 8 : 16)
+                                : (bed.horizontal ? 10 : 20)}
+                            height={bed.plan === 'small'
+                                ? (bed.horizontal ? 16 : 8)
+                                : (bed.horizontal ? 20 : 10)}
+                            onClick={() => handleBedClick(bed)}
+                            className="cursor-pointer"
+                        />
+                    ))}
+                </svg>
+
+            </div>
+            {selectedBed && showMessage && (
+                <div ref={messageRef}
+                     className="absolute bg-white rounded-2xl shadow-2xl h-[7rem] md:h-auto w-full md:w-auto p-4 md:p-6 flex flex-col gap-5 md:gap-3 items-center"
+                     style={{
+                         left: '50%',
+                         top: '110%', // Смещаем блок ниже
+                         transform: 'translateX(-50%)', // Центрируем по горизонтали
+                         zIndex: 50, // Увеличиваем zIndex на случай перекрытий
+                         ...(window.innerWidth >= 768 ? {
+                             left: `${(selectedBed.x ?? 0) + 20}%`, // Используем координаты кровати
+                             top: `${(selectedBed.y ?? 0) + 10}%`,  // Используем координаты кровати
+                             transform: 'none' // Отключаем translate для десктопов
+                         } : {})
+                     }}>
+                    <p className="text-sm md:text-3xl font-normal text-center">
+                        The bed is free
+                    </p>
+                    <Link href={`/rooms/${id}/reservation/${selectedBed.id}`}>
+                        <Button2 className="w-20 md:w-28 h-10 md:h-12 mt-0 md:mt-2" color="bg-[#14803F]">
+                            Book
+                        </Button2>
+                    </Link>
+                </div>
+            )}
         </div>
     );
 };
@@ -439,19 +467,20 @@ const BedSelect: React.FC = () => {
 
     return (
         <Layout>
-            <div className={"flex justify-center flex-col items-center h-[70vh] md:h-[85vh] mx-2 md:mx-60 px-10"}>
+            <div
+                className={"flex justify-center flex-col items-center h-[70vh] md:h-[85vh] mx-2 md:mx-60 my-10 md:my-0 -mb-10 pt-10 px-10"}>
                 <div className="relative w-[24rem] h-[15rem] md:w-full md:h-full bg-white rounded-3xl"
                      style={{boxShadow: 'inset 0 7px 10px rgba(0, 0, 0, 0.3), 0 7px 10px rgba(0, 0, 0, 0.2)'}}>
                     <Plan beds={beds}/>
                 </div>
-                <div className={"flex flex-row gap-2 md:gap-4 mt-8 md:mt-14"}>
-                    <div className={"flex flex-col items-center text-lg md:text-xl "}>
+                <div className={"flex flex-row gap-6 md:gap-4 mt-8 md:mt-14"}>
+                    <div className={"flex flex-col items-center text-lg md:text-xl w-24 h-24 md:w-40 md:h-40"}>
                         <Image src={freeBed} alt="Free bed" width={160} height={160}/>
                         <p>Bed is free</p>
                     </div>
-                    <div className={"flex flex-col items-center text-lg md:text-xl"}>
-                        <Image src={chosenBed} alt="Chosen bed" width={160} height={160}/>
-                        <p>Bed is booked</p>
+                    <div className={"flex flex-col items-center text-lg md:text-xl w-24 h-24 md:w-40 md:h-40"}>
+                        <Image src={chosenBed} alt="Chosen bed" width={160} height={160} sizes="(max-width: 768px) 80px, 160px"/>
+                        <p className={"text-center"}>Bed is booked</p>
                     </div>
                 </div>
 

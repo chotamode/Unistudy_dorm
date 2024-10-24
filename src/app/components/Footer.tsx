@@ -20,10 +20,9 @@ const Footer = () => {
                                 <Image src={logo} alt="Logo" fill/>
                             </Link>
                         </div>
-                        <div className="text-center font-medium">
+                        <div className="text-center items font-medium">
                             <ul className="flex flex-col text-left font-montserrat gap-y-2 ">
                                 <li className="text-adxs lg:text-xl">
-                                    <div><a href="#booking" className="hover:underline">To book</a></div>
                                     <div><a href="#contacts" className="hover:underline">Contacts</a></div>
                                 </li>
                                 <li className="text-xs lg:text-lg">
@@ -32,9 +31,6 @@ const Footer = () => {
                                         Michle</a>
                                     </div>
                                 </li>
-                                <li className="text-xs lg:text-lg"><a href="#https://roomrent.cz/" className="hover:underline">Link
-                                    to
-                                    our old website</a></li>
                             </ul>
                         </div>
                     </div>
@@ -45,8 +41,7 @@ const Footer = () => {
                             <p className=" w-60 ">+420 773 037 688</p>
                         </div>
                         <div className={"flex flex-row justify-start md:justify-end gap-x-2"}>
-                           <div className="relative  w-6 h-6  lg:w-10 lg:h-10 xl:w-12 xl:h-12"> <Image src={instaLogo} alt="Instagram" fill/> </div>
-                           <div className="relative  w-6 h-6 lg:w-10 lg:h-10 xl:w-12 xl:h-12"> <Image src={fbLogo} alt="Facebook" fill/> </div>
+                           <div className="relative  w-6 h-6  lg:w-10 lg:h-10 xl:w-12 xl:h-12"> <Link href="https://www.instagram.com/roomrent.cz?igsh=M29ka3JsdXFkZG8z"> <Image src={instaLogo} alt="Instagram" fill/> </Link></div>
                         </div>
                     </div>
                 </div>

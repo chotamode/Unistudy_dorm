@@ -47,7 +47,6 @@ const contacts = () => {
                         </div>
                         <div className={"flex flex-row gap-4"}>
                             <Image src={instagramLogo} alt="Instagram logo"/>
-                            <Image src={facebookLogo} alt="Facebook logo"/>
                         </div>
                     </div>
                 </div>

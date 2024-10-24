@@ -32,6 +32,7 @@ import castle_plan11 from '../../../../assets/room_plans/castle_plan11.svg'
 import castle_plan12 from '../../../../assets/room_plans/castle_plan12.svg'
 import castle_plan13 from '../../../../assets/room_plans/castle_plan13.svg'
 import castle_plan14 from '../../../../assets/room_plans/castle_plan14.svg'
+
 import sokol_plan2 from '../../../../assets/room_plans/sokol_plan2.svg'
 import sokol_plan3 from '../../../../assets/room_plans/sokol_plan3.svg'
 import sokol_plan4 from '../../../../assets/room_plans/sokol_plan4.svg'
@@ -40,6 +41,7 @@ import sokol_plan6 from '../../../../assets/room_plans/sokol_plan6.svg'
 import sokol_plan7 from '../../../../assets/room_plans/sokol_plan7.svg'
 import sokol_plan8 from '../../../../assets/room_plans/sokol_plan8.svg'
 import sokol_plan9 from '../../../../assets/room_plans/sokol_plan9.svg'
+
 import kamcka_plan1 from '../../../../assets/room_plans/kamcka_plan1.svg'
 import kamcka_plan2 from '../../../../assets/room_plans/kamcka_plan2.svg'
 import kamcka_plan3 from '../../../../assets/room_plans/kamcka_plan3.svg'
@@ -51,6 +53,7 @@ import kamcka_plan8 from '../../../../assets/room_plans/kamcka_plan8.svg'
 import kamcka_plan9 from '../../../../assets/room_plans/kamcka_plan9.svg'
 import kamcka_plan10 from '../../../../assets/room_plans/kamcka_plan10.svg'
 import kamcka_plan11 from '../../../../assets/room_plans/kamcka_plan11.svg'
+
 import sokol_plan10 from '../../../../assets/room_plans/sokol_plan10.svg'
 import sokol_plan11 from '../../../../assets/room_plans/sokol_plan11.svg'
 
@@ -341,6 +344,7 @@ const Plan: React.FC<PlanProps> = ({beds = []}) => {
     const [selectedBed, setSelectedBed] = useState<Bed | null>(null);
     const [showMessage, setShowMessage] = useState(false);
     const messageRef = useRef<HTMLDivElement>(null);
+    const svgRef = useRef<SVGSVGElement>(null);
 
     const handleBedClick = (bed: Bed) => {
         if (!bed.occupied) {
@@ -368,8 +372,27 @@ const Plan: React.FC<PlanProps> = ({beds = []}) => {
         };
     }, [showMessage]);
 
+    const getMessagePosition = (): { top: number; left: number } | undefined => {
+        if (selectedBed && svgRef.current) {
+            const svg = svgRef.current;
+            const point = svg.createSVGPoint();
+            point.x = selectedBed.x ?? 0;
+            point.y = selectedBed.y ?? 0;
+
+            // Преобразование координат
+            const svgCTM = svg.getScreenCTM();
+            if (svgCTM) {
+                const screenPoint = point.matrixTransform(svgCTM);
+                const top = screenPoint.y - 340; // Подгонка по вертикали
+                const left = screenPoint.x
+                return { top, left };
+            }
+        }
+        return undefined;
+    };
+
     return (
-        <div className={"flex justify-center bg-[#F6F4F2]  rounded-3xl relative w-full h-full"}
+        <div className={"flex justify-center bg-[#F6F4F2] py-12  rounded-3xl relative w-full h-full"}
              style={{boxShadow: 'inset 0 7px 10px rgba(0, 0, 0, 0.3), 0 7px 10px rgba(0, 0, 0, 0.2)'}}>
             <div
                 className="absolute  top-[-30px] left-1/2 transform -translate-x-1/2 px-6 pr-2 w-80 h-16 bg-[#0F478D] rounded-2xl flex flex-row items-center">
@@ -381,7 +404,7 @@ const Plan: React.FC<PlanProps> = ({beds = []}) => {
                 </div>
             </div>
             <div className="relative w-full h-full">
-                <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100"
+                <svg ref={svgRef} className="absolute inset-0 w-full h-full" viewBox="0 0 100 100"
                      preserveAspectRatio="xMidYMid meet">
                     <image href={planImage.src} width="100%" height="100%"/>
                     {bedsForPlan.map((bed) => (
@@ -410,12 +433,12 @@ const Plan: React.FC<PlanProps> = ({beds = []}) => {
                 {selectedBed && showMessage && (
                     <div ref={messageRef}
                          className="absolute bg-white rounded-2xl shadow-2xl p-8 flex flex-col gap-3 items-center"
-                         style={{left: (selectedBed.x ?? 0) + 20 , top: (selectedBed.y ?? 0) + 10}}>
-                        <p className={"text-3xl font-normal text-center"}>
+                         style={getMessagePosition()}>
+                        <p className="text-3xl font-normal text-center">
                             The bed is free
                         </p>
                         <Link href={`/rooms/${id}/reservation/${selectedBed.id}`}>
-                            <Button2 className={"w-28 h-12 mt-2"} color={"bg-[#14803F]"}>
+                            <Button2 className="w-28 h-12 mt-2" color="bg-[#14803F]">
                                 Book
                             </Button2>
                         </Link>
@@ -442,7 +465,7 @@ const BedSelect: React.FC = () => {
 
     return (
         <Layout>
-            <div className={"flex justify-center flex-col items-center h-[85vh] mx-0 phone:mx-56"}>
+            <div className={"flex justify-center flex-col items-center h-[85vh] mx-0  md:mx-12 laptop:mx-24 desktop:mx-36 large-desktop:mx-48"}>
                 <Plan beds={beds}/>
                 <div className={"flex flex-row gap-4 mt-14"}>
                     <div className={"flex flex-col items-center text-xl"}>

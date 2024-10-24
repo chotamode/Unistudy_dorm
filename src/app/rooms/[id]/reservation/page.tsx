@@ -330,16 +330,19 @@ const bedsMapping: Bed[] = [
 
 ];
 
-const Plan: React.FC<PlanProps> = ({beds = []}) => {
-    const {id} = useParams();
+const Plan: React.FC<PlanProps> = ({ beds = [] }) => {
+    const { id } = useParams();
     const planImage = plansMapping[id as string] || planDefault;
 
     const bedsForPlan = bedsMapping
         .filter(bed => bed.room === Number(id))
-        .map(bed => ({
-            ...bed,
-            occupied: beds.find(dbBed => dbBed.id === bed.id)?.occupied ?? bed.occupied
-        }));
+        .map(bed => {
+            const isAvailable = beds.some(dbBed => dbBed.id === bed.id);
+            return {
+                ...bed,
+                occupied: !isAvailable,
+            };
+        });
 
     const [selectedBed, setSelectedBed] = useState<Bed | null>(null);
     const [showMessage, setShowMessage] = useState(false);

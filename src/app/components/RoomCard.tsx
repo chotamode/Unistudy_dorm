@@ -16,6 +16,8 @@ interface RoomCardProps {
     background?: string;
     floor?: string;
     apart_name?: string;
+    gender?:  'male' | 'female' | 'both';
+    year?: number;
 }
 
 const RoomCard: React.FC<RoomCardProps> = ({

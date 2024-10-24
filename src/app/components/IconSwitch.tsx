@@ -30,11 +30,11 @@ const IconSwitch = () => {
 
     return (
         <div className="flex flex-col items-center">
-            <h1 className="text-7xl font-normal text-black mb-8 text-center">
+            <h1 className="text-5xl md:text-7xl font-normal text-black mb-8 pb-7 text-center">
                 {activeIndex === 0 ? 'Boys\' room' : 'Girls\' room'}
             </h1>
             <div className="rounded-3xl bg-[#FEF9F6] w-fit" style={{ boxShadow: '0 0px 30px rgba(0, 0, 0, 0.4)' }}>
-                <div className="relative flex mx-auto">
+                <div className="relative gap-0 flex mx-auto">
                     {['female', 'male'].map((gender, index) => (
                         <div key={gender}>
                             <button

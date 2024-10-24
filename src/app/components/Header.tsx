@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const Header = () => {
     return (
-        <header className="bg-none text-white py-3 tablet:py-8 px-5 tablet:px-20">
+        <header className="absolute md:position-none top-0 left-0 w-full text-white py-3 tablet:py-8 px-5 tablet:px-20">
             <nav className="mt-2 flex flex-row justify-between items-center font-montserrat w-full">
                 {/*  logo*/}
                 <div className="relative w-10 h-10 tablet:w-14 tablet:h-14 flex-shrink-0 z-20">

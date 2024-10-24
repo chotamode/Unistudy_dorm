@@ -72,13 +72,13 @@ const RoomDetails: React.FC<Room > = ({ image }) => {
 
     return (
         <Layout>
-            <div className="px-4 px-48 rounded-3xl flex flex-col md:flex-row">
-                <div className="relative flex md:flex-row rounded-xxl
-                           bg-cover bg-center min-h-[40rem] min-h-[20rem] md:min-h-[40rem] w-full md:w-[700px]
+            <div className="px-4 md:px-48 rounded-3xl flex flex-col md:flex-row">
+                <div className="relative rounded-xxl
+                           bg-cover bg-center min-h-[20rem] md:min-h-[40rem] w-full md:w-110
 
-                           " style={{backgroundImage: `url(${room.image})`}} >
+                           " style={{backgroundImage: `url(${placeholderImage.src})`}} >
                 </div>
-                <div className="w-full md:w-1/2  h-full flex flex-col justify-center gap-6">
+                <div className="w-full md:w-1/2  h-full flex flex-col justify-center gap-6 mt-6 md:mt-0">
                     <h1 className="text-2xl md:text-3xl px-1.5 md:px-[4px] font-bold">
                         {room.name}
                     </h1>

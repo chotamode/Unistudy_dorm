@@ -370,12 +370,18 @@ const Plan: React.FC<PlanProps> = ({beds = []}) => {
 
     return (
         <div className="flex justify-center bg-[#F6F4F2] rounded-3xl relative w-full h-full">
-            <div className="relative w-1/4 h-4 hidden md:block">
+            <div
+               className={"absolute md:hidden -top-[3.5rem] left-[11.5rem] transform -translate-x-1/2 px-6 pr-2 w-full h-16 flex flex-col items-center"} >
+                <p className={"w-3/4 text-black text-center font-semibold whitespace-nowrap text-lg"}>
+                    To book a bed, click on the bed:
+                </p>
+                <div className="relative w-1/4 h-4 hidden md:block">
                 <Image src={finger} alt="Finger" layout="fill" objectFit="contain"/>
+            </div>
             </div>
 
             <div className="md:hidden"> {/* Mobile version */}
-                <svg className="relative inset-0 w-72 h-72" viewBox="0 10 100 100" preserveAspectRatio="xMidYMid meet">
+                <svg className="relative inset-0 w-60 h-60" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
                     <image href={planImage.src} width="100%" height="100%"/>
                     {bedsForPlan.map((bed) => (
                         <image

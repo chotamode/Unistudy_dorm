@@ -1,6 +1,5 @@
 import React from 'react';
 import Button2 from "@/app/components/Button2";
-import {white} from "next/dist/lib/picocolors";
 import Link from 'next/link';
 import Button from "@/app/components/Button";
 import Image from "next/image";
@@ -86,24 +85,23 @@ const RoomCard: React.FC<RoomCardProps> = ({
 
                     </div>
 
-                    <div className="flex flex-col ">
+                    <div className="flex flex-col">
+                        <div className="w-11 h-11 flex items-center justify-center">
+                            <Image src={arrowButton} width={48} height={48} alt="Arrow Button"/>
+                        </div>
 
-                                <Image src={arrowButton} width={40} height={40} alt={arrowButton}></Image>
 
                     </div>
+                    </div>
 
-
-
-                </div>
-
-            </Link>
+                </Link>
 
             </div>
 
 
         </div>
 
-    );
+);
 };
 
 export default RoomCard;

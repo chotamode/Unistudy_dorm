@@ -39,7 +39,7 @@ const YearSwitch: React.FC<YearSwitchProps> = ({ activeIndex, onClick }) => {
                     </div>
                 ))}
                 <div
-                    className="absolute top-0 rounded-3xl transition-transform duration-300 bg-[#FEF9F6] z-0"
+                    className="absolute top-0  rounded-3xl transition-transform duration-300 bg-[#FEF9F6] z-0"
                     style={{
                         boxShadow: '0 0px 30px rgba(0, 0, 0, 0.4)',
                         transform: `translateX(${positions[activeIndex]})`,

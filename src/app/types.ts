@@ -18,12 +18,15 @@ export interface Reservation {
     to: string;
     confirmed: boolean;
     bed?: Bed; // Make bed optional
+    canceled_at: string | null;
 }
 
 export type Bed = {
     cost: number;
     id: number;
     room: number;
+    availableFrom: string;
+    availableTo: string;
 };
 
 export type Room = {

@@ -24,7 +24,22 @@ export const getRoomById = async (roomId: number) => {
     }
     return data;
 };
+export const cancelReservation = async (reservationId: number) => {
+    const { data, error } = await supabase
+        .from('reservation')
+        .update({
+            confirmed: false,
+            canceled_at: new Date().toISOString(),
+        })
+        .eq('id', reservationId);
 
+    if (error) {
+        console.error('Error canceling reservation:', error);
+        throw new Error(error.message || 'Error canceling reservation');
+    }
+
+    return data;
+};
 export const getBedsByRoomId = async (roomId: number) => {
     const {data, error} = await supabase
         .from('bed')
@@ -35,7 +50,8 @@ export const getBedsByRoomId = async (roomId: number) => {
       reservations:reservation (
         from,
         to,
-        confirmed
+        confirmed,
+        canceled_at
       )
     `)
         .eq('room', roomId);
@@ -44,22 +60,58 @@ export const getBedsByRoomId = async (roomId: number) => {
         console.error('Error fetching beds:', error);
         return [];
     }
-    // git pls work
-    return data.map(bed => {
-        const isOccupied = bed.reservations.some(reservation => {
+
+
+    const today = new Date();
+    const currentYear = today.getFullYear();
+
+    // Фиксированные даты бронирования
+    const defaultStartDate = new Date(currentYear + 1, 8, 2); // 2 сентября текущего года
+    const defaultEndDate = new Date(currentYear + 2, 7, 31); // 30 августа следующего года
+
+
+
+
+    const availableBeds = data.map(bed => {
+        let isOccupied = false;
+        let availableFrom = defaultStartDate;
+
+        // Проверяем все бронирования для кровати
+        bed.reservations.forEach(reservation => {
             const fromDate = new Date(reservation.from);
             const toDate = new Date(reservation.to);
-            const now = new Date();
-            return reservation.confirmed && now >= fromDate && now <= toDate;
+
+            if (reservation.confirmed) {
+                // Если есть подтверждённое бронирование, кровать занята
+                isOccupied = true;
+            } else if (reservation.canceled_at) {
+                const canceledAt = new Date(reservation.canceled_at);
+                if (canceledAt > availableFrom) {
+                    // Обновляем дату доступности на дату отмены бронирования
+                    availableFrom = canceledAt;
+                }
+            }
         });
 
-        return {
-            id: bed.id,
-            room: bed.room,
-            occupied: isOccupied,
-            cost: bed.cost
-        };
-    });
+        if (isOccupied) {
+            // Если кровать занята, не включаем её в список доступных кроватей
+            return null;
+        } else {
+            // Форматируем даты в строковый формат 'YYYY-MM-DD'
+            const availableFromStr = availableFrom.toISOString().split('T')[0];
+            const availableToStr = defaultEndDate.toISOString().split('T')[0];
+
+            return {
+                id: bed.id,
+                room: bed.room,
+                cost: bed.cost,
+                availableFrom: availableFromStr,
+                availableTo: availableToStr,
+            };
+        }
+    }).filter(bed => bed !== null); // Убираем занятые кровати
+
+    return availableBeds;
 };
 
 export const createDefaultReservation = async (
@@ -76,17 +128,55 @@ export const createDefaultReservation = async (
     const currentYear = today.getFullYear();
     const nextYear = currentYear + 1;
 
-    let startDate = new Date(currentYear, 8, 2); // September 1st of the current year
+    let startDate = new Date(currentYear, 8, 2);
 
     if (today > startDate) {
-        startDate = new Date(nextYear, 7, 31); // August 30st of the next year
+        startDate = new Date(nextYear, 8, 2);
     }
 
-    const endDate = new Date(startDate);
-    endDate.setFullYear(startDate.getFullYear() + 1);
+    const endDate = new Date(nextYear, 7, 31);
 
     const reservationFrom = startDate.toISOString().split('T')[0];
     const reservationTo = endDate.toISOString().split('T')[0];
+
+    const { data: bedData, error: bedError } = await supabase
+        .from('bed')
+        .select(`
+            id,
+            reservations:reservation (
+                from,
+                to,
+                confirmed,
+                canceled_at
+            )
+        `)
+        .eq('id', bedId)
+        .single();
+
+    if (bedError || !bedData) {
+        console.error('Error fetching bed:', bedError);
+        throw new Error('Error fetching bed data');
+    }
+
+    const isOccupied = bedData.reservations.some((reservation: any) => {
+        const fromDate = new Date(reservation.from);
+        const toDate = new Date(reservation.to);
+        const reservationCanceled = reservation.canceled_at !== null;
+        const reservationConfirmed = reservation.confirmed;
+
+        return (
+            reservationConfirmed &&
+            !reservationCanceled &&
+            fromDate <= new Date(reservationTo) &&
+            toDate >= new Date(reservationFrom)
+        );
+    });
+
+    if (isOccupied) {
+        // Кровать уже занята
+        throw new Error('This bed has already been booked.');
+    }
+
 
     const { data, error } = await supabase.rpc('create_reservation', {
         tenant_name: tenantName,
@@ -175,6 +265,7 @@ export const getReservations = async (): Promise<Reservation[]> => {
             from,
             to,
             confirmed,
+            canceled_at,
             bed (
                 id,
                 room
@@ -204,6 +295,7 @@ export const getReservations = async (): Promise<Reservation[]> => {
             from: reservation.from,
             to: reservation.to,
             confirmed: reservation.confirmed,
+            canceled_at: reservation.canceled_at,
             room: reservation.bed ? reservation.bed.room : null,
             bed,
             tenant: {
@@ -217,6 +309,18 @@ export const getReservations = async (): Promise<Reservation[]> => {
 };
 
 export const updateReservationStatus = async (reservationId: number, confirmed: boolean) => {
+
+
+    const updates: any = { confirmed };
+
+    if (confirmed) {
+        // Если резервация подтверждается, очищаем canceled_at
+        updates.canceled_at = null;
+    } else {
+        // Если резервация отменяется, устанавливаем canceled_at
+        updates.canceled_at = new Date().toISOString();
+    }
+
     const {data, error} = await supabase
         .from('reservation')
         .update({confirmed})

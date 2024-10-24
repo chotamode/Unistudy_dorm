@@ -8,24 +8,12 @@ import Layout from "@/app/components/Layout";
 import placeholderImage from '@/assets/placeholder_room.jpg';
 import Button2 from "@/app/components/Button2";
 import Link from "next/link";
-
-interface Room {
-    area: number;
-    id: number;
-    name: string;
-    address: string;
-    description: string;
-    price_month: number;
-    image?: string;
-    mini_description: string;
-}
+import freeBed from '../../../assets/beds/free_bed.svg';
+import {Reservation, Room, Bed} from '@/app/types';
+import { cancelReservation } from '@/app/api/rooms';
 
 
 
-interface Bed {
-    id: number;
-    occupied: boolean;
-}
 
 interface RoomDetail {
     id: number;
@@ -39,6 +27,7 @@ const RoomDetails: React.FC<Room > = ({ image }) => {
     const [beds, setBeds] = useState<Bed[]>([]);
     const [details, setDetails] = useState<RoomDetail[]>([]);
     const [roomType, setRoomType] = useState<string>('both');
+
 
 
     useEffect(() => {
@@ -66,6 +55,15 @@ const RoomDetails: React.FC<Room > = ({ image }) => {
                 setRoomType(type);
             };
             fetchRoomType().then(r => r);
+
+            const handleCancelReservation = async (reservationId: number) => {
+                try {
+                    await cancelReservation(reservationId);
+                    await fetchBeds(); // Обновляем данные о кроватях после отмены резервации
+                } catch (error) {
+                    console.error('Error canceling reservation:', error);
+                }
+            };
 
         }
     }, [id]);
@@ -103,12 +101,25 @@ const RoomDetails: React.FC<Room > = ({ image }) => {
                         Available places:
                     </h3>
                     <div className={"flex flex-col"}>
-                        <p className="text-start text-adxs  max-w-[450px] font-medium py-4">
-                            Double room with access to the balcony |
-                            1 place is free • 8500kh per month per place Double room
-                            without access to the balcony |
-                            2 places are free • 8000kh per month per place
-                        </p>
+                        <div className="grid grid-cols-3 p-6 gap-4">
+                            {beds.map(bed => (
+                                <div key={bed.id} className="mb-2 bg-[#DBE9FB] p-2 border rounded">
+                                    <div className="mt-2">
+                                        <Image
+                                            src={freeBed}
+                                            alt="free bed"
+                                            objectFit="cover"
+                                            width={75}
+                                            height={75}>
+                                        </Image>
+                                        <p>{bed.cost}$</p>
+                                        <p>Доступна с {new Date(bed.availableFrom).toLocaleDateString()} по {new Date(bed.availableTo).toLocaleDateString()}</p>
+
+                                    </div>
+
+                                </div>
+                            ))}
+                        </div>
 
                         <Link href={`/rooms/${id}/reservation`}>
                             <Button2 className={"w-60"}>

@@ -13,6 +13,8 @@ import {
 } from '@/app/api/rooms';
 import {Reservation, Room, Bed} from '@/app/types';
 import Image from "next/image";
+import { cancelReservation } from '@/app/api/rooms';
+
 // git pls work
 const AdminPage = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -111,6 +113,21 @@ const AdminPage = () => {
         }
     };
 
+    const handleCancelReservation = async (reservationId: number) => {
+        try {
+            await cancelReservation(reservationId);
+            // Обновляем список резерваций после отмены
+            setReservations(reservations.map(reservation =>
+                reservation.id === reservationId
+                    ? { ...reservation, confirmed: false, canceled_at: new Date().toISOString() }
+                    : reservation
+            ));
+        } catch (error) {
+            console.error('Error canceling reservation:', error);
+            alert('Error canceling reservation');
+        }
+    };
+
     return (
         <Layout>
             <div className="flex flex-col px-16 py-8">
@@ -164,7 +181,7 @@ const AdminPage = () => {
                                                         </p>
 
                                                         <p className="border-[#32648B] text-xs w-[50%] rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
-                                                             {reservation.confirmed ? 'Confirmed' : 'Pending'}
+                                                             {reservation.confirmed && !reservation.canceled_at ? 'Confirmed' : 'Canceled'}
                                                         </p>
 
                                                     </div>
@@ -256,7 +273,7 @@ const AdminPage = () => {
                                                     Booking Confirmations
                                                 </button>
                                                 <button
-                                                    onClick={() => handleUpdateReservation(reservation.id, false)}
+                                                    onClick={() => handleCancelReservation(reservation.id)}
                                                     className="bg-[#0F478D] w-64 h-16 text-white px-4 py-2 rounded-xl"
                                                 >
                                                     Cancellation of reservations

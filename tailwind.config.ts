@@ -70,7 +70,11 @@ const config: Config = {
                 'minibook': '1100px',
 
                 'desktop': '1280px',
+
                 // => @media (min-width: 1280px) { ... }
+
+                'medium-desktop': '1720px',
+
                 'large-desktop': '2150px'
             },
         },

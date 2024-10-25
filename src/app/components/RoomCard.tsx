@@ -53,7 +53,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
                         </p>
 
                     </div>
-                        <Button2 className="h-10 w-40 text-xs">Book now</Button2>
+                        <Button2 className="h-16 w-36 text-xs">Book now</Button2>
 
                 </div>
 

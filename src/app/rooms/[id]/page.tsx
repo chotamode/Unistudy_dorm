@@ -72,9 +72,9 @@ const RoomDetails: React.FC<Room > = ({ image }) => {
 
     return (
         <Layout>
-            <div className="px-4 md:px-48 rounded-3xl flex flex-col md:flex-row">
+            <div className="px-4 md:px-14 rounded-3xl flex flex-col md:flex-row">
                 <div className="relative rounded-xxl
-                           bg-cover bg-center min-h-[20rem] md:min-h-[40rem] w-full md:w-110
+                           bg-cover bg-center min-h-[20rem] md:min-h-[40rem] w-full md:w-88
 
                            " style={{backgroundImage: `url(${placeholderImage.src})`}} >
                 </div>

@@ -15,7 +15,7 @@ const GoToMainPageButton: React.FC<GoToMainPageButtonProps> = ({ text }) => {
                         {text}
                     </p>
                 </div>
-                <div className={"bg-[#0F478D] p-4 rounded-xl h-full aspect-square flex justify-center items-center"}>
+                <div className={"hidden bg-[#0F478D] p-4 rounded-xl h-full aspect-square justify-center items-center"}>
                     <Image src={arrowRight} alt="Arrow right"/>
                 </div>
             </div>

@@ -42,7 +42,7 @@ const IconSwitch = () => {
                                 className="w-36 h-36 rounded-lg flex items-center justify-center relative transition-all duration-300 z-10"
                                 onClick={() => handleClick(index)}
                             >
-                                <Image src={gender === 'male' ? maleIcon : femaleIcon}
+                                <Image src={gender === 'male' ? femaleIcon : maleIcon}
                                        alt={`Только для ${gender === 'male' ? 'мальчиков' : 'девочек'}`}
                                        className="w-full h-full p-6"/>
                             </button>

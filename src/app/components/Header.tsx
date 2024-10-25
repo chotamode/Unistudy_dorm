@@ -1,19 +1,25 @@
+"use client";
+
 import Image from 'next/image';
 import logo from '../../../public/logo.svg';
 import Button2 from "@/app/components/Button2";
 import Link from "next/link";
+import { usePathname } from 'next/navigation';
 
 const Header = () => {
+    const pathname = usePathname();
+    const isReservationPage = pathname.includes('/rooms/[id]/reservation/[bedID]');
+
     return (
-        <header className="absolute md:position-none top-0 left-0 w-full text-white py-3 tablet:py-8 px-5 tablet:px-20">
+        <header className={`${isReservationPage ? 'absolute' : 'static'} md:position-none top-0 left-0 w-full text-white py-3 tablet:py-8 px-5 tablet:px-20`}>
             <nav className="mt-2 flex flex-row justify-between items-center font-montserrat w-full">
-                {/*  logo*/}
+                {/*  logo */}
                 <div className="relative w-10 h-10 tablet:w-14 tablet:h-14 flex-shrink-0 z-20">
                     <Link href="/">
                         <Image src={logo} alt="Logo" fill />
                     </Link>
                 </div>
-                <div className={" text-sm tablet:text-bold font-medium z-20"}>
+                <div className={"text-sm tablet:text-bold font-medium z-20"}>
                     <Link href="/contacts">
                         <div className="text-black cursor-pointer">Contacts</div>
                     </Link>

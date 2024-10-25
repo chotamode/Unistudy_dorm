@@ -29,7 +29,6 @@ const RoomDetails: React.FC<Room > = ({ image }) => {
     const [roomType, setRoomType] = useState<string>('both');
 
 
-
     useEffect(() => {
         if (id) {
             const fetchRoom = async () => {
@@ -103,8 +102,8 @@ const RoomDetails: React.FC<Room > = ({ image }) => {
                     <div className={"flex flex-col"}>
                         <div className="grid grid-cols-3 p-6 gap-4">
                             {beds.map(bed => (
-                                <div key={bed.id} className="mb-2 bg-[#DBE9FB] p-2 border rounded">
-                                    <div className="mt-2">
+                                <div key={bed.id} className="mb-2 bg-[#DBE9FB] p-3 border rounded-2xl">
+                                    <div className="mt-2 flex flex-col gap-2">
                                         <Image
                                             src={freeBed}
                                             alt="free bed"
@@ -112,8 +111,11 @@ const RoomDetails: React.FC<Room > = ({ image }) => {
                                             width={75}
                                             height={75}>
                                         </Image>
-                                        <p>{bed.cost}$</p>
-                                        <p>Доступна с {new Date(bed.availableFrom).toLocaleDateString()} по {new Date(bed.availableTo).toLocaleDateString()}</p>
+                                        <p> bed - {bed.id}</p>
+                                        <div className="flex flex-row gap-2">
+                                            <p className="bg-[#32648B] text-white px-3 py-1 rounded-xl">{bed.cost}$</p>
+                                            <p className="bg-[#32648B] text-white px-3 py-1 rounded-xl"> {new Date(bed.availableFrom).toLocaleDateString()} - {new Date(bed.availableTo).toLocaleDateString()}</p>
+                                        </div>
 
                                     </div>
 

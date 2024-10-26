@@ -370,19 +370,19 @@ const Plan: React.FC<PlanProps> = ({beds = []}) => {
 
     return (
         <div className="flex justify-center bg-[#F6F4F2] rounded-3xl relative w-full h-full">
-            <div
-               className={"absolute md:hidden -top-[3.5rem] left-[11.5rem] transform -translate-x-1/2 px-6 pr-2 w-full h-16 flex flex-col items-center"} >
-                <p className={"w-3/4 text-black text-center font-semibold whitespace-nowrap text-lg"}>
-                    To book a bed, click on the bed:
-                </p>
-                <div className="relative w-1/4 h-4 hidden md:block">
-                <Image src={finger} alt="Finger" layout="fill" objectFit="contain"/>
-            </div>
-            </div>
 
-            <div className="md:hidden"> {/* Mobile version */}
-                <svg className="relative inset-0 w-60 h-60" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+
+            {/*Мобильная версия схемы*/}
+            <div className="flex justify-center items-center md:hidden">
+                <svg
+                    className="relative inset-0 w-60 max-w-xs h-60"
+                     viewBox="0 0 100 100"
+                     preserveAspectRatio="xMinYMin meet">
+
+                    {/*Главная схема комнаты*/}
                     <image href={planImage.src} width="100%" height="100%"/>
+
+                    {/*Кровати*/}
                     {bedsForPlan.map((bed) => (
                         <image
                             key={bed.id}
@@ -404,11 +404,10 @@ const Plan: React.FC<PlanProps> = ({beds = []}) => {
                         />
                     ))}
                 </svg>
-
             </div>
 
-
-            <div className="absolute hidden md:block w-full h-full"> {/* Desktop version */}
+            {/*Десктопная версия*/}
+            <div className="absolute hidden md:block w-full h-full">
                 <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
                     <image href={planImage.src} width="100%" height="100%"/>
                     {bedsForPlan.map((bed) => (
@@ -441,13 +440,13 @@ const Plan: React.FC<PlanProps> = ({beds = []}) => {
                      className="absolute bg-white rounded-2xl shadow-2xl h-[7rem] md:h-auto w-full md:w-auto p-4 md:p-6 flex flex-col gap-5 md:gap-3 items-center"
                      style={{
                          left: '50%',
-                         top: '110%', // Смещаем блок ниже
-                         transform: 'translateX(-50%)', // Центрируем по горизонтали
-                         zIndex: 50, // Увеличиваем zIndex на случай перекрытий
+                         top: '110%',
+                         transform: 'translateX(-50%)',
+                         zIndex: 50,
                          ...(window.innerWidth >= 768 ? {
-                             left: `${(selectedBed.x ?? 0) + 20}%`, // Используем координаты кровати
-                             top: `${(selectedBed.y ?? 0) + 10}%`,  // Используем координаты кровати
-                             transform: 'none' // Отключаем translate для десктопов
+                             left: `${(selectedBed.x ?? 0) + 20}%`,
+                             top: `${(selectedBed.y ?? 0) + 10}%`,
+                             transform: 'none'
                          } : {})
                      }}>
                     <p className="text-sm md:text-3xl font-normal text-center">
@@ -481,12 +480,24 @@ const BedSelect: React.FC = () => {
     return (
         <Layout>
             <div
-                className={"flex justify-center flex-col items-center h-[70vh] md:h-[85vh] mx-2 md:mx-60 my-10 md:my-0 -mb-10 pt-10 px-10"}>
-                <div className="relative w-[24rem] h-[15rem] md:w-full md:h-full bg-white rounded-3xl"
+                className={"flex justify-center flex-col items-center min-h-screen md:h-[85vh] mx-2 md:mx-60 my-0 md:my-0 pt-0 px-4 md:px-16"} >
+                <div className="relative w-full h-full bg-white rounded-3xl"
                      style={{boxShadow: 'inset 0 7px 10px rgba(0, 0, 0, 0.3), 0 7px 10px rgba(0, 0, 0, 0.2)'}}>
+
+                    {/*Контейнер с надписью*/}
+                    <div
+                        className={"absolute md:hidden -top-[6rem] transform px-6 ml-1 w-full h-16 flex flex-col items-center"} >
+                        <p className={"w-3/4 text-black text-center font-semibold whitespace-nowrap text-lg"}>
+                            To book a bed, click on the bed:
+                        </p>
+                        <div className="relative w-1/4 h-4 hidden md:block">
+                            <Image src={finger} alt="Finger" layout="fill" objectFit="contain"/>
+                        </div>
+                    </div>
+                    
                     <Plan beds={beds}/>
                 </div>
-                <div className={"flex flex-row gap-6 md:gap-4 mt-8 md:mt-14"}>
+                <div className={"flex flex-row gap-6 md:gap-4 mt-8 md:mt-14"} >
                     <div className={"flex flex-col items-center text-lg md:text-xl w-24 h-24 md:w-40 md:h-40"}>
                         <Image src={freeBed} alt="Free bed" width={160} height={160}/>
                         <p>Bed is free</p>

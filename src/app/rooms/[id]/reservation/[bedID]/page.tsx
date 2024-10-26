@@ -5,6 +5,7 @@ import Layout from "@/app/components/Layout";
 import {useParams, useRouter} from "next/navigation";
 import { createDefaultReservation } from '@/app/api/rooms';
 import Link from "next/link";
+import BlueBackground  from "@/app/contacts/BlueBackground";
 
 const FeedbackForm = () => {
     const [formData, setFormData] = useState({
@@ -72,7 +73,8 @@ const FeedbackForm = () => {
 
     return (
         <form onSubmit={handleSubmit}
-              className="flex flex-col gap-4 w-full md:w-1/2 bg-[#0F478D] rounded-2xl p-6 md:p-10 py-7 md:py-0 px-7 h-full mr-4 md:mr-16 mx-auto justify-center md:justify-evenly shadow-lg ">
+              className="flex flex-col gap-4 w-full md:w-1/2 bg-[#0F478D] rounded-2xl p-6 md:p-8 md:px-20 py-7 md:py-0 px-7 h-full mr-4 md:mr-16 mx-auto justify-center md:justify-evenly shadow-lg ">
+
             <div className={"flex flex-col md:flex-row gap-4 w-full"}>
                 <input
                     type="text"
@@ -142,7 +144,8 @@ const FeedbackForm = () => {
                 I consent to data processing
             </label>
             <button type="submit" className="hidden md:block p-2 bg-blue-500 text-white rounded">Confirm</button>
-            <button type="submit" className="md:hidden p-2 w-1/2 bg-white text-black font-bold rounded-3xl">Confirm</button>
+            <button type="submit" className="md:hidden p-2 w-1/2 bg-white text-black font-bold rounded-3xl">Confirm
+            </button>
         </form>
     );
 };
@@ -150,22 +153,34 @@ const FeedbackForm = () => {
 
 const Stage3Page = () => {
     return (
-        <Layout>
-            <div className={"relative flex flex-col md:flex-row justify-center items-center min-h-screen  bg-blue-100 rounded-3xl mx-0 md:mx-20 py-8 px-4 pt-24  md:mr-10 md:py-24"}>
+        <div>
+            <div
+                className="absolute top-0 left-0 w-full h-screen bg-bg-stage3 bg-[length:115%_110%] bg-no-repeat bg-left z-10 md:hidden"/>
+            <Layout>
+                {/* Ебучий синий фон на мобилках */}
 
-                <div className={"absolute md:static left-0 -top-0  bg-bg-stage3 bg-cover bg-no-repeat w-full h-[50vh] md:h-[70vh] bg-bottom p-0 md:p-20  z-0 "} >
+                <div
+                    className="relative flex flex-col md:flex-row justify-center items-center h-screen bg-blue-100 rounded-3xl px-10 md:px-5 md:mx-10 py-16">
+
+
+
+                {/* Контейнер с текстом, поверх фона */}
+                <div className="relative z-10 flex flex-col w-1/2 justify-center items-center text-white h-full ">
+                    {/*Синий фон для десктопов*/}
                     <div
-                        className={"relative flex flex-col w-full  justify-center items-center text-center text-white p-12 md:mb-10 mt-10 md:mt-20 z-10 "}>
-                        <h1 className="mb-0 md:mb-3 text-3xl md:text-5xl text-white font-medium">Here you can leave your</h1>
-                        <h1 className="mb-0 md:mb-3 text-3xl md:text-5xl text-white font-medium">details for feedback!</h1>
-                    </div>
+                        className={"hidden md:block top-0  absolute w-full h-full justify-center items-center text-white bg-bg-stage3 bg-[length:115%_110%] bg-no-repeat bg-bottom left-0 z-0"}></div>
+                    <h1 className="mb-4 text-3xl md:text-5xl font-medium z-10">Here you can leave your</h1>
+                    <h1 className="mb-4 text-3xl md:text-5xl font-medium z-10">details for feedback!</h1>
                 </div>
 
+                {/* Форма обратной связи */}
                 <FeedbackForm/>
 
             </div>
         </Layout>
+        </div>
     );
-}
+};
+
 
 export default Stage3Page;

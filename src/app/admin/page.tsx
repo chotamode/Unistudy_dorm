@@ -14,6 +14,7 @@ import {
 import {Reservation, Room, Bed} from '@/app/types';
 import Image from "next/image";
 import { cancelReservation } from '@/app/api/rooms';
+import freeBed from "@/assets/beds/free_bed.svg";
 
 // git pls work
 const AdminPage = () => {
@@ -324,16 +325,9 @@ const AdminPage = () => {
                         {activeTab === 'rooms' && (
                             <div>
                                 <h2 className="text-2xl font-bold mt-8">Rooms</h2>
-                                <ul>
+                                <div>
                                     {rooms.map(room => (
-                                        <li key={room.id} className="mb-4 p-4 border rounded">
-                                            <p><strong>Room ID:</strong> {room.id}</p>
-                                            <p><strong>Name:</strong> {room.name}</p>
-                                            <p><strong>Address:</strong> {room.address}</p>
-                                            <p><strong>Mini Description:</strong> {room.mini_description}</p>
-                                            <p><strong>Floor:</strong> {room.floor}</p>
-                                            <p><strong>Area:</strong> {room.area}</p>
-                                            <p><strong>Description:</strong> {room.description}</p>
+                                        <div key={room.id} className="mb-4 p-4 border rounded">
                                             <button
                                                 onClick={() => handleEditRoom(room)}
                                                 className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
@@ -341,124 +335,183 @@ const AdminPage = () => {
                                                 Edit Room
                                             </button>
                                             {editRoomId === room.id && (
-                                                <div className="mt-4">
-                                                    <label>
-                                                        Name:
-                                                        <input
-                                                            type="text"
-                                                            value={newRoomDetails.name ?? ''}
-                                                            onChange={(e) => setNewRoomDetails({
-                                                                ...newRoomDetails,
-                                                                name: e.target.value
-                                                            })}
-                                                            className="ml-2 p-2 border rounded"
-                                                        />
-                                                    </label>
-                                                    <label className="ml-4">
-                                                        Address:
-                                                        <input
-                                                            type="text"
-                                                            value={newRoomDetails.address ?? ''}
-                                                            onChange={(e) => setNewRoomDetails({
-                                                                ...newRoomDetails,
-                                                                address: e.target.value
-                                                            })}
-                                                            className="ml-2 p-2 border rounded"
-                                                        />
-                                                    </label>
-                                                    <label className="ml-4">
-                                                        Mini Description:
-                                                        <input
-                                                            type="text"
-                                                            value={newRoomDetails.mini_description ?? ''}
-                                                            onChange={(e) => setNewRoomDetails({
-                                                                ...newRoomDetails,
-                                                                mini_description: e.target.value
-                                                            })}
-                                                            className="ml-2 p-2 border rounded"
-                                                        />
-                                                    </label>
-                                                    <label className="ml-4">
-                                                        Floor:
-                                                        <input
-                                                            type="number"
-                                                            value={newRoomDetails.floor ?? ''}
-                                                            onChange={(e) => setNewRoomDetails({
-                                                                ...newRoomDetails,
-                                                                floor: Number(e.target.value)
-                                                            })}
-                                                            className="ml-2 p-2 border rounded"
-                                                        />
-                                                    </label>
-                                                    <label className="ml-4">
-                                                        Area:
-                                                        <input
-                                                            type="number"
-                                                            value={newRoomDetails.area ?? ''}
-                                                            onChange={(e) => setNewRoomDetails({
-                                                                ...newRoomDetails,
-                                                                area: Number(e.target.value)
-                                                            })}
-                                                            className="ml-2 p-2 border rounded"
-                                                        />
-                                                    </label>
-                                                    <label className="ml-4">
-                                                        Description:
-                                                        <input
-                                                            type="text"
-                                                            value={newRoomDetails.description ?? ''}
-                                                            onChange={(e) => setNewRoomDetails({
-                                                                ...newRoomDetails,
-                                                                description: e.target.value
-                                                            })}
-                                                            className="ml-2 p-2 border rounded"
-                                                        />
-                                                    </label>
-                                                    <button
-                                                        onClick={handleSaveRoomDetails}
-                                                        className="bg-green-500 text-white px-4 py-2 rounded ml-4"
-                                                    >
-                                                        Save
-                                                    </button>
-                                                    <h3 className="text-xl font-bold mt-4">Beds</h3>
-                                                    <ul>
-                                                        {beds.map(bed => (
-                                                            <li key={bed.id} className="mb-2 p-2 border rounded">
-                                                                <p><strong>Bed ID:</strong> {bed.id}</p>
-                                                                <p><strong>Cost:</strong> {bed.cost}</p>
-                                                                <button
-                                                                    onClick={() => handleEditBed(bed)}
-                                                                    className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
-                                                                >
-                                                                    Edit Bed
-                                                                </button>
-                                                                {editBedId === bed.id && (
-                                                                    <div className="mt-2">
-                                                                        <label>
-                                                                            Cost:
-                                                                            <input
-                                                                                type="number"
-                                                                                value={newBedCost ?? ''}
-                                                                                onChange={(e) => setNewBedCost(Number(e.target.value))}
-                                                                                className="ml-2 p-2 border rounded"
-                                                                            />
-                                                                        </label>
-                                                                        <button
-                                                                            onClick={handleSaveBedDetails}
-                                                                            className="bg-green-500 text-white px-4 py-2 rounded ml-4"
-                                                                        >
-                                                                            Save
-                                                                        </button>
-                                                                    </div>
-                                                                )}
-                                                            </li>
-                                                        ))}
-                                                    </ul>
+                                                <div className="mt-4 flex gap-20 flex-row">
+
+
+                                                    <div className="grid grid-cols-3 gap-2 p-2 py-4 w-[639px] h-[402px] border-2 rounded-3xl ">
+
+                                                        <div>
+
+                                                            <label>
+                                                                <input
+                                                                    type="image"
+
+                                                                    className="ml-2 p-2 border rounded"
+                                                                />
+                                                            </label>
+
+                                                        </div>
+
+                                                    </div>
+
+
+                                                    <div className="flex gap-2 flex-col">
+
+                                                        <div className="flex flex-row">
+
+                                                            <div >
+
+                                                                <label>
+                                                                    <input
+                                                                        type="text"
+                                                                        value={newRoomDetails.name ?? ''}
+                                                                        onChange={(e) => setNewRoomDetails({
+                                                                            ...newRoomDetails,
+                                                                            name: e.target.value
+                                                                        })}
+                                                                        className="ml-2 w-[370px] p-2 border rounded"
+                                                                    />
+                                                                </label>
+
+                                                            </div>
+
+                                                            <div>
+
+                                                                <label className="ml-4">
+                                                                    <input
+                                                                        type="number"
+                                                                        value={newRoomDetails.floor ?? ''}
+                                                                        onChange={(e) => setNewRoomDetails({
+                                                                            ...newRoomDetails,
+                                                                            floor: Number(e.target.value)
+                                                                        })}
+                                                                        className="ml-2 p-2  border rounded"
+                                                                    />
+                                                                </label>
+
+                                                            </div>
+
+                                                        </div>
+
+
+
+                                                        <div>
+
+                                                            <label className="ml-4">
+
+                                                                <textarea
+
+                                                                    value={newRoomDetails.mini_description ?? ''}
+                                                                    onChange={(e) => setNewRoomDetails({
+                                                                        ...newRoomDetails,
+                                                                        mini_description: e.target.value
+                                                                    })}
+                                                                    className="ml-2 w-[579px] p-2 border rounded"
+                                                                />
+                                                            </label>
+
+                                                        </div>
+
+                                                        <div>
+
+                                                            <label className="ml-4">
+
+                                                                <textarea
+                                                                    value={newRoomDetails.description ?? ''}
+                                                                    onChange={(e) => setNewRoomDetails({
+                                                                        ...newRoomDetails,
+                                                                        description: e.target.value
+                                                                    })}
+                                                                    className="ml-2 p-2 w-[579px] border rounded"
+                                                                />
+                                                            </label>
+
+                                                        </div>
+
+
+                                                        <div>
+
+                                                            <label className="ml-4">
+                                                                Area:
+                                                                <input
+                                                                    type="number"
+                                                                    value={newRoomDetails.area ?? ''}
+                                                                    onChange={(e) => setNewRoomDetails({
+                                                                        ...newRoomDetails,
+                                                                        area: Number(e.target.value)
+                                                                    })}
+                                                                    className="ml-2 p-2 border rounded"
+                                                                />
+                                                            </label>
+
+                                                        </div>
+
+                                                        <button
+                                                            onClick={handleSaveRoomDetails}
+                                                            className="bg-[#0F478D] text-white w-44 h-10 px-4 py-2 rounded ml-4"
+                                                        >
+                                                            Save
+                                                        </button>
+
+                                                        <div className="flex flex-row gap-2 mt-4">
+                                                            {beds.map(bed => (
+                                                                <div key={bed.id}
+                                                                     className="mb-2 bg-[#DBE9FB] ml-2 p-2 w-64 border rounded-xl">
+
+                                                                    <Image
+                                                                        src={freeBed}
+                                                                        alt="free bed"
+                                                                        objectFit="cover"
+                                                                        width={75}
+                                                                        height={75}>
+                                                                    </Image>
+
+                                                                    <p>bed - {bed.id}</p>
+                                                                    <p> {bed.cost}</p>
+
+                                                                    <button
+                                                                        onClick={() => handleEditBed(bed)}
+                                                                        className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
+                                                                    >
+                                                                        Edit Bed
+                                                                    </button>
+
+                                                                    {editBedId === bed.id && (
+                                                                        <div className="mt-2">
+                                                                            <label>
+                                                                                Cost:
+                                                                                <input
+                                                                                    type="number"
+                                                                                    value={newBedCost ?? ''}
+                                                                                    onChange={(e) => setNewBedCost(Number(e.target.value))}
+                                                                                    className="ml-2 p-2 border rounded"
+                                                                                />
+                                                                            </label>
+
+
+                                                                            <button
+                                                                                onClick={handleSaveBedDetails}
+                                                                                className="bg-[#0F478D] mt-2 w-44 h-10 text-white px-4 py-2 rounded-xl ml-4"
+                                                                            >
+                                                                                Save
+                                                                            </button>
+
+
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            ))}
+                                                        </div>
+
+
+                                                    </div>
+
+
                                                 </div>
                                             )}
-                                        </li>
+                                        </div>
                                     ))}
-                                </ul>
+                                </div>
                             </div>
                         )}
                     </>

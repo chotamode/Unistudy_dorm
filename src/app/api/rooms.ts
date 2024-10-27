@@ -1,5 +1,99 @@
 import {supabase} from '@/supabaseClient';
-import { Reservation } from '@/app/types';
+import {Reservation} from '@/app/types';
+import { v4 as uuidv4 } from 'uuid';
+
+export const uploadPhotoAndAddToRoom = async (roomId: number, file: File) => {
+    // Generate a UUID for the file name
+    const uniqueFileName = `${uuidv4()}.${file.name.split('.').pop()}`;
+    console.log(uniqueFileName);
+
+    // Step 1: Upload the photo to Supabase storage
+    const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('photos')
+        .upload(`public/room_photos/${roomId}/${uniqueFileName}`, file);
+
+    if (uploadError) {
+        console.error('Error uploading photo:', uploadError);
+        return null;
+    }
+
+    // Step 2: Get the public URL of the uploaded photo
+    const { data } = supabase.storage
+        .from('photos')
+        .getPublicUrl(`public/room_photos/${roomId}/${uniqueFileName}`);
+
+    const publicURL = data.publicUrl;
+
+    // Step 3: Add the photo URL to the room's image_urls field
+    const { data: roomData, error } = await supabase
+        .from('room')
+        .select('image_urls')
+        .eq('id', roomId)
+        .single();
+
+    if (error) {
+        console.error('Error fetching room image URLs:', error);
+        return null;
+    }
+
+    const imageUrls = roomData.image_urls ? JSON.parse(roomData.image_urls) : [];
+    imageUrls.push(publicURL);
+
+    const { data: updateData, error: updateError } = await supabase
+        .from('room')
+        .update({ image_urls: JSON.stringify(imageUrls) })
+        .eq('id', roomId);
+
+    if (updateError) {
+        console.error('Error updating room image URLs:', updateError);
+        return null;
+    }
+
+    return updateData;
+};
+
+export const deletePhotoFromRoom = async (roomId: number, photoUrl: string) => {
+    const { data, error } = await supabase
+        .from('room')
+        .select('image_urls')
+        .eq('id', roomId)
+        .single();
+
+    if (error) {
+        console.error('Error fetching room image URLs:', error);
+        return null;
+    }
+
+    const imageUrls = data.image_urls ? JSON.parse(data.image_urls) : [];
+    const updatedImageUrls = imageUrls.filter((url: string) => url !== photoUrl);
+
+    const { data: updateData, error: updateError } = await supabase
+        .from('room')
+        .update({ image_urls: JSON.stringify(updatedImageUrls) })
+        .eq('id', roomId);
+
+    if (updateError) {
+        console.error('Error updating room image URLs:', updateError);
+        return null;
+    }
+
+    return updateData;
+};
+
+export const getRoomImages = async (roomId: number) => {
+    const { data, error } = await supabase
+        .from('room')
+        .select('image_urls')
+        .eq('id', roomId)
+        .single();
+
+    if (error) {
+        console.error('Error fetching room images:', error);
+        return [];
+    }
+
+    return data.image_urls ? JSON.parse(data.image_urls) : [];
+};
 
 // Function to get all rooms
 export const getRooms = async () => {

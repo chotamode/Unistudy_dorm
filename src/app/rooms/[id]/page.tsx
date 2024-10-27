@@ -32,7 +32,8 @@ interface RoomDetail {
     detail: string;
 }
 
-const RoomDetails: React.FC<Room> = ({ image }) => {
+
+const RoomDetails: React.FC = () => {
     const { id } = useParams();
     const [room, setRoom] = useState<Room | null>(null);
     const [beds, setBeds] = useState<Bed[]>([]);

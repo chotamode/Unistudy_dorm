@@ -25,7 +25,7 @@ const BedSelect: React.FC = () => {
 
     return (
         <Layout>
-            <div className={"flex justify-center flex-col items-center h-[85vh] mx-0 phone:mx-56"}>
+            <div className={"flex justify-center flex-col items-center h-[85vh] mx-0  md:mx-12 laptop:mx-24 desktop:mx-36 large-desktop:mx-48"}>
                 <Plan beds={beds}/>
                 <div className={"flex flex-row gap-4 mt-14"}>
                     <div className={"flex flex-col items-center text-xl"}>

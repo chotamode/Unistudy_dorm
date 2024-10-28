@@ -1,5 +1,99 @@
 import {supabase} from '@/supabaseClient';
-import { Reservation } from '@/app/types';
+import {Reservation} from '@/app/types';
+import { v4 as uuidv4 } from 'uuid';
+
+export const uploadPhotoAndAddToRoom = async (roomId: number, file: File) => {
+    // Generate a UUID for the file name
+    const uniqueFileName = `${uuidv4()}.${file.name.split('.').pop()}`;
+    console.log(uniqueFileName);
+
+    // Step 1: Upload the photo to Supabase storage
+    const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('photos')
+        .upload(`public/room_photos/${roomId}/${uniqueFileName}`, file);
+
+    if (uploadError) {
+        console.error('Error uploading photo:', uploadError);
+        return null;
+    }
+
+    // Step 2: Get the public URL of the uploaded photo
+    const { data } = supabase.storage
+        .from('photos')
+        .getPublicUrl(`public/room_photos/${roomId}/${uniqueFileName}`);
+
+    const publicURL = data.publicUrl;
+
+    // Step 3: Add the photo URL to the room's image_urls field
+    const { data: roomData, error } = await supabase
+        .from('room')
+        .select('image_urls')
+        .eq('id', roomId)
+        .single();
+
+    if (error) {
+        console.error('Error fetching room image URLs:', error);
+        return null;
+    }
+
+    const imageUrls = roomData.image_urls ? JSON.parse(roomData.image_urls) : [];
+    imageUrls.push(publicURL);
+
+    const { data: updateData, error: updateError } = await supabase
+        .from('room')
+        .update({ image_urls: JSON.stringify(imageUrls) })
+        .eq('id', roomId);
+
+    if (updateError) {
+        console.error('Error updating room image URLs:', updateError);
+        return null;
+    }
+
+    return updateData;
+};
+
+export const deletePhotoFromRoom = async (roomId: number, photoUrl: string) => {
+    const { data, error } = await supabase
+        .from('room')
+        .select('image_urls')
+        .eq('id', roomId)
+        .single();
+
+    if (error) {
+        console.error('Error fetching room image URLs:', error);
+        return null;
+    }
+
+    const imageUrls = data.image_urls ? JSON.parse(data.image_urls) : [];
+    const updatedImageUrls = imageUrls.filter((url: string) => url !== photoUrl);
+
+    const { data: updateData, error: updateError } = await supabase
+        .from('room')
+        .update({ image_urls: JSON.stringify(updatedImageUrls) })
+        .eq('id', roomId);
+
+    if (updateError) {
+        console.error('Error updating room image URLs:', updateError);
+        return null;
+    }
+
+    return updateData;
+};
+
+export const getRoomImages = async (roomId: number) => {
+    const { data, error } = await supabase
+        .from('room')
+        .select('image_urls')
+        .eq('id', roomId)
+        .single();
+
+    if (error) {
+        console.error('Error fetching room images:', error);
+        return [];
+    }
+
+    return data.image_urls ? JSON.parse(data.image_urls) : [];
+};
 
 // Function to get all rooms
 export const getRooms = async () => {
@@ -24,22 +118,7 @@ export const getRoomById = async (roomId: number) => {
     }
     return data;
 };
-export const cancelReservation = async (reservationId: number) => {
-    const { data, error } = await supabase
-        .from('reservation')
-        .update({
-            confirmed: false,
-            canceled_at: new Date().toISOString(),
-        })
-        .eq('id', reservationId);
 
-    if (error) {
-        console.error('Error canceling reservation:', error);
-        throw new Error(error.message || 'Error canceling reservation');
-    }
-
-    return data;
-};
 export const getBedsByRoomId = async (roomId: number) => {
     const {data, error} = await supabase
         .from('bed')
@@ -50,8 +129,7 @@ export const getBedsByRoomId = async (roomId: number) => {
       reservations:reservation (
         from,
         to,
-        confirmed,
-        canceled_at
+        confirmed
       )
     `)
         .eq('room', roomId);
@@ -60,58 +138,22 @@ export const getBedsByRoomId = async (roomId: number) => {
         console.error('Error fetching beds:', error);
         return [];
     }
-
-
-    const today = new Date();
-    const currentYear = today.getFullYear();
-
-    // Фиксированные даты бронирования
-    const defaultStartDate = new Date(currentYear + 1, 8, 2); // 2 сентября текущего года
-    const defaultEndDate = new Date(currentYear + 2, 7, 31); // 30 августа следующего года
-
-
-
-
-    const availableBeds = data.map(bed => {
-        let isOccupied = false;
-        let availableFrom = defaultStartDate;
-
-        // Проверяем все бронирования для кровати
-        bed.reservations.forEach(reservation => {
+    // git pls work
+    return data.map(bed => {
+        const isOccupied = bed.reservations.some(reservation => {
             const fromDate = new Date(reservation.from);
             const toDate = new Date(reservation.to);
-
-            if (reservation.confirmed) {
-                // Если есть подтверждённое бронирование, кровать занята
-                isOccupied = true;
-            } else if (reservation.canceled_at) {
-                const canceledAt = new Date(reservation.canceled_at);
-                if (canceledAt > availableFrom) {
-                    // Обновляем дату доступности на дату отмены бронирования
-                    availableFrom = canceledAt;
-                }
-            }
+            const now = new Date();
+            return reservation.confirmed && now >= fromDate && now <= toDate;
         });
 
-        if (isOccupied) {
-            // Если кровать занята, не включаем её в список доступных кроватей
-            return null;
-        } else {
-            // Форматируем даты в строковый формат 'YYYY-MM-DD'
-            const availableFromStr = availableFrom.toISOString().split('T')[0];
-            const availableToStr = defaultEndDate.toISOString().split('T')[0];
-
-            return {
-                id: bed.id,
-                room: bed.room,
-                cost: bed.cost,
-                availableFrom: availableFromStr,
-                availableTo: availableToStr,
-            };
-        }
-    }).filter(bed => bed !== null); // Убираем занятые кровати
-
-    return availableBeds;
+        return {
+            id: bed.id,
+            room: bed.room,
+            occupied: isOccupied,
+            cost: bed.cost
+        };
+    });
 };
 
 export const createDefaultReservation = async (
@@ -128,55 +170,17 @@ export const createDefaultReservation = async (
     const currentYear = today.getFullYear();
     const nextYear = currentYear + 1;
 
-    let startDate = new Date(currentYear, 8, 2);
+    let startDate = new Date(currentYear, 8, 2); // September 1st of the current year
 
     if (today > startDate) {
-        startDate = new Date(nextYear, 8, 2);
+        startDate = new Date(nextYear, 7, 31); // August 30st of the next year
     }
 
-    const endDate = new Date(nextYear, 7, 31);
+    const endDate = new Date(startDate);
+    endDate.setFullYear(startDate.getFullYear() + 1);
 
     const reservationFrom = startDate.toISOString().split('T')[0];
     const reservationTo = endDate.toISOString().split('T')[0];
-
-    const { data: bedData, error: bedError } = await supabase
-        .from('bed')
-        .select(`
-            id,
-            reservations:reservation (
-                from,
-                to,
-                confirmed,
-                canceled_at
-            )
-        `)
-        .eq('id', bedId)
-        .single();
-
-    if (bedError || !bedData) {
-        console.error('Error fetching bed:', bedError);
-        throw new Error('Error fetching bed data');
-    }
-
-    const isOccupied = bedData.reservations.some((reservation: any) => {
-        const fromDate = new Date(reservation.from);
-        const toDate = new Date(reservation.to);
-        const reservationCanceled = reservation.canceled_at !== null;
-        const reservationConfirmed = reservation.confirmed;
-
-        return (
-            reservationConfirmed &&
-            !reservationCanceled &&
-            fromDate <= new Date(reservationTo) &&
-            toDate >= new Date(reservationFrom)
-        );
-    });
-
-    if (isOccupied) {
-        // Кровать уже занята
-        throw new Error('This bed has already been booked.');
-    }
-
 
     const { data, error } = await supabase.rpc('create_reservation', {
         tenant_name: tenantName,
@@ -265,7 +269,6 @@ export const getReservations = async (): Promise<Reservation[]> => {
             from,
             to,
             confirmed,
-            canceled_at,
             bed (
                 id,
                 room
@@ -295,7 +298,6 @@ export const getReservations = async (): Promise<Reservation[]> => {
             from: reservation.from,
             to: reservation.to,
             confirmed: reservation.confirmed,
-            canceled_at: reservation.canceled_at,
             room: reservation.bed ? reservation.bed.room : null,
             bed,
             tenant: {
@@ -309,18 +311,6 @@ export const getReservations = async (): Promise<Reservation[]> => {
 };
 
 export const updateReservationStatus = async (reservationId: number, confirmed: boolean) => {
-
-
-    const updates: any = { confirmed };
-
-    if (confirmed) {
-        // Если резервация подтверждается, очищаем canceled_at
-        updates.canceled_at = null;
-    } else {
-        // Если резервация отменяется, устанавливаем canceled_at
-        updates.canceled_at = new Date().toISOString();
-    }
-
     const {data, error} = await supabase
         .from('reservation')
         .update({confirmed})

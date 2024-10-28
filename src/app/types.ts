@@ -13,23 +13,24 @@ export interface Reservation {
         name: string;
         surname: string;
         email: string;
+        phone: string;
+        gender: string;
+        date_of_birth: string;
     };
     from: string;
     to: string;
     confirmed: boolean;
     bed?: Bed; // Make bed optional
-    canceled_at: string | null;
 }
 
 export type Bed = {
     cost: number;
     id: number;
     room: number;
-    availableFrom: string;
-    availableTo: string;
 };
 
 export type Room = {
+    image_urls: string[];
     address: string;
     description: string;
     id: number;

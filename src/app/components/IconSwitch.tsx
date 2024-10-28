@@ -1,7 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect, SetStateAction, Dispatch} from 'react';
 import Image from 'next/image';
 import maleIcon from '@/assets/sex/male.svg';
 import femaleIcon from '@/assets/sex/female.svg';
+
+interface IconSwitchProps {
+    activeIndex: number;
+    onClick: Dispatch<SetStateAction<'both' | 'male' | 'female'>>;
+}
 
 const IconSwitch = () => {
     const [activeIndex, setActiveIndex] = useState<number>(0);

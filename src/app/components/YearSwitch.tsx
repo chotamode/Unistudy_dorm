@@ -1,5 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 
+interface YearSwitchProps {
+    activeIndex: number;
+    onClick: (year: number) => void;
+}
+
 const YearSwitch: React.FC<YearSwitchProps> = ({ activeIndex, onClick }) => {
     const currentYear = new Date().getFullYear();
     const nextYear = currentYear + 1;

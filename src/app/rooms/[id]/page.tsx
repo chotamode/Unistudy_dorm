@@ -2,32 +2,43 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { getRoomById, getBedsByRoomId, getRoomDetailsByRoomId, getRoomType } from '../../api/rooms';
+import { getRoomById, getBedsByRoomId, getRoomDetailsByRoomId, getRoomType, getRoomImages } from '../../api/rooms';
 import Image from 'next/image';
 import Layout from "@/app/components/Layout";
 import placeholderImage from '@/assets/placeholder_room.jpg';
 import Button2 from "@/app/components/Button2";
 import Link from "next/link";
-import freeBed from '../../../assets/beds/free_bed.svg';
-import {Reservation, Room, Bed} from '@/app/types';
-import { cancelReservation } from '@/app/api/rooms';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
+interface Room {
+    area: number;
+    id: number;
+    name: string;
+    address: string;
+    description: string;
+    price_month: number;
+    image?: string;
+    mini_description: string;
+}
 
-
+interface Bed {
+    id: number;
+    occupied: boolean;
+}
 
 interface RoomDetail {
     id: number;
     detail: string;
 }
 
-const RoomDetails: React.FC<Room > = ({ image }) => {
-
+const RoomDetails: React.FC<Room> = ({ image }) => {
     const { id } = useParams();
     const [room, setRoom] = useState<Room | null>(null);
     const [beds, setBeds] = useState<Bed[]>([]);
     const [details, setDetails] = useState<RoomDetail[]>([]);
     const [roomType, setRoomType] = useState<string>('both');
-
+    const [images, setImages] = useState<string[]>([]);
 
     useEffect(() => {
         if (id) {
@@ -55,15 +66,11 @@ const RoomDetails: React.FC<Room > = ({ image }) => {
             };
             fetchRoomType().then(r => r);
 
-            const handleCancelReservation = async (reservationId: number) => {
-                try {
-                    await cancelReservation(reservationId);
-                    await fetchBeds(); // Обновляем данные о кроватях после отмены резервации
-                } catch (error) {
-                    console.error('Error canceling reservation:', error);
-                }
+            const fetchImages = async () => {
+                const imageUrls = await getRoomImages(Number(id));
+                setImages(imageUrls.length > 0 ? imageUrls : Array(5).fill(placeholderImage.src));
             };
-
+            fetchImages().then(r => r);
         }
     }, [id]);
 
@@ -74,11 +81,16 @@ const RoomDetails: React.FC<Room > = ({ image }) => {
     return (
         <Layout>
             <div className="px-48 rounded-3xl gap-10 flex flex-row">
-                <div className="flex flex-row rounded-xxl
-                           bg-cover bg-center min-h-[40rem] w-[700px]
-                           " style={{backgroundImage: `url(${placeholderImage.src})`}} >
+                <div className="flex flex-row rounded-xxl bg-cover bg-center min-h-[40rem] w-[700px]">
+                    <Carousel>
+                        {images.map((url, index) => (
+                            <div key={index}>
+                                <img src={url} alt={`Room image ${index + 1}`} />
+                            </div>
+                        ))}
+                    </Carousel>
                 </div>
-                <div className="w-1/2  h-full flex flex-col justify-center gap-6">
+                <div className="w-1/2 h-full flex flex-col justify-center gap-6">
                     <h1 className="text-3xl px-[4px] font-bold">
                         {room.name}
                     </h1>
@@ -100,28 +112,12 @@ const RoomDetails: React.FC<Room > = ({ image }) => {
                         Available places:
                     </h3>
                     <div className={"flex flex-col"}>
-                        <div className="grid grid-cols-3 p-6 gap-4">
-                            {beds.map(bed => (
-                                <div key={bed.id} className="mb-2 bg-[#DBE9FB] p-3 border rounded-2xl">
-                                    <div className="mt-2 flex flex-col gap-2">
-                                        <Image
-                                            src={freeBed}
-                                            alt="free bed"
-                                            objectFit="cover"
-                                            width={75}
-                                            height={75}>
-                                        </Image>
-                                        <p> bed - {bed.id}</p>
-                                        <div className="flex flex-row gap-2">
-                                            <p className="bg-[#32648B] text-white px-3 py-1 rounded-xl">{bed.cost}$</p>
-                                            <p className="bg-[#32648B] text-white px-3 py-1 rounded-xl"> {new Date(bed.availableFrom).toLocaleDateString()} - {new Date(bed.availableTo).toLocaleDateString()}</p>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                            ))}
-                        </div>
+                        <p className="text-start text-adxs max-w-[450px] font-medium py-4">
+                            Double room with access to the balcony |
+                            1 place is free • 8500kh per month per place Double room
+                            without access to the balcony |
+                            2 places are free • 8000kh per month per place
+                        </p>
 
                         <Link href={`/rooms/${id}/reservation`}>
                             <Button2 className={"w-60"}>

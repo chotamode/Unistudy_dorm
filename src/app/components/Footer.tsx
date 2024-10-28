@@ -20,7 +20,7 @@ const Footer = () => {
                                 <Image src={logo} alt="Logo" fill/>
                             </Link>
                         </div>
-                        <div className="text-center font-medium">
+                        <div className="text-center font-bold md:font-medium">
                             <ul className="flex flex-col text-left font-montserrat gap-y-2 ">
                                 <li className="text-adxs lg:text-xl">
                                     <div><a href="#booking" className="hover:underline">To book</a></div>
@@ -39,7 +39,7 @@ const Footer = () => {
                         </div>
                     </div>
 
-                    <div className={"flex flex-col gap-3 lg:mt-0 mt-3 md:mt-10  md:w-auto w-60 text-sm lg:text-xl xl:text-xxl text-start xl:text-center font-medium"}>
+                    <div className={"flex flex-col gap-3 lg:mt-0 mt-3 md:mt-10  md:w-auto w-60 text-sm lg:text-xl xl:text-xxl text-start xl:text-center font-bold md:font-medium"}>
                         <div className= " ">
                             <p className=" w-60 ">+420 775 095 879</p>
                             <p className=" w-60 ">+420 773 037 688</p>
@@ -52,7 +52,7 @@ const Footer = () => {
                 </div>
 
             </div>
-            <div className="flex flex-row flex-wrap justify-between text-stone-400 font-medium text-xs py-6 px-14">
+            <div className="flex flex-row flex-wrap justify-between text-stone-400 font-bold md:font-medium text-xs py-6 px-14">
 
                 <div className=" flex justify-around">
 

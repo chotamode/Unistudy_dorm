@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect, SetStateAction, Dispatch} from 'react';
+import React, { useState, useRef, useEffect, SetStateAction, Dispatch } from 'react';
 import Image from 'next/image';
 import maleIcon from '@/assets/sex/male.svg';
 import femaleIcon from '@/assets/sex/female.svg';
@@ -8,14 +8,13 @@ interface IconSwitchProps {
     onClick: Dispatch<SetStateAction<'both' | 'male' | 'female'>>;
 }
 
-const IconSwitch = () => {
-    const [activeIndex, setActiveIndex] = useState<number>(0);
+const IconSwitch: React.FC<IconSwitchProps> = ({ activeIndex, onClick }) => {
     const [positions, setPositions] = useState<string[]>(['0rem', '0rem']);
     const buttonRefs = useRef<HTMLButtonElement[]>([]);
     const [buttonSize, setButtonSize] = useState({ width: 0, height: 0 });
 
     const handleClick = (index: number) => {
-        setActiveIndex(index);
+        onClick(index === 0 ? 'male' : 'female');
     };
 
     const updatePositionsAndSizes = () => {

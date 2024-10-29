@@ -16,23 +16,27 @@ const contacts = () => {
                     Our contacts
                 </h1>
 
-                <div className={"flex flex-row gap-10 sm:gap-28 md:gap-60 justify-center items-center flex-wrap"}>
-                    <div className={"flex flex-col items-center gap-5 md:gap-6 lg:gap-10"}>
-                        <div className="phone:max-lg:w-32 ">
+                <div className={"flex flex-row gap-5 sm:gap-28 md:gap-40 justify-center items-center flex-wrap"}>
+
+
+
+                    <div className={"flex flex-col w-40 tablet:w-56 custom-tablet:w-48 items-center gap-2 lg:gap-10"}>
+                        <div className="tablet:max-lg:w-24  max-tablet:w-14">
                             <Image src={phoneIcon} alt="Phone icon"/>
                         </div>
-                        <div className={"flex flex-col justify-center items-center"}>
+                        <div className={"flex flex-col text-adxs tablet:text-lg justify-center items-center"}>
                             <p>+420 775 095 879</p>
                             <p>+420 773 037 688</p>
-                            <p>(WhatsApp, Viber, Telegram)</p>
+                            <p>Telegram</p>
                         </div>
                     </div>
-                    <div className={"flex flex-col w-56 items-center gap-5 md:gap-6 lg:gap-10 "}>
-                        <div className="phone:max-lg:w-32">
+
+                    <div className={"flex flex-col w-40 custom-tablet:w-48 tablet:w-56 items-center gap-2 lg:gap-10 "}>
+                        <div className="tablet:max-lg:w-24 max-tablet:w-14">
                             <Image src={locationIcon} alt="Location icon"/>
                         </div>
 
-                        <div className={"flex flex-col justify-center items-center"}>
+                        <div className={"flex flex-col text-adxs tablet:text-lg justify-center items-center"}>
                             <p>
                                 Jaurisova 515/4,
                             </p>
@@ -41,11 +45,12 @@ const contacts = () => {
                             </p>
                         </div>
                     </div>
-                    <div className={"flex flex-col w-56 mb-8 items-center gap-5 md:gap-6 lg:gap-10"}>
-                        <div className="phone:max-lg:w-32">
+
+                    <div className={"flex flex-col w-40 custom-tablet:w-48 tablet:w-56 mb-8 items-center gap-2 lg:gap-10"}>
+                        <div className="tablet:max-lg:w-24 max-tablet:w-14">
                             <Image src={socialIcon} alt="Social icon"/>
                         </div>
-                        <div className={"flex flex-row gap-4"}>
+                        <div className={"flex phone:max-sm:w-6 max-tablet:w-6 flex-row gap-4"}>
                             <Image src={instagramLogo} alt="Instagram logo"/>
                         </div>
                     </div>

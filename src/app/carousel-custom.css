@@ -4,10 +4,11 @@
     margin: 0 auto;
     position: relative; /* Сделаем контейнер относительно спозиционированным */
 }
+
 .carousel .slider-wrapper{
     max-width: 590px;
-
 }
+
 .carousel .slide {
     height: 520px; /* Желаемая высота блока изображения */
     overflow: hidden;
@@ -40,10 +41,27 @@
     box-sizing: border-box;
     text-align: center;
 }
+
 .left-arrow {
     left: 15px; /* Устанавливаем отступ слева */
 }
 
 .right-arrow {
     right: 15px; /* Устанавливаем отступ справа */
+}
+
+
+@media (max-width: 620px) {
+    .carousel-container {
+        max-width: 350px;
+
+
+    }
+    .carousel .slide {
+        height: 230px; /* Желаемая высота блока изображения */
+    }
+    .carousel .slider-wrapper{
+        max-width: 350px;
+    }
+
 }

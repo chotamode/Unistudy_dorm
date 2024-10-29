@@ -1,0 +1,22 @@
+
+.carousel.carousel-slider{
+    display: flex !important;
+    justify-content: center !important;
+    justify-items: center !important;
+}
+
+
+.carousel.carousel-slider .control-arrow{
+   width: 50px !important;
+    height: 50px !important;
+    background-color: white !important;
+    border-radius: 100%;
+}
+
+.carousel .control-next.control-arrow:before{
+    border-left: 8px solid black !important;
+}
+
+.carousel .control-prev.control-arrow:before{
+    border-right: 8px solid black !important;
+}

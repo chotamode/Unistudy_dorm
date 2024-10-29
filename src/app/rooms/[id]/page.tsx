@@ -10,6 +10,8 @@ import Button2 from "@/app/components/Button2";
 import Link from "next/link";
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import '../../carousel-custom.css';
+
 
 interface Room {
     area: number;

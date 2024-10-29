@@ -33,13 +33,13 @@ const IconSwitch = () => {
             <h1 className="text-7xl font-normal text-black mb-8 text-center">
                 {activeIndex === 0 ? 'Boys\' room' : 'Girls\' room'}
             </h1>
-            <div className="rounded-3xl bg-[#FEF9F6] w-fit" style={{ boxShadow: '0 0px 30px rgba(0, 0, 0, 0.4)' }}>
+            <div className="rounded-3xl bg-[#FEF9F6] flex justify-center items-center w-[360px] h-[200px] laptop:w-[450px] laptop:h-[240px]" style={{ boxShadow: '0 0px 30px rgba(0, 0, 0, 0.4)' }}>
                 <div className="relative flex mx-auto">
                     {['female', 'male'].map((gender, index) => (
                         <div key={gender}>
                             <button
                                 ref={el => buttonRefs.current[index] = el!}
-                                className="w-36 h-36 rounded-lg flex items-center justify-center relative transition-all duration-300 z-10"
+                                className="w-[120px] h-[120px] laptop:w-36 laptop:h-36 rounded-lg flex items-center justify-center relative transition-all duration-300 z-10"
                                 onClick={() => handleClick(index)}
                             >
                                 <Image src={gender === 'female' ? maleIcon : femaleIcon}

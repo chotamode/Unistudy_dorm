@@ -239,19 +239,6 @@ export const getRoomAvailability = async (roomId: number, year: number) => {
     return data;
 }
 
-type Tenant = {
-    id: number;
-    name: string;
-    surname: string;
-    email: string;
-};
-
-type Bed = {
-    id: number;
-    room: number;
-    cost: number;
-};
-
 type Room = {
     id: number;
     name: string;
@@ -269,15 +256,19 @@ export const getReservations = async (): Promise<Reservation[]> => {
             from,
             to,
             confirmed,
-            bed (
+            bed:bed (
                 id,
-                room
+                room,
+                cost
             ),
             tenant:reserved_by (
                 id,
                 name,
                 surname,
-                email
+                email,
+                phone,
+                gender,
+                date_of_birth
             )
         `);
 
@@ -291,7 +282,7 @@ export const getReservations = async (): Promise<Reservation[]> => {
             id: reservation.bed.id,
             room: reservation.bed.room,
             cost: reservation.bed.cost
-        } : undefined
+        } : undefined;
 
         return {
             id: reservation.id,
@@ -304,7 +295,10 @@ export const getReservations = async (): Promise<Reservation[]> => {
                 id: reservation.tenant.id,
                 name: reservation.tenant.name,
                 surname: reservation.tenant.surname,
-                email: reservation.tenant.email
+                email: reservation.tenant.email,
+                phone: reservation.tenant.phone,
+                gender: reservation.tenant.gender,
+                date_of_birth: reservation.tenant.date_of_birth
             }
         };
     });

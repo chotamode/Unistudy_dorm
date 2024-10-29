@@ -1,9 +1,12 @@
 // src/app/types.ts
-export type Tenant = {
+type Tenant = {
     id: number;
     name: string;
     surname: string;
     email: string;
+    phone: string;
+    gender: string;
+    date_of_birth: string;
 };
 
 export interface Reservation {

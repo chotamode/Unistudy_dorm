@@ -62,7 +62,7 @@ interface PlanProps {
     beds: Bed[];
     roomPlan?: string;
     takenBedId?: number;
-    id?: string;
+    id?: number;
 }
 
 const plansMapping: { [key: string]: string } = {

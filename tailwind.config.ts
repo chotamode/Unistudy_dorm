@@ -62,6 +62,7 @@ const config: Config = {
                 'phonexs': '390px',
 
                 'tablet': '620px',
+                'custom-tablet': '517px',
                 // => @media (min-width: 640px) { ... }
 
 

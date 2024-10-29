@@ -89,7 +89,7 @@ const RoomDetails: React.FC = () => {
     return (
         <Layout>
             <div className="px-0 desktopxl:px-24 medium-desktop:px-48 rounded-3xl gap-2 desktop:gap-10 flex flex-col items-center  mdsuperbook:flex-row mdsuperbook:flex-wrap justify-center">
-                <div className=" flex flex-row rounded-xxl bg-cover bg-center min-h-[520px] w-[590px]">
+                <div className="flex flex-row rounded-xxl bg-cover bg-center w-[350px] h-[230px] tablet:min-h-[520px] tablet:w-[590px]">
                     <Carousel
                         renderArrowPrev={(onClickHandler, hasPrev) =>
                             hasPrev && (
@@ -118,14 +118,15 @@ const RoomDetails: React.FC = () => {
                     >
 
                         {images.map((url, index) => (
-                            <div className=" w-[590px] h-[520px]" key={index}>
+                            <div className=" w-[350px] h-[230px] tablet:w-[590px] tablet:h-[520px]" key={index}>
                                 <img src={url} alt={`Room image ${index + 1}`} />
                             </div>
                         ))}
                     </Carousel>
                 </div>
 
-                <div className="w-[590px] mdsuperbook:mt-0 mt-5 h-full flex flex-col gap-3 justify-center mdsuperbook:gap-6">
+                <div className=" w-[350px] tablet:w-[590px] mdsuperbook:mt-0 mt-5 h-full flex flex-col gap-3 justify-center mdsuperbook:gap-6">
+
                     <h1 className="text-3xl mb-4 px-[4px] font-bold">
                         {room.name}
                     </h1>
@@ -137,7 +138,7 @@ const RoomDetails: React.FC = () => {
                             <li key={detail.id}>{detail.detail}</li>
                         ))}
                     </ul>
-                    <p className="bg-[#DBE9FB] text-adxs w-[570px] py-6 px-4 rounded-3xl">
+                    <p className="bg-[#DBE9FB] text-adxs w-[350px] tablet:w-[570px] py-6 px-4 rounded-3xl">
                         {room.description}
                     </p>
                     <p className={"border-b-2 border-[#0F478D] w-fit pr-12 font-medium"}>
@@ -148,7 +149,7 @@ const RoomDetails: React.FC = () => {
                     </h3>
                     <div className={"flex flex-row flex-wrap gap-4"}>
                         {beds.map(bed => (
-                            <div key={bed.id} className="mb-2 p-4 flex bg-[#DBE9FB] flex-col rounded-xl">
+                            <div key={bed.id} className="mb-2 p-4 flex bg-[#DBE9FB] max-tablet:w-[256px] flex-col rounded-xl">
 
                                 <div>
 
@@ -178,9 +179,11 @@ const RoomDetails: React.FC = () => {
 
                     </div>
                     <Link href={`/rooms/${id}/reservation`}>
-                        <Button2 className={"w-52"}>
-                            Book a bed
-                        </Button2>
+                        <div className="flex mt-4  w-full justify-center tablet:justify-start ">
+                            <Button2 className={"w-80 tablet:w-52"}>
+                                Book a bed
+                            </Button2>
+                        </div>
                     </Link>
                 </div>
             </div>

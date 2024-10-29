@@ -55,7 +55,6 @@ const contacts = () => {
                         </div>
                         <div className={"flex flex-row gap-4 cursor-pointer"}>
                             <Image src={instagramLogo} alt="Instagram logo"/>
-                            <Image src={facebookLogo} alt="Facebook logo"/>
                         </div>
                         <div className={"static md:absolute justify-end mt-4 w-full md:w-1/6 md:pt-20 md:mt-14 pt-1"}>
                             <GoToMainPageButton text="Go back to the main page"/>

@@ -1,16 +1,20 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, SetStateAction, Dispatch } from 'react';
 import Image from 'next/image';
 import maleIcon from '@/assets/sex/male.svg';
 import femaleIcon from '@/assets/sex/female.svg';
 
-const IconSwitch = () => {
-    const [activeIndex, setActiveIndex] = useState<number>(0);
+interface IconSwitchProps {
+    activeIndex: number;
+    onClick: Dispatch<SetStateAction<'both' | 'male' | 'female'>>;
+}
+
+const IconSwitch: React.FC<IconSwitchProps> = ({ activeIndex, onClick }) => {
     const [positions, setPositions] = useState<string[]>(['0rem', '0rem']);
     const buttonRefs = useRef<HTMLButtonElement[]>([]);
     const [buttonSize, setButtonSize] = useState({ width: 0, height: 0 });
 
     const handleClick = (index: number) => {
-        setActiveIndex(index);
+        onClick(index === 0 ? 'male' : 'female');
     };
 
     const updatePositionsAndSizes = () => {
@@ -30,11 +34,11 @@ const IconSwitch = () => {
 
     return (
         <div className="flex flex-col items-center">
-            <h1 className="text-5xl md:text-7xl font-normal text-black mb-8 pb-7 text-center">
+            <h1 className="text-5xl md:text-7xl font-normal text-black mb-8 pb-7 md:pb-0 text-center">
                 {activeIndex === 0 ? 'Boys\' room' : 'Girls\' room'}
             </h1>
             <div className="rounded-3xl bg-[#FEF9F6] w-fit" style={{ boxShadow: '0 0px 30px rgba(0, 0, 0, 0.4)' }}>
-                <div className="relative gap-0 flex mx-auto">
+                <div className="relative flex mx-auto">
                     {['female', 'male'].map((gender, index) => (
                         <div key={gender}>
                             <button

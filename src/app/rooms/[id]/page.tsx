@@ -2,12 +2,14 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { getRoomById, getBedsByRoomId, getRoomDetailsByRoomId, getRoomType } from '../../api/rooms';
+import { getRoomById, getBedsByRoomId, getRoomDetailsByRoomId, getRoomType, getRoomImages } from '../../api/rooms';
 import Image from 'next/image';
 import Layout from "@/app/components/Layout";
 import placeholderImage from '@/assets/placeholder_room.jpg';
 import Button2 from "@/app/components/Button2";
 import Link from "next/link";
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 interface Room {
     area: number;
@@ -20,6 +22,8 @@ interface Room {
     mini_description: string;
 }
 
+
+
 interface Bed {
     id: number;
     occupied: boolean;
@@ -30,13 +34,14 @@ interface RoomDetail {
     detail: string;
 }
 
-const RoomDetails: React.FC<Room > = ({ image }) => {
 
+const RoomDetails: React.FC = () => {
     const { id } = useParams();
     const [room, setRoom] = useState<Room | null>(null);
     const [beds, setBeds] = useState<Bed[]>([]);
     const [details, setDetails] = useState<RoomDetail[]>([]);
     const [roomType, setRoomType] = useState<string>('both');
+    const [images, setImages] = useState<string[]>([]);
 
     useEffect(() => {
         if (id) {
@@ -63,6 +68,12 @@ const RoomDetails: React.FC<Room > = ({ image }) => {
                 setRoomType(type);
             };
             fetchRoomType().then(r => r);
+
+            const fetchImages = async () => {
+                const imageUrls = await getRoomImages(Number(id));
+                setImages(imageUrls.length > 0 ? imageUrls : Array(5).fill(placeholderImage.src));
+            };
+            fetchImages().then(r => r);
         }
     }, [id]);
 
@@ -72,13 +83,17 @@ const RoomDetails: React.FC<Room > = ({ image }) => {
 
     return (
         <Layout>
-            <div className="px-4 md:px-14 rounded-3xl flex flex-col md:flex-row">
-                <div className="relative rounded-xxl
-                           bg-cover bg-center min-h-[20rem] md:min-h-[40rem] w-full md:w-88
-
-                           " style={{backgroundImage: `url(${placeholderImage.src})`}} >
+            <div className="px-4 md:px-48 rounded-3xl gap-0 md:gap-10 flex flex-row">
+                <div className="flex flex-row rounded-xxl bg-cover bg-center min-h-[20rem] md:min-h-[40rem] w-full md:w-[700px]">
+                    <Carousel>
+                        {images.map((url, index) => (
+                            <div key={index}>
+                                <img src={url} alt={`Room image ${index + 1}`} />
+                            </div>
+                        ))}
+                    </Carousel>
                 </div>
-                <div className="w-full md:w-1/2  h-full flex flex-col justify-center gap-6 mt-6 md:mt-0">
+                <div className="w-full md:w-1/2 h-full flex flex-col justify-center gap-6 mt-6 md:mt-0">
                     <h1 className="text-2xl md:text-3xl px-1.5 md:px-[4px] font-bold">
                         {room.name}
                     </h1>
@@ -88,7 +103,7 @@ const RoomDetails: React.FC<Room > = ({ image }) => {
                         </h3>
                         {details.map((detail) => (
                             <li key={detail.id}>{detail.detail}</li>
-                            ))}
+                        ))}
                     </ul>
                     <p className="bg-[#DBE9FB] text-adxs py-5 md:py-6 px-5 md:px-4 rounded-3xl">
                         {room.description}
@@ -100,7 +115,7 @@ const RoomDetails: React.FC<Room > = ({ image }) => {
                         Available places:
                     </h3>
                     <div className={"flex flex-col"}>
-                        <p className="text-start text-adxs  w-full md:max-w-[450px] font-medium py-4">
+                        <p className="text-start text-adxs w-full md:max-w-[450px] font-medium py-4">
                             Double room with access to the balcony |
                             1 place is free • 8500kh per month per place Double room
                             without access to the balcony |

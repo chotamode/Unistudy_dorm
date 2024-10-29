@@ -67,12 +67,12 @@ const MainPage = () => {
                     </h1>
                 </div>
             </div>
-            <div className="min-h-screen bg-gray-100 p-8 md:px-0 lg:px-18 xl:px-52 pt-28">
+            <div className="min-h-screen p-8 md:px-0 lg:px-18 xl:px-52 pt-28">
                 <main>
                     <IconSwitch activeIndex={gender === 'male' ? 0 : 1} onClick={setGender} />
                     <YearSwitch activeIndex={year === new Date().getFullYear() ? 0 : 1} onClick={setYear} />
-                    <h2 className="lg:text-8xl md:text-7xl sm:text-6xl text- font-semibold text-black mb-20 mt-24 text-center">Spare rooms</h2>
-                    <div className="grid grid-cols-1 justify-items-center lg:grid-cols-2 xl:justify-items-stretch 2xl:grid-cols-3">
+                    <h2 className="lg:text-8xl md:text-7xl sm:text-6xl font-semibold text-black mb-20 mt-24 text-center">Spare rooms</h2>
+                    <div className="grid grid-cols-1 justify-items-center desktop:grid-cols-2  medium-desktop:grid-cols-3">
                         {filteredRooms.map((room) => (
                             <RoomCard
                                 key={room.id}

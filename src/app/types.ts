@@ -13,6 +13,9 @@ export interface Reservation {
         name: string;
         surname: string;
         email: string;
+        phone: string;
+        gender: string;
+        date_of_birth: string;
     };
     from: string;
     to: string;
@@ -27,6 +30,7 @@ export type Bed = {
 };
 
 export type Room = {
+    image_urls: string[];
     address: string;
     description: string;
     id: number;

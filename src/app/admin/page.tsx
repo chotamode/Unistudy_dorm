@@ -9,10 +9,14 @@ import {
     getRooms,
     updateRoomDetails,
     getBedsByRoomId,
-    updateBedCost
+    updateBedCost, uploadPhotoAndAddToRoom, deletePhotoFromRoom
 } from '@/app/api/rooms';
-import {Reservation, Room, Bed} from '@/app/types';
+import {Reservation, Room} from '@/app/types';
 import Image from "next/image";
+import {Plan} from "@/app/components/Plan";
+import { Bed as PlanBed } from '@/app/components/Plan';
+import { Bed as TypesBed } from '@/app/types';
+
 // git pls work
 const AdminPage = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -21,14 +25,61 @@ const AdminPage = () => {
     const [activeTab, setActiveTab] = useState<'reservations' | 'rooms'>('reservations');
     const [reservations, setReservations] = useState<Reservation[]>([]);
     const [rooms, setRooms] = useState<Room[]>([]);
-    const [beds, setBeds] = useState<Bed[]>([]);
+    const [beds, setBeds] = useState<TypesBed[]>([]);
     const [editReservationId, setEditReservationId] = useState<number | null>(null);
     const [newFromDate, setNewFromDate] = useState<string>('');
     const [newToDate, setNewToDate] = useState<string>('');
     const [editRoomId, setEditRoomId] = useState<number | null>(null);
     const [newRoomDetails, setNewRoomDetails] = useState<Partial<Room>>({});
     const [editBedId, setEditBedId] = useState<number | null>(null);
-    const [newBedCost, setNewBedCost] = useState<number | null>(null);
+    const [newBedCost, setNewBedCost] = useState<number | null>(null)
+    const [planBeds, setPlanBeds] = useState<PlanBed[]>([]);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [photoToDelete, setPhotoToDelete] = useState<string | null>(null);
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+        setSelectedFile(e.target.files[0]);
+    }
+};
+
+const handleUploadPhoto = async () => {
+    if (editRoomId !== null && selectedFile) {
+        await uploadPhotoAndAddToRoom(editRoomId, selectedFile);
+        setSelectedFile(null);
+        // Refresh room data after upload
+        const updatedRooms = await getRooms();
+        setRooms(updatedRooms);
+    }
+};
+
+const handleDeletePhoto = async (photoUrl: string) => {
+    if (editRoomId !== null) {
+        await deletePhotoFromRoom(editRoomId, photoUrl);
+        setPhotoToDelete(null);
+        // Refresh room data after deletion
+        const updatedRooms = await getRooms();
+        setRooms(updatedRooms);
+    }
+};
+
+    useEffect(() => {
+        const fetchBedsForReservations = async () => {
+            const bedsData = await Promise.all(
+                reservations.map(async (reservation) => {
+                    if (reservation.bed) {
+                        return getBedsByRoomId(reservation.bed.room);
+                    }
+                    return [];
+                })
+            );
+            setBeds(bedsData.flat());
+        };
+
+        if (reservations.length > 0) {
+            fetchBedsForReservations();
+        }
+    }, [reservations]);
 
     useEffect(() => {
         const fetchReservations = async () => {
@@ -96,7 +147,7 @@ const AdminPage = () => {
         }
     };
 
-    const handleEditBed = (bed: Bed) => {
+    const handleEditBed = (bed: TypesBed) => {
         setEditBedId(bed.id);
         setNewBedCost(bed.cost);
     };
@@ -110,6 +161,16 @@ const AdminPage = () => {
             setEditBedId(null);
         }
     };
+
+    const roomToBedsMap = beds.reduce((acc, bed) => {
+        if (!acc[bed.room]) {
+            acc[bed.room] = [];
+        }
+        acc[bed.room].push(bed);
+        return acc;
+    }, {} as Record<number, TypesBed[]>);
+
+    console.log(roomToBedsMap);
 
     return (
         <Layout>
@@ -174,7 +235,7 @@ const AdminPage = () => {
                                                 <div>
 
                                                     <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
-                                                        +420 777 777 777
+                                                        {reservation.tenant.phone}
                                                     </p>
 
                                                 </div>
@@ -190,7 +251,7 @@ const AdminPage = () => {
                                                 <div>
 
                                                     <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
-                                                        Male/Female
+                                                        {reservation.tenant.gender}
                                                     </p>
 
                                                 </div>
@@ -198,7 +259,7 @@ const AdminPage = () => {
                                                 <div>
 
                                                     <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
-                                                        01.01.1999
+                                                        {reservation.tenant.date_of_birth}
                                                     </p>
 
                                                 </div>
@@ -228,9 +289,11 @@ const AdminPage = () => {
                                                 </div>
 
 
-                                                <div className="w-80 h-44 border-solid border-4">
-
-                                                </div>
+                                                {reservation.bed && (
+                                                    <div className="w-80 h-44 border-solid border-4">
+                                                        <Plan beds={roomToBedsMap[reservation.bed.room] ?? []} takenBedId={reservation.bed.id} id={reservation.bed.room} />
+                                                    </div>
+                                                )}
 
                                             </div>
 
@@ -437,6 +500,39 @@ const AdminPage = () => {
                                                             </li>
                                                         ))}
                                                     </ul>
+                                                    <div className="mt-4">
+                                                        <label>
+                                                            Upload Photo:
+                                                            <input
+                                                                type="file"
+                                                                onChange={handleFileChange}
+                                                                className="ml-2 p-2 border rounded"
+                                                            />
+                                                        </label>
+                                                        <button
+                                                            onClick={handleUploadPhoto}
+                                                            className="bg-green-500 text-white px-4 py-2 rounded ml-4"
+                                                        >
+                                                            Upload
+                                                        </button>
+                                                    </div>
+                                                    <div className="mt-4">
+                                                        <h3 className="text-xl font-bold">Photos</h3>
+                                                        <ul>
+                                                            {room.image_urls && JSON.parse(room.image_urls).map((url: string) => (
+                                                                <li key={url} className="mb-2 p-2 border rounded">
+                                                                    <img src={url} alt="Room Photo"
+                                                                         className="w-32 h-32 object-cover"/>
+                                                                    <button
+                                                                        onClick={() => handleDeletePhoto(url)}
+                                                                        className="bg-red-500 text-white px-4 py-2 rounded ml-2"
+                                                                    >
+                                                                        Delete
+                                                                    </button>
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
                                                 </div>
                                             )}
                                         </li>
@@ -488,5 +584,15 @@ const AdminPage = () => {
         </Layout>
     );
 };
+
+// // reservation plan by id
+// const ReservationPlan = ({id, takenBedId}: { id: number, takenBedId: number | undefined }) => {
+//     const
+//     return (
+//         <div className="w-80 h-44 border-solid border-4">
+//             {/*<Plan beds={getBedsByRoomId(id)} takenBedId={undefined}/>*/}
+//         </div>
+//     );
+// }
 
 export default AdminPage;

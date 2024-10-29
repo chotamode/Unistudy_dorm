@@ -1,5 +1,6 @@
 import React from 'react';
 import Button2 from "@/app/components/Button2";
+import {white} from "next/dist/lib/picocolors";
 import Link from 'next/link';
 import Button from "@/app/components/Button";
 import Image from "next/image";
@@ -35,6 +36,8 @@ const RoomCard: React.FC<RoomCardProps> = ({
             <div
                 className="hidden rounded-xxl md:flex flex-col justify-end overflow-hidden
                            bg-cover bg-center min-h-120 w-full md:w-110 filter grayscale-[1%]
+                           desktop:min-h-[30rem] desktop:w-[26rem]
+                           medium-desktop:min-h-120 medium-desktop:w-110
                            large-desktop:min-h-[37rem] large-desktop:w-[32rem]
                            "
                 style={{backgroundImage: `url(${background})`}}
@@ -53,7 +56,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
                         </p>
 
                     </div>
-                        <Button2 className="h-16 w-36 text-xs">Book now</Button2>
+                        <Button2 className="h-10 w-40 text-xs">Book now</Button2>
 
                 </div>
 

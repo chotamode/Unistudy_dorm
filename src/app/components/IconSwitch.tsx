@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, SetStateAction, Dispatch } from 'react';
+import React, {useState, useRef, useEffect, SetStateAction, Dispatch} from 'react';
 import Image from 'next/image';
 import maleIcon from '@/assets/sex/male.svg';
 import femaleIcon from '@/assets/sex/female.svg';
@@ -8,10 +8,10 @@ interface IconSwitchProps {
     onClick: Dispatch<SetStateAction<'both' | 'male' | 'female'>>;
 }
 
-const IconSwitch: React.FC<IconSwitchProps> = ({ activeIndex, onClick }) => {
+const IconSwitch: React.FC<IconSwitchProps> = ({activeIndex, onClick}) => {
     const [positions, setPositions] = useState<string[]>(['0rem', '0rem']);
     const buttonRefs = useRef<HTMLButtonElement[]>([]);
-    const [buttonSize, setButtonSize] = useState({ width: 0, height: 0 });
+    const [buttonSize, setButtonSize] = useState({width: 0, height: 0});
 
     const handleClick = (index: number) => {
         onClick(index === 0 ? 'male' : 'female');
@@ -19,8 +19,8 @@ const IconSwitch: React.FC<IconSwitchProps> = ({ activeIndex, onClick }) => {
 
     const updatePositionsAndSizes = () => {
         if (buttonRefs.current[0]) {
-            const { offsetWidth, offsetHeight } = buttonRefs.current[0];
-            setButtonSize({ width: offsetWidth, height: offsetHeight });
+            const {offsetWidth, offsetHeight} = buttonRefs.current[0];
+            setButtonSize({width: offsetWidth, height: offsetHeight});
         }
         const newPositions = buttonRefs.current.map(button => `${button.offsetLeft}px`);
         setPositions(newPositions);
@@ -37,12 +37,16 @@ const IconSwitch: React.FC<IconSwitchProps> = ({ activeIndex, onClick }) => {
             <h1 className="text-7xl font-normal text-black mb-8 text-center">
                 {activeIndex === 0 ? 'Boys\' room' : 'Girls\' room'}
             </h1>
-            <div className="rounded-3xl bg-[#FEF9F6] flex justify-center items-center w-[360px] h-[200px] laptop:w-[450px] laptop:h-[240px]" style={{ boxShadow: '0 0px 30px rgba(0, 0, 0, 0.4)' }}>
+            <div
+                className="rounded-3xl bg-[#FEF9F6] flex justify-center items-center w-[360px] h-[200px] laptop:w-[450px] laptop:h-[240px]"
+                style={{boxShadow: '0 0px 30px rgba(0, 0, 0, 0.4)'}}>
                 <div className="relative flex mx-auto">
                     {['female', 'male'].map((gender, index) => (
                         <div key={gender}>
                             <button
-                                ref={el => buttonRefs.current[index] = el!}
+                                ref={el => {
+                                    buttonRefs.current[index] = el!;
+                                }}
                                 className="w-[120px] h-[120px] laptop:w-36 laptop:h-36 rounded-lg flex items-center justify-center relative transition-all duration-300 z-10"
                                 onClick={() => handleClick(index)}
                             >

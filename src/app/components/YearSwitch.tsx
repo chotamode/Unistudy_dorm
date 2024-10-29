@@ -37,7 +37,9 @@ const YearSwitch: React.FC<YearSwitchProps> = ({ activeIndex, onClick }) => {
                     {[currentYear, nextYear].map((year, index) => (
                         <div key={year}>
                             <button
-                                ref={el => buttonRefs.current[index] = el!}
+                                ref={el => {
+                                    buttonRefs.current[index] = el!;
+                                }}
                                 className="rounded-lg flex items-center justify-center relative transition-all duration-300 z-10 w-40"
                                 onClick={() => onClick(index === 0 ? currentYear : nextYear)}
                             >

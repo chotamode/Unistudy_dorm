@@ -316,13 +316,13 @@ const handleDeletePhoto = async (photoUrl: string) => {
                                                     onClick={() => handleUpdateReservation(reservation.id, true)}
                                                     className="bg-[#0F478D]  w-64 h-16 text-white px-4 py-2 rounded-xl mr-2"
                                                 >
-                                                    Booking Confirmations
+                                                    Confirm reservation
                                                 </button>
                                                 <button
                                                     onClick={() => handleUpdateReservation(reservation.id, false)}
                                                     className="bg-[#0F478D] w-64 h-16 text-white px-4 py-2 rounded-xl"
                                                 >
-                                                    Cancellation of reservations
+                                                    Cancel reservation
                                                 </button>
                                                 <button
                                                     onClick={() => handleEditDates(reservation)}

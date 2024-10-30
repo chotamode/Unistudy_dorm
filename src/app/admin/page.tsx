@@ -43,6 +43,13 @@ const AdminPage = () => {
         }
     };
 
+    rooms.map(room => {
+        console.log(
+            room.image_urls
+        )
+
+    })
+
     const handleUploadPhoto = async () => {
         if (editRoomId !== null && selectedFile) {
             await uploadPhotoAndAddToRoom(editRoomId, selectedFile);
@@ -545,7 +552,7 @@ const AdminPage = () => {
                                                     <div className="mt-4">
                                                         <h3 className="text-xl font-bold">Photos</h3>
                                                         <ul>
-                                                            {Array.isArray(room.image_urls) && room.image_urls.map((url: string) => (
+                                                            {room.image_urls != null && Array.isArray(JSON.parse(room.image_urls)) && JSON.parse(room.image_urls).map((url: string) => (
                                                                 <li key={url} className="mb-2 p-2 border rounded">
                                                                     <img src={url} alt="Room Photo"
                                                                          className="w-32 h-32 object-cover"/>

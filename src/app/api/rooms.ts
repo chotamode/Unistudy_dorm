@@ -158,6 +158,7 @@ export const getBedsByRoomId = async (roomId: number, year: number) => {
     const bedsWithAvailability = await Promise.all(data.map(async (bed) => {
         const freePeriod = await checkBedAvailability(bed.id, from, to);
         console.log("freePeriod", freePeriod);
+        // TODO: Check if the bed is occupied using the freePeriod
         const isOccupied = !freePeriod || (freePeriod.from <= from && freePeriod.to >= to);
 
         return {

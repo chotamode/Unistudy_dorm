@@ -4,11 +4,13 @@ import React, {useEffect, useState} from 'react';
 import {useParams, useSearchParams} from 'next/navigation';
 import Image from 'next/image';
 import Layout from "@/app/components/Layout";
+import Link from "next/link";
 import {getBedsByRoomId} from '@/app/api/rooms';
 import chosenBed from '../../../../assets/beds/chosen_bed.svg';
 import freeBed from '../../../../assets/beds/free_bed.svg';
 import {Bed, Plan} from "@/app/components/Plan";
 import finger from "@/assets/finger.svg";
+import Button2 from "@/app/components/Button2";
 
 const BedSelect: React.FC = () => {
     const {id} = useParams();
@@ -30,17 +32,20 @@ const BedSelect: React.FC = () => {
     return (
         <Layout>
             <div
-                className={"flex justify-center flex-col items-center h-[85vh] mx-0  md:mx-12 laptop:mx-24 desktop:mx-36 large-desktop:mx-48"}>
+                className={"flex justify-center flex-col items-center h-[85vh] mx-0 px-4 pt-10 phone:pt-8 md:mx-12 laptop:mx-24 desktop:mx-36 large-desktop:mx-48"}>
                 <div
-                    className={"flex justify-center bg-[#F6F4F2]  py-8 px-4  rounded-3xl relative w-full md:h-[700px] phone:h-[550px] phonexs:h-[450px] h-[350px]  minibook:h-full"}
+                    className={"flex justify-center bg-[#F6F4F2]  py-8 px-4 md:px-4  rounded-3xl relative w-full md:h-[700px] phone:h-[550px] phonexs:h-[450px] h-[350px]  minibook:h-full"}
                     style={{boxShadow: 'inset 0 7px 10px rgba(0, 0, 0, 0.3), 0 7px 10px rgba(0, 0, 0, 0.2)'}}>
 
+                    {/*ВОТ ТУТ ТЫ РАБОТАЕШЬ*/}
                     <div
-                        className="absolute  top-[-30px] left-1/2 transform -translate-x-1/2 px-6 pr-2 w-80 h-16 bg-[#0F478D] rounded-2xl flex flex-row items-center">
-                        <p className="w-3/4 text-white text-center font-semibold whitespace-nowrap text-sm">
+                        className="absolute bottom-[2vh] phone:bottom-[12vh] tablet:bottom-[10vh] md:bottom-0 md:top-[-30px]
+                        left-[40vw]  phone:left-[42.5vw] tablet:left-[49vw] md:left-1/2
+                        transform -translate-x-1/2 px-6 pr-2 w-80 h-screen md:h-16 bg-transparent md:bg-[#0F478D] rounded-2xl flex flex-row items-center justify-center">
+                        <p className="w-3/4 text-black md:text-white text-center font-semibold whitespace-nowrap text-sm">
                             To book a bed, click on the bed
                         </p>
-                        <div className="relative ml-8 z-0 w-1/4 h-4">
+                        <div className="relative ml-8 z-0 w-1/4 h-4 hidden tablet:block">
                             <Image src={finger} alt="Finger" layout="fill" objectFit="contain"/>
                         </div>
                     </div>
@@ -56,6 +61,13 @@ const BedSelect: React.FC = () => {
                         <Image src={chosenBed} alt="Chosen bed" width={160} height={160}/>
                         <p>Bed is booked</p>
                     </div>
+                </div>
+                <div className={"my-10"}>
+                <Link href={`/rooms/${id}`}>
+                <Button2 className={"w-full md:w-60 mt-12 md:mt-0"}>
+                    Go back
+                </Button2>
+                </Link>
                 </div>
             </div>
         </Layout>

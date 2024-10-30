@@ -175,6 +175,7 @@ export const getBedsByRoomId = async (roomId: number) => {
 export const createDefaultReservation = async (
     tenantName: string,
     tenantSurname: string,
+    tenantPhoneNumber: string,
     tenantGender: string,
     tenantEmail: string,
     tenantDateOfBirth: string,
@@ -201,6 +202,7 @@ export const createDefaultReservation = async (
     const { data, error } = await supabase.rpc('create_reservation', {
         tenant_name: tenantName,
         tenant_surname: tenantSurname,
+        tenant_phone_number: tenantPhoneNumber,
         tenant_gender: tenantGender,
         tenant_email: tenantEmail,
         tenant_date_of_birth: tenantDateOfBirth,

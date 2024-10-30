@@ -150,11 +150,11 @@ const FeedbackForm = () => {
 const Stage3Page = () => {
     return (
         <Layout>
-            <div className={"flex flex-row justify-center items-center h-screen bg-blue-100 rounded-3xl mx-20 py-24"}>
+            <div className={"flex flex-col mdsuperbook:flex-row justify-center items-center h-screen bg-blue-100 rounded-3xl mx-20 py-24"}>
                 <div
-                    className={"flex flex-col w-1/2 justify-center items-center text-white bg-bg-stage3 bg-[length:105%_100%] bg-no-repeat h-full bg-left"}>
-                    <h1 className=" mb-4 text-5xl font-medium">Here you can leave your</h1>
-                    <h1 className=" mb-4 text-5xl font-medium">details for feedback!</h1>
+                    className={"flex flex-col mdsuperbook:w-1/2 w-full justify-center items-center text-white bg-form-adaptive-bg mdsuperbook:bg-bg-stage3 mdsuperbook:bg-[length:105%_100%] bg-no-repeat h-full mdsuperbook:bg-left"}>
+                    <h1 className=" mb-4 text-2xl mdsuperbook:text-3xl desktopxl:text-4xl desktopxxl:text-5xl font-medium">Here you can leave your</h1>
+                    <h1 className=" mb-4  text-2xl mdsuperbook:text-3xl desktopxl:text-4xl desktopxxl:text-5xl font-medium">details for feedback!</h1>
                 </div>
                 <FeedbackForm />
             </div>

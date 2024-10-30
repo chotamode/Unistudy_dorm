@@ -14,8 +14,8 @@ import {
 import {Reservation, Room} from '@/app/types';
 import Image from "next/image";
 import {Plan} from "@/app/components/Plan";
-import { Bed as PlanBed } from '@/app/components/Plan';
-import { Bed as TypesBed } from '@/app/types';
+import {Bed as PlanBed} from '@/app/components/Plan';
+import {Bed as TypesBed} from '@/app/types';
 
 // git pls work
 const AdminPage = () => {
@@ -38,30 +38,30 @@ const AdminPage = () => {
     const [photoToDelete, setPhotoToDelete] = useState<string | null>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-        setSelectedFile(e.target.files[0]);
-    }
-};
+        if (e.target.files && e.target.files[0]) {
+            setSelectedFile(e.target.files[0]);
+        }
+    };
 
-const handleUploadPhoto = async () => {
-    if (editRoomId !== null && selectedFile) {
-        await uploadPhotoAndAddToRoom(editRoomId, selectedFile);
-        setSelectedFile(null);
-        // Refresh room data after upload
-        const updatedRooms = await getRooms();
-        setRooms(updatedRooms);
-    }
-};
+    const handleUploadPhoto = async () => {
+        if (editRoomId !== null && selectedFile) {
+            await uploadPhotoAndAddToRoom(editRoomId, selectedFile);
+            setSelectedFile(null);
+            // Refresh room data after upload
+            const updatedRooms = await getRooms();
+            setRooms(updatedRooms);
+        }
+    };
 
-const handleDeletePhoto = async (photoUrl: string) => {
-    if (editRoomId !== null) {
-        await deletePhotoFromRoom(editRoomId, photoUrl);
-        setPhotoToDelete(null);
-        // Refresh room data after deletion
-        const updatedRooms = await getRooms();
-        setRooms(updatedRooms);
-    }
-};
+    const handleDeletePhoto = async (photoUrl: string) => {
+        if (editRoomId !== null) {
+            await deletePhotoFromRoom(editRoomId, photoUrl);
+            setPhotoToDelete(null);
+            // Refresh room data after deletion
+            const updatedRooms = await getRooms();
+            setRooms(updatedRooms);
+        }
+    };
 
     useEffect(() => {
         const fetchBedsForReservations = async () => {
@@ -225,7 +225,7 @@ const handleDeletePhoto = async (photoUrl: string) => {
                                                         </p>
 
                                                         <p className="border-[#32648B] text-xs w-[50%] rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
-                                                             {reservation.confirmed ? 'Confirmed' : 'Pending'}
+                                                            {reservation.confirmed ? 'Confirmed' : 'Pending'}
                                                         </p>
 
                                                     </div>
@@ -267,22 +267,46 @@ const handleDeletePhoto = async (photoUrl: string) => {
                                             </div>
 
 
-
                                             <div className="flex flex-row justify-between my-5 items-center  w-[540px]">
 
                                                 <div className="flex flex-col gap-4">
 
-                                                    Address and bed number
+                                                    Reservation period
 
                                                     <div className="bg-[#FFFFFF] flex flex-col gap-2 rounded-2xl p-5">
-                                                        <p className="font-medium text-adxs">
-                                                          <strong>From:</strong>  {reservation.from}
-                                                        </p>
+                                                        {/*<p className="font-medium text-adxs">*/}
+                                                        {/*  <strong>From:</strong>  {reservation.from}*/}
+                                                        {/*</p>*/}
 
-                                                        <p className="font-medium text-adxs">
-                                                          <strong>To:</strong> {reservation.to}
-                                                        </p>
-
+                                                        {/*<p className="font-medium text-adxs">*/}
+                                                        {/*  <strong>To:</strong> {reservation.to}*/}
+                                                        {/*</p>*/}
+                                                        <div className="mt-4">
+                                                            <label>
+                                                                From:
+                                                                <input
+                                                                    type="date"
+                                                                    value={newFromDate}
+                                                                    onChange={(e) => setNewFromDate(e.target.value)}
+                                                                    className="ml-2 p-2 border rounded"
+                                                                />
+                                                            </label>
+                                                            <label className="ml-4">
+                                                                To:
+                                                                <input
+                                                                    type="date"
+                                                                    value={newToDate}
+                                                                    onChange={(e) => setNewToDate(e.target.value)}
+                                                                    className="ml-2 p-2 border rounded"
+                                                                />
+                                                            </label>
+                                                            <button
+                                                                onClick={handleSaveDates}
+                                                                className="bg-green-500 text-white px-4 py-2 rounded ml-4"
+                                                            >
+                                                                Save
+                                                            </button>
+                                                        </div>
 
                                                     </div>
 
@@ -291,7 +315,9 @@ const handleDeletePhoto = async (photoUrl: string) => {
 
                                                 {reservation.bed && (
                                                     <div className="w-80 h-44 border-solid border-4">
-                                                        <Plan beds={roomToBedsMap[reservation.bed.room] ?? []} takenBedId={reservation.bed.id} id={reservation.bed.room} />
+                                                        <Plan beds={roomToBedsMap[reservation.bed.room] ?? []}
+                                                              takenBedId={reservation.bed.id}
+                                                              id={reservation.bed.room}/>
                                                     </div>
                                                 )}
 
@@ -324,42 +350,42 @@ const handleDeletePhoto = async (photoUrl: string) => {
                                                 >
                                                     Cancel reservation
                                                 </button>
-                                                <button
-                                                    onClick={() => handleEditDates(reservation)}
-                                                    className="bg-[#0F478D] w-64 h-16 text-white px-4 py-2 rounded-xl ml-2"
-                                                >
-                                                    Сhange the date
-                                                </button>
+                                                {/*<button*/}
+                                                {/*    onClick={() => handleEditDates(reservation)}*/}
+                                                {/*    className="bg-[#0F478D] w-64 h-16 text-white px-4 py-2 rounded-xl ml-2"*/}
+                                                {/*>*/}
+                                                {/*    Сhange the date*/}
+                                                {/*</button>*/}
                                             </div>
 
-                                            {editReservationId === reservation.id && (
-                                                <div className="mt-4">
-                                                    <label>
-                                                        From:
-                                                        <input
-                                                            type="date"
-                                                            value={newFromDate}
-                                                            onChange={(e) => setNewFromDate(e.target.value)}
-                                                            className="ml-2 p-2 border rounded"
-                                                        />
-                                                    </label>
-                                                    <label className="ml-4">
-                                                        To:
-                                                        <input
-                                                            type="date"
-                                                            value={newToDate}
-                                                            onChange={(e) => setNewToDate(e.target.value)}
-                                                            className="ml-2 p-2 border rounded"
-                                                        />
-                                                    </label>
-                                                    <button
-                                                        onClick={handleSaveDates}
-                                                        className="bg-green-500 text-white px-4 py-2 rounded ml-4"
-                                                    >
-                                                        Save
-                                                    </button>
-                                                </div>
-                                            )}
+                                            {/*{editReservationId === reservation.id && (*/}
+                                            {/*    <div className="mt-4">*/}
+                                            {/*        <label>*/}
+                                            {/*            From:*/}
+                                            {/*            <input*/}
+                                            {/*                type="date"*/}
+                                            {/*                value={newFromDate}*/}
+                                            {/*                onChange={(e) => setNewFromDate(e.target.value)}*/}
+                                            {/*                className="ml-2 p-2 border rounded"*/}
+                                            {/*            />*/}
+                                            {/*        </label>*/}
+                                            {/*        <label className="ml-4">*/}
+                                            {/*            To:*/}
+                                            {/*            <input*/}
+                                            {/*                type="date"*/}
+                                            {/*                value={newToDate}*/}
+                                            {/*                onChange={(e) => setNewToDate(e.target.value)}*/}
+                                            {/*                className="ml-2 p-2 border rounded"*/}
+                                            {/*            />*/}
+                                            {/*        </label>*/}
+                                            {/*        <button*/}
+                                            {/*            onClick={handleSaveDates}*/}
+                                            {/*            className="bg-green-500 text-white px-4 py-2 rounded ml-4"*/}
+                                            {/*        >*/}
+                                            {/*            Save*/}
+                                            {/*        </button>*/}
+                                            {/*    </div>*/}
+                                            {/*)}*/}
                                         </div>
                                     ))}
                                 </div>

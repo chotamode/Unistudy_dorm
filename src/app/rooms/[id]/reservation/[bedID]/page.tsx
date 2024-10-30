@@ -44,6 +44,7 @@ const FeedbackForm = () => {
             const result = await createDefaultReservation(
                 formData.name,
                 formData.surname,
+                formData.phoneNumber,
                 formData.gender,
                 formData.email,
                 formData.dateOfBirth,

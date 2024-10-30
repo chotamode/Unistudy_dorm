@@ -33,7 +33,7 @@ export type Bed = {
 };
 
 export type Room = {
-    image_urls: string[];
+    image_urls: string;
     address: string;
     description: string;
     id: number;

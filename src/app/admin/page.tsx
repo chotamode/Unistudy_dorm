@@ -545,7 +545,7 @@ const AdminPage = () => {
                                                     <div className="mt-4">
                                                         <h3 className="text-xl font-bold">Photos</h3>
                                                         <ul>
-                                                            {room.image_urls && room.image_urls.map((url: string) => (
+                                                            {Array.isArray(room.image_urls) && room.image_urls.map((url: string) => (
                                                                 <li key={url} className="mb-2 p-2 border rounded">
                                                                     <img src={url} alt="Room Photo"
                                                                          className="w-32 h-32 object-cover"/>

@@ -2,6 +2,22 @@ import {supabase} from '@/supabaseClient';
 import {Reservation} from '@/app/types';
 import { v4 as uuidv4 } from 'uuid';
 
+export const getFirstRoomPhoto = async (roomId: number) => {
+    const { data, error } = await supabase
+        .from('room')
+        .select('image_urls')
+        .eq('id', roomId)
+        .single();
+
+    if (error) {
+        console.error('Error fetching room images:', error);
+        return null;
+    }
+
+    const imageUrls = data.image_urls ? JSON.parse(data.image_urls) : [];
+    return imageUrls.length > 0 ? imageUrls[0] : null;
+};
+
 export const uploadPhotoAndAddToRoom = async (roomId: number, file: File) => {
     // Generate a UUID for the file name
     const uniqueFileName = `${uuidv4()}.${file.name.split('.').pop()}`;

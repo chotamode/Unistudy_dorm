@@ -20,7 +20,7 @@ const BedSelect: React.FC = () => {
     useEffect(() => {
         if (id) {
             const fetchBeds = async () => {
-                const bedsData = await getBedsByRoomId(Number(id), Number(year));
+                const bedsData = await getBedsByRoomId(Number(id));
                 setBeds(bedsData);
             };
             fetchBeds().then(r => r);

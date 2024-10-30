@@ -1,7 +1,7 @@
 "use client";
 
 import React, {useEffect, useState} from 'react';
-import {useParams} from 'next/navigation';
+import {useParams, useSearchParams} from 'next/navigation';
 import Image from 'next/image';
 import Layout from "@/app/components/Layout";
 import {getBedsByRoomId} from '@/app/api/rooms';
@@ -13,11 +13,14 @@ import finger from "@/assets/finger.svg";
 const BedSelect: React.FC = () => {
     const {id} = useParams();
     const [beds, setBeds] = useState<Bed[]>([]);
+    const searchParams = useSearchParams();
+    const year = searchParams.get('year');
+    const gender = searchParams.get('gender');
 
     useEffect(() => {
         if (id) {
             const fetchBeds = async () => {
-                const bedsData = await getBedsByRoomId(Number(id));
+                const bedsData = await getBedsByRoomId(Number(id), Number(year));
                 setBeds(bedsData);
             };
             fetchBeds().then(r => r);

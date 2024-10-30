@@ -151,7 +151,7 @@ const RoomDetails: React.FC = () => {
                         ))}
 
                     </div>
-                    <Link href={`/rooms/${id}/reservation`}>
+                    <Link href={`/rooms/${id}/reservation?year=${year}&gender=${gender}`}>
                         <div className="flex mt-4  w-full justify-center tablet:justify-start ">
                             <Button2 className={"w-80 tablet:w-52"}>
                                 Book a bed

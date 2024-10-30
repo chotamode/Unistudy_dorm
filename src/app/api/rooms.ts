@@ -135,41 +135,41 @@ export const getRoomById = async (roomId: number) => {
     return data;
 };
 
-export const getBedsByRoomId = async (roomId: number) => {
-    const {data, error} = await supabase
+export const getBedsByRoomId = async (roomId: number, year: number) => {
+
+    const from = new Date(year, 8, 1); // September 1st of the given year
+    const to = new Date(year + 1, 7, 31); // August 31st of the next year
+    console.log(from, to);
+
+    const { data, error } = await supabase
         .from('bed')
         .select(`
-      id,
-      room,
-      cost,
-      reservations:reservation (
-        from,
-        to,
-        confirmed
-      )
-    `)
+            id,
+            room,
+            cost
+        `)
         .eq('room', roomId);
 
     if (error) {
         console.error('Error fetching beds:', error);
         return [];
     }
-    // git pls work
-    return data.map(bed => {
-        const isOccupied = bed.reservations.some(reservation => {
-            const fromDate = new Date(reservation.from);
-            const toDate = new Date(reservation.to);
-            const now = new Date();
-            return reservation.confirmed && now >= fromDate && now <= toDate;
-        });
+
+    const bedsWithAvailability = await Promise.all(data.map(async (bed) => {
+        const freePeriod = await checkBedAvailability(bed.id, from, to);
+        console.log("freePeriod", freePeriod);
+        const isOccupied = !freePeriod || (freePeriod.from <= from && freePeriod.to >= to);
 
         return {
             id: bed.id,
             room: bed.room,
             occupied: isOccupied,
-            cost: bed.cost
+            cost: bed.cost,
+            availability: freePeriod
         };
-    });
+    }));
+
+    return bedsWithAvailability;
 };
 
 export const createDefaultReservation = async (

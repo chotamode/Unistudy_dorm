@@ -36,10 +36,12 @@ const AdminPage = () => {
     const [planBeds, setPlanBeds] = useState<PlanBed[]>([]);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [photoToDelete, setPhotoToDelete] = useState<string | null>(null);
+    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            setSelectedFile(e.target.files[0]);
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+            setSelectedFiles(Array.from(event.target.files));
         }
     };
 
@@ -51,9 +53,11 @@ const AdminPage = () => {
     })
 
     const handleUploadPhoto = async () => {
-        if (editRoomId !== null && selectedFile) {
-            await uploadPhotoAndAddToRoom(editRoomId, selectedFile);
-            setSelectedFile(null);
+        if (editRoomId !== null && selectedFiles.length > 0) {
+            for (const file of selectedFiles) {
+                await uploadPhotoAndAddToRoom(editRoomId, file);
+            }
+            setSelectedFiles([]);
             // Refresh room data after upload
             const updatedRooms = await getRooms();
             setRooms(updatedRooms);
@@ -538,6 +542,7 @@ const AdminPage = () => {
                                                             Upload Photo:
                                                             <input
                                                                 type="file"
+                                                                multiple
                                                                 onChange={handleFileChange}
                                                                 className="ml-2 p-2 border rounded"
                                                             />

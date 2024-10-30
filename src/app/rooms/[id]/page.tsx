@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { getRoomById, getBedsByRoomId, getRoomDetailsByRoomId, getRoomType, getRoomImages } from '../../api/rooms';
 import Image from 'next/image';
 import Layout from "@/app/components/Layout";
@@ -11,8 +11,7 @@ import Link from "next/link";
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import '../../carousel-custom.css';
-import freeBed from '../../../assets/beds/free_bed.svg';
-
+import BedCard from '@/app/components/BedCard';
 
 interface Room {
     area: number;
@@ -39,6 +38,9 @@ interface RoomDetail {
 
 const RoomDetails: React.FC = () => {
     const { id } = useParams();
+    const searchParams = useSearchParams();
+    const year = searchParams.get('year');
+    const gender = searchParams.get('gender');
     const [room, setRoom] = useState<Room | null>(null);
     const [beds, setBeds] = useState<Bed[]>([]);
     const [details, setDetails] = useState<RoomDetail[]>([]);
@@ -83,9 +85,6 @@ const RoomDetails: React.FC = () => {
         return <div>Loading...</div>;
     }
 
-
-
-
     return (
         <Layout>
             <div className="px-0 desktopxl:px-24 medium-desktop:px-48 rounded-3xl gap-2 desktop:gap-10 flex flex-col items-center  mdsuperbook:flex-row mdsuperbook:flex-wrap justify-center">
@@ -116,7 +115,6 @@ const RoomDetails: React.FC = () => {
                         showThumbs={false}
                         showStatus={false}
                     >
-
                         {images.map((url, index) => (
                             <div className=" w-[350px] h-[230px] tablet:w-[590px] tablet:h-[520px]" key={index}>
                                 <img src={url} alt={`Room image ${index + 1}`} />
@@ -149,32 +147,7 @@ const RoomDetails: React.FC = () => {
                     </h3>
                     <div className={"flex flex-row flex-wrap gap-4"}>
                         {beds.map(bed => (
-                            <div key={bed.id} className="mb-2 p-4 flex bg-[#DBE9FB] max-tablet:w-[256px] flex-col rounded-xl">
-
-                                <div>
-
-                                    <Image
-                                        src={freeBed}
-                                        alt="Background"
-                                        objectFit="cover"
-                                        width={75}
-                                        height={75}
-                                    />
-
-                                </div>
-
-                                <p className="text-xs">{bed.id}</p>
-
-                                <div className="flex text-xs gap-4 flex-row">
-
-
-                                    <p >16.06.25 • 16.06.26</p>
-                                    <p> {bed.cost}$</p>
-
-
-                                </div>
-
-                            </div>
+                            <BedCard key={bed.id} bed={bed} year={Number(year)} />
                         ))}
 
                     </div>

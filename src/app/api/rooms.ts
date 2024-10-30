@@ -227,7 +227,9 @@ export const getRoomType = async (roomId: number) => {
     return data;
 };
 
-//If at least one bed has free period until 30 august of year
+//If at least one bed has free period
+// from 1 september of year - 1
+// until 30 august of year
 export const getRoomAvailability = async (roomId: number, year: number) => {
     const {data, error} = await supabase.rpc('get_room_availability', {room_id: roomId, year});
 
@@ -246,6 +248,43 @@ type Room = {
     description: string;
     price_month: number;
     image: string;
+};
+
+// find free period until to date argument. returns free period or null
+export const checkBedAvailability = async (bedId: number, from: Date, to: Date) => {
+    console.log(from, to);
+    if (isNaN(from.getTime()) || isNaN(to.getTime())) {
+        console.error('Invalid date provided');
+        return null;
+    }
+
+    const { data, error } = await supabase
+        .from('reservation')
+        .select('from, to')
+        .eq('bed', bedId)
+        .lte('from', from.toISOString())
+        .gte('to', to.toISOString());
+    console.log(data);
+
+    if (error) {
+        console.error('Error fetching bed availability:', error);
+        return null;
+    }
+
+    const freePeriod = data.reduce((acc: { from: Date, to: Date }, reservation: { from: string, to: string }) => {
+        const reservationFrom = new Date(reservation.from);
+        const reservationTo = new Date(reservation.to);
+
+        console.log(reservationFrom, reservationTo);
+
+        if (reservationFrom > acc.from) {
+            acc.from = reservationTo;
+        }
+
+        return acc;
+    }, { from: from, to: to });
+
+    return freePeriod;
 };
 
 export const getReservations = async (): Promise<Reservation[]> => {

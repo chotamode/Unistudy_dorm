@@ -19,7 +19,7 @@ interface Room {
 const MainPage = () => {
     const [rooms, setRooms] = useState<Room[]>([]);
     const [filteredRooms, setFilteredRooms] = useState<Room[]>([]);
-    const [gender, setGender] = useState<'male' | 'female' | 'both'>('both');
+    const [gender, setGender] = useState<'male' | 'female' | 'both'>('female'); // Default to 'female'
     const [year, setYear] = useState<number>(new Date().getFullYear());
 
     useEffect(() => {
@@ -69,7 +69,7 @@ const MainPage = () => {
             </div>
             <div className="min-h-screen p-8 md:px-0 lg:px-18 xl:px-52 pt-28">
                 <main>
-                    <IconSwitch activeIndex={gender === 'male' ? 0 : 1} onClick={setGender} />
+                    <IconSwitch activeIndex={1} onClick={setGender} /> {/* Default to 'female' */}
                     <YearSwitch activeIndex={year === new Date().getFullYear() ? 0 : 1} onClick={setYear} />
                     <h2 className="lg:text-8xl md:text-7xl sm:text-6xl font-semibold text-black mb-20 mt-24 text-center">Spare rooms</h2>
                     <div className="grid grid-cols-1 justify-items-center desktop:grid-cols-2  medium-desktop:grid-cols-3">

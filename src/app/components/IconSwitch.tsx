@@ -5,7 +5,7 @@ import femaleIcon from '@/assets/sex/female.svg';
 
 interface IconSwitchProps {
     activeIndex: number;
-    onClick: Dispatch<SetStateAction<'both' | 'male' | 'female'>>;
+    onClick: Dispatch<SetStateAction<'male' | 'female'>>;
 }
 
 const IconSwitch: React.FC<IconSwitchProps> = ({activeIndex, onClick}) => {

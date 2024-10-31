@@ -47,7 +47,7 @@ const MainPage = () => {
 
     return (
         <div>
-            <div className="relative">
+            <div className="relative mt-10 tablet:mt-0">
                 <Image
                     src="/images/mpage_hero.svg"
                     alt="Background"

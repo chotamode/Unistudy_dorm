@@ -10,7 +10,6 @@ interface RoomCardProps {
     name?: string;
     address?: string;
     sex?: string;
-    description?: string;
     background?: string;
     floor?: string;
     apart_name?: string;
@@ -22,7 +21,6 @@ const RoomCard: React.FC<RoomCardProps> = ({
     id = 1,
     name = "Default Room Name",
     address = "Default Address",
-    description = "No description provided",
     sex = "Girls only",
     apart_name = "Penthouse Apartment",
     background = "/images/rommbg.png",
@@ -62,7 +60,6 @@ const RoomCard: React.FC<RoomCardProps> = ({
                         <div className="text-adxs my-4">
                             <p>{floor} | {apart_name}</p>
                             <p>{sex}</p>
-                            <p className="py-2">{description}</p>
                         </div>
                         <Button2 className="h-10 w-40 text-xs">Book now</Button2>
                     </div>

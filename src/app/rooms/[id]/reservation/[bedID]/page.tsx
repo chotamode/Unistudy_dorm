@@ -22,7 +22,6 @@ const FeedbackForm = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const router = useRouter();
 
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
         if (type === 'checkbox' && e.target instanceof HTMLInputElement) {
@@ -75,7 +74,7 @@ const FeedbackForm = () => {
 
     return (
         <form onSubmit={handleSubmit}
-              className="flex flex-col gap-4 w-full md:w-1/2 bg-[#0F478D] rounded-2xl p-6 md:p-8 px-5 md:px-20 py-14 md:py-0 mt-20 md:mt-0 h-full mr-4 md:mr-16 mx-auto md:mx-auto justify-center md:justify-evenly">
+              className="flex flex-col gap-4 md:gap-6 w-full md:w-[528px] bg-[#0F478D] rounded-2xl p-6 md:p-8 px-5 md:px-12 py-14 md:py-10 mt-20 md:mt-0 h-full mr-4 md:mr-16 mx-auto md:mx-auto justify-center md:justify-evenly h-4/6">
             <div className={"flex flex-col md:flex-row gap-4 w-full z-20"}>
                 <label className="block text-sm font-medium -mb-2 text-white" htmlFor="name">
                     First Name<span className="text-red-500">*</span>
@@ -86,7 +85,7 @@ const FeedbackForm = () => {
                     placeholder="Name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="p-2 border rounded-xl w-full h-14"
+                    className="p-2 border rounded-xl w-full h-12"
                     required
                 />
                 <label className="block text-sm font-medium -mb-2 text-white" htmlFor="name">
@@ -98,7 +97,7 @@ const FeedbackForm = () => {
                     placeholder="Surname"
                     value={formData.surname}
                     onChange={handleChange}
-                    className="p-2 border rounded-xl w-full h-14"
+                    className="p-2 border rounded-xl w-full h-12"
                     required
                 />
             </div>
@@ -111,7 +110,7 @@ const FeedbackForm = () => {
                 placeholder="Phone Number"
                 value={formData.phoneNumber}
                 onChange={handleChange}
-                className="p-2 border rounded-xl w-full h-14"
+                className="p-2 border rounded-xl w-full h-12"
                 required
             />
             <label className="block text-sm font-medium -mb-2 text-white" htmlFor="name">
@@ -123,7 +122,7 @@ const FeedbackForm = () => {
                 placeholder="Email"
                 value={formData.email}
                 onChange={handleChange}
-                className="p-2 border rounded-xl w-full h-14"
+                className="p-2 border rounded-xl w-full h-12"
                 required
             />
             <label className="block text-sm font-medium -mb-2 text-white" htmlFor="name">
@@ -133,7 +132,7 @@ const FeedbackForm = () => {
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
-                className="p-2 border rounded-xl w-full h-14"
+                className="p-2 border rounded-xl w-full h-12"
                 required
             >
                 <option value="" disabled>Select Gender</option>
@@ -148,7 +147,7 @@ const FeedbackForm = () => {
                 name="dateOfBirth"
                 value={formData.dateOfBirth}
                 onChange={handleChange}
-                className="p-2 border rounded-xl w-full h-14"
+                className="p-2 border rounded-xl w-full h-12"
                 required
             />
             <label className="flex items-center text-white">

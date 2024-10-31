@@ -12,6 +12,7 @@ const config: Config = {
                 "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
                 "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
                 'bg-stage3': "url('/images/bg_stage3.svg')",
+                'bg-form-adaptive': "url('/images/form-adaptive-bg.svg')",
                 'bgmpage': "url('/images/mpage_hero.svg')",
                 "roomcardbg": 'url("/images/rommbg.png")',
                 "roomcardmb": 'url("/images/room_mobile.svg")'
@@ -82,6 +83,8 @@ const config: Config = {
                 'desktop': '1280px',
 
                 'desktopxl': '1480px',
+
+                'desktopxxl': '1670px',
 
                 // => @media (min-width: 1280px) { ... }
 

@@ -59,8 +59,13 @@ const config: Config = {
             },
             screens: {
                 'phone': '500px',
+                'zfold': '280px',
+                'phonese': '350px',
                 'phonexs': '390px',
+                'phonexr': '413px',
+                'phonepixel': '411px',
 
+                'ipadmini': '768px',
                 'tablet': '620px',
                 'custom-tablet': '517px',
                 // => @media (min-width: 640px) { ... }

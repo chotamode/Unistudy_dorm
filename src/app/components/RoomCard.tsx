@@ -81,7 +81,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
                         <div className="flex flex-col">
                             <h2 className="text-xxl font-black mb-2">{name}</h2>
                         </div>
-                        <div className="flex flex-col w-11 h-11 md:w-40 md:h-40 ">
+                        <div className="flex flex-col w-11 h-11 ">
                             <Image src={arrowButton} width={40} height={40} alt={arrowButton}></Image>
                         </div>
                     </div>

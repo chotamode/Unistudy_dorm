@@ -5,6 +5,7 @@ import Layout from "@/app/components/Layout";
 import {useParams, useRouter} from "next/navigation";
 import { createDefaultReservation } from '@/app/api/rooms';
 import Link from "next/link";
+import BlueBackground  from "@/app/components/BlueBackground";
 
 const FeedbackForm = () => {
     const [formData, setFormData] = useState({
@@ -20,6 +21,7 @@ const FeedbackForm = () => {
     const { bedID, id } = useParams();
     const [isSubmitted, setIsSubmitted] = useState(false);
     const router = useRouter();
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
@@ -73,8 +75,11 @@ const FeedbackForm = () => {
 
     return (
         <form onSubmit={handleSubmit}
-              className="flex flex-col gap-4 w-1/2 bg-[#0F478D] rounded-2xl p-8 px-20 h-full mr-16 justify-evenly">
-            <div className={"flex flex-row gap-4 w-full"}>
+              className="flex flex-col gap-4 w-full md:w-1/2 bg-[#0F478D] rounded-2xl p-6 md:p-8 px-5 md:px-20 py-14 md:py-0 mt-20 md:mt-0 h-full mr-4 md:mr-16 mx-auto md:mx-auto justify-center md:justify-evenly">
+            <div className={"flex flex-col md:flex-row gap-4 w-full z-20"}>
+                <label className="block text-sm font-medium -mb-2 text-white" htmlFor="name">
+                    First Name<span className="text-red-500">*</span>
+                </label>
                 <input
                     type="text"
                     name="name"
@@ -84,6 +89,9 @@ const FeedbackForm = () => {
                     className="p-2 border rounded-xl w-full h-14"
                     required
                 />
+                <label className="block text-sm font-medium -mb-2 text-white" htmlFor="name">
+                    Surname<span className="text-red-500">*</span>
+                </label>
                 <input
                     type="text"
                     name="surname"
@@ -94,6 +102,9 @@ const FeedbackForm = () => {
                     required
                 />
             </div>
+            <label className="block text-sm font-medium -mb-2 text-white" htmlFor="name">
+                Phone Number<span className="text-red-500">*</span>
+            </label>
             <input
                 type="tel"
                 name="phoneNumber"
@@ -103,6 +114,9 @@ const FeedbackForm = () => {
                 className="p-2 border rounded-xl w-full h-14"
                 required
             />
+            <label className="block text-sm font-medium -mb-2 text-white" htmlFor="name">
+                Email<span className="text-red-500">*</span>
+            </label>
             <input
                 type="email"
                 name="email"
@@ -112,6 +126,9 @@ const FeedbackForm = () => {
                 className="p-2 border rounded-xl w-full h-14"
                 required
             />
+            <label className="block text-sm font-medium -mb-2 text-white" htmlFor="name">
+                What is your gender?<span className="text-red-500">*</span>
+            </label>
             <select
                 name="gender"
                 value={formData.gender}
@@ -123,6 +140,9 @@ const FeedbackForm = () => {
                 <option value="male">Male</option>
                 <option value="female">Female</option>
             </select>
+            <label className="block text-sm font-medium -mb-2 text-white" htmlFor="name">
+                Your date of birth<span className="text-red-500">*</span>
+            </label>
             <input
                 type="date"
                 name="dateOfBirth"
@@ -131,7 +151,7 @@ const FeedbackForm = () => {
                 className="p-2 border rounded-xl w-full h-14"
                 required
             />
-            <label className="flex items-center">
+            <label className="flex items-center text-white">
                 <input
                     type="checkbox"
                     name="consent"
@@ -142,7 +162,9 @@ const FeedbackForm = () => {
                 />
                 I consent to data processing
             </label>
-            <button type="submit" className="p-2 bg-blue-500 text-white rounded">Confirm</button>
+            <button type="submit" className="hidden md:block p-2 bg-blue-500 text-white rounded">Confirm</button>
+            <button type="submit" className="md:hidden p-2 w-1/2 bg-white text-black font-bold rounded-3xl">Confirm
+            </button>
         </form>
     );
 };
@@ -150,17 +172,24 @@ const FeedbackForm = () => {
 
 const Stage3Page = () => {
     return (
+        <div className={"relative"}>
         <Layout>
-            <div className={"flex flex-row justify-center items-center h-screen bg-blue-100 rounded-3xl mx-20 py-24"}>
+            <BlueBackground/>
+            <div className={"flex flex-col md:flex-row justify-center items-center h-full md:h-screen bg-blue-100 rounded-3xl mx-0 md:mx-20 py-16 md:py-24 px-7 md:px-0 gap-1 md:gap-0 pt-6 md:pt-0"}>
+
+                {/* Контейнер с текстом, поверх фона */}
                 <div
-                    className={"flex flex-col w-1/2 justify-center items-center text-white bg-bg-stage3 bg-[length:105%_100%] bg-no-repeat h-full bg-left"}>
-                    <h1 className=" mb-4 text-5xl font-medium">Here you can leave your</h1>
-                    <h1 className=" mb-4 text-5xl font-medium">details for feedback!</h1>
+                    className={"relative flex flex-col w-full md:w-1/2 justify-center pb-10 items-center text-white  h-full md:bg-transparent "}>
+                    {/*Синий фон для десктопов*/}
+                    <div className={"hidden md:flex flex-col w-1/2 justify-center items-center text-white bg-bg-stage3 bg-[length:105%_100%] bg-no-repeat h-full bg-left"}></div>
+                        <h1 className="mb-0 md:mb-4 mt-10 text-2xl md:text-5xl font-medium z-10">Here you can leave your</h1>
+                        <h1 className="mb-0 md:mb-4 text-2xl md:text-5xl font-medium z-10">details for feedback!</h1>
+                    </div>
+                    <FeedbackForm/>
                 </div>
-                <FeedbackForm />
-            </div>
         </Layout>
-    );
+        </div>
+);
 }
 
 export default Stage3Page;

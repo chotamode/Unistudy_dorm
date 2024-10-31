@@ -386,6 +386,7 @@ export const Plan: React.FC<PlanProps> = ({
                 const left = screenPoint.x; // Подгонка по горизонтали
                 return { top, left };
             }
+
         }
         return undefined;
     };

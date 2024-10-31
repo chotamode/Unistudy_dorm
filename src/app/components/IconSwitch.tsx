@@ -38,8 +38,8 @@ const IconSwitch: React.FC<IconSwitchProps> = ({activeIndex, onClick}) => {
                 {activeIndex === 0 ? 'Boys\' room' : 'Girls\' room'}
             </h1>
             <div
-                className="rounded-3xl bg-[#FEF9F6] flex justify-center items-center w-[360px] h-[200px] laptop:w-[450px] laptop:h-[240px]"
-                style={{boxShadow: '0 0px 30px rgba(0, 0, 0, 0.4)'}}>
+                className="rounded-3xl bg-white] flex justify-center items-center w-[360px] h-[200px] laptop:w-[450px] laptop:h-[240px]"
+                style={{boxShadow: '0 0px 15px rgba(0, 0, 0, 0.4)'}}>
                 <div className="relative flex mx-auto">
                     {['female', 'male'].map((gender, index) => (
                         <div key={gender}>
@@ -60,9 +60,9 @@ const IconSwitch: React.FC<IconSwitchProps> = ({activeIndex, onClick}) => {
                         </div>
                     ))}
                     <div
-                        className="absolute top-0 rounded-3xl transition-transform duration-300 bg-[#FEF9F6] z-0"
+                        className="absolute top-0 rounded-3xl transition-transform duration-300 bg-white z-0"
                         style={{
-                            boxShadow: '0 0px 30px rgba(0, 0, 0, 0.4)',
+                            boxShadow: '0 0px 15px rgba(0, 0, 0, 0.4)',
                             transform: `translateX(${positions[activeIndex]})`,
                             width: `${buttonSize.width}px`,
                             height: `${buttonSize.height}px`

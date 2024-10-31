@@ -20,7 +20,7 @@ const stage4Page = () => {
                     </div>
                 </div>
                 <p className={"underline mb-5"}>Downloading documents</p>
-                <div>
+                <div className="max-custom-tablet:w-">
                     <GoToMainPageButton text="Go back to the main page"/>
                 </div>
             </div>

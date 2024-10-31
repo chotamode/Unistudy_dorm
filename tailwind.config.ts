@@ -64,12 +64,8 @@ const config: Config = {
 
                 'tablet': '620px',
                 'custom-tablet': '517px',
-                // => @media (min-width: 640px) { ... }
-
 
                 'laptop': '1024px',
-
-                // => @media (min-width: 1024px) { ... }
 
                 'minibook': '1100px',
 
@@ -80,8 +76,6 @@ const config: Config = {
                 'desktopxl': '1480px',
 
                 'desktopxxl': '1670px',
-
-                // => @media (min-width: 1280px) { ... }
 
                 'medium-desktop': '1720px',
 

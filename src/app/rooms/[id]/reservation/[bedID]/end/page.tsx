@@ -8,17 +8,19 @@ const stage4Page = () => {
         <Layout>
             <div className={"flex flex-col justify-center items-center h-[47rem] bg-blue-100 rounded-3xl mx-20"}>
                 <div className={"flex flex-col justify-center items-center gap-2 mb-10"}>
-                    <h1 className={"text-7xl font-semibold"}>Now the manager will</h1>
-                    <h1 className={"text-7xl font-semibold"}>contact you</h1>
+                    <h1 className={"text-xl custom-tablet:text-3xl md:text-5xl desktop:text-7xl font-semibold"}>Now the manager will</h1>
+                    <h1 className={"text-xl custom-tablet:text-3xl md:text-5xl desktop:text-7xl font-semibold"}>contact you</h1>
                 </div>
                 <div className={"flex items-center gap-2"}>
-                    <Image src={geoIcon} alt="Geo Icon"/>
+                    <div className="hidden md:flex">
+                        <Image src={geoIcon} alt="Geo Icon"/>
+                    </div>
                     <div className={"bg-[#0F478D] rounded-3xl py-4 px-12 mb-2"}>
                         <p className={"text-white"}>Kirovogradskaya street, 13A</p>
                     </div>
                 </div>
                 <p className={"underline mb-5"}>Downloading documents</p>
-                <div className={"pr-11"}>
+                <div>
                     <GoToMainPageButton text="Go back to the main page"/>
                 </div>
             </div>

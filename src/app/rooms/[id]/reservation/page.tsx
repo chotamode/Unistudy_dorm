@@ -30,7 +30,7 @@ const BedSelect: React.FC = () => {
     return (
         <Layout>
             <div
-                className={"flex justify-center flex-col items-center h-[85vh] mx-0  md:mx-12 laptop:mx-24 desktop:mx-36 large-desktop:mx-48"}>
+                className={"flex justify-center flex-col items-center h-[85vh] mx-0  md:mx-12 laptop:mx-24 mt-10 tablet:mt-0 desktop:mx-36 large-desktop:mx-48"}>
                 <div
                     className={"flex justify-center bg-[#F6F4F2]  py-8 px-4  rounded-3xl relative w-full md:h-[700px] phone:h-[550px] phonexs:h-[450px] h-[350px]  minibook:h-full"}
                     style={{boxShadow: 'inset 0 7px 10px rgba(0, 0, 0, 0.3), 0 7px 10px rgba(0, 0, 0, 0.2)'}}>

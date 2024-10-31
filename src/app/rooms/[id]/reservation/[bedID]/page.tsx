@@ -73,7 +73,7 @@ const FeedbackForm = () => {
 
     return (
         <form onSubmit={handleSubmit}
-              className="flex flex-col gap-4 w-1/2 bg-[#0F478D] rounded-2xl p-8 px-20 h-full mr-16 justify-evenly">
+              className="flex flex-col gap-6 w-[528px] h-4/6 bg-[#0F478D] rounded-2xl py-10 px-12 h-588 mr-16">
             <div className={"flex flex-row gap-4 w-full"}>
                 <input
                     type="text"
@@ -81,7 +81,7 @@ const FeedbackForm = () => {
                     placeholder="Name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="p-2 border rounded-xl w-full h-14"
+                    className="p-2 w-52 border rounded-xl h-12"
                     required
                 />
                 <input
@@ -90,7 +90,7 @@ const FeedbackForm = () => {
                     placeholder="Surname"
                     value={formData.surname}
                     onChange={handleChange}
-                    className="p-2 border rounded-xl w-full h-14"
+                    className="p-2 border rounded-xl w-52 h-12"
                     required
                 />
             </div>
@@ -100,7 +100,7 @@ const FeedbackForm = () => {
                 placeholder="Phone Number"
                 value={formData.phoneNumber}
                 onChange={handleChange}
-                className="p-2 border rounded-xl w-full h-14"
+                className="p-2 border rounded-xl w-[431px] h-12"
                 required
             />
             <input
@@ -109,14 +109,14 @@ const FeedbackForm = () => {
                 placeholder="Email"
                 value={formData.email}
                 onChange={handleChange}
-                className="p-2 border rounded-xl w-full h-14"
+                className="p-2 border rounded-xl w-[431px] h-12"
                 required
             />
             <select
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
-                className="p-2 border rounded-xl w-full h-14"
+                className="p-2 border rounded-xl w-[431px] h-12"
                 required
             >
                 <option value="" disabled>Select Gender</option>
@@ -128,7 +128,7 @@ const FeedbackForm = () => {
                 name="dateOfBirth"
                 value={formData.dateOfBirth}
                 onChange={handleChange}
-                className="p-2 border rounded-xl w-full h-14"
+                className="p-2 border rounded-xl w-[431px] h-12"
                 required
             />
             <label className="flex items-center">
@@ -151,11 +151,11 @@ const FeedbackForm = () => {
 const Stage3Page = () => {
     return (
         <Layout>
-            <div className={"flex flex-row justify-center items-center h-screen bg-blue-100 rounded-3xl mx-20 py-24"}>
+            <div className={"flex flex-col mdsuperbook:flex-row justify-center items-center h-[900px] mdsuperbook:bg-blue-100 rounded-3xl mx-20 "}>
                 <div
-                    className={"flex flex-col w-1/2 justify-center items-center text-white bg-bg-stage3 bg-[length:105%_100%] bg-no-repeat h-full bg-left"}>
-                    <h1 className=" mb-4 text-5xl font-medium">Here you can leave your</h1>
-                    <h1 className=" mb-4 text-5xl font-medium">details for feedback!</h1>
+                    className={"hidden mdsuperbook:flex flex-col w-[976px] h-[651px] justify-center items-center text-white bg-form-adaptive-bg bg-bg-stage3 bg-[length:105%_100%] bg-no-repeat  bg-left"}>
+                    <h1 className=" mb-4 text-2xl mdsuperbook:text-3xl desktopxl:text-4xl desktopxxl:text-5xl font-medium">Here you can leave your</h1>
+                    <h1 className=" mb-4  text-2xl mdsuperbook:text-3xl desktopxl:text-4xl desktopxxl:text-5xl font-medium">details for feedback!</h1>
                 </div>
                 <FeedbackForm />
             </div>

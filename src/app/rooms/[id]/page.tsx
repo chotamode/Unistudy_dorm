@@ -125,7 +125,7 @@ const RoomDetails: React.FC = () => {
 
                 <div className=" w-[350px] tablet:w-[590px] mdsuperbook:mt-0 mt-5 h-full flex flex-col gap-3 justify-center mdsuperbook:gap-6">
 
-                    <h1 className="text-3xl mb-4 px-[4px] font-bold">
+                    <h1 className="text-3xl  px-[4px] font-bold">
                         {room.name}
                     </h1>
                     <ul className="list-disc text-adxs px-2 list-inside">
@@ -152,7 +152,7 @@ const RoomDetails: React.FC = () => {
 
                     </div>
                     <Link href={`/rooms/${id}/reservation?year=${year}&gender=${gender}`}>
-                        <div className="flex mt-4  w-full justify-center tablet:justify-start ">
+                        <div className="flex mt-4 max-mdsuperbook:mt-4 w-full justify-center tablet:justify-start ">
                             <Button2 className={"w-80 tablet:w-52"}>
                                 Book a bed
                             </Button2>

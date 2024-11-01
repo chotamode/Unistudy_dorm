@@ -34,7 +34,7 @@ const YearSwitch: React.FC<YearSwitchProps> = ({ activeIndex, onClick }) => {
     return (
         <div className="flex flex-col items-center">
             <div className="flex justify-center items-center mt-8 w-[360px] h-[60px] laptop:w-[450px] laptop:h-[110px] rounded-2xl laptop:rounded-3xl"
-                style={{boxShadow: '0 0px 30px rgba(0, 0, 0, 0.4)'}}>
+                style={{boxShadow: '0 0px 15px rgba(0, 0, 0, 0.4)'}}>
                 <div className="relative flex mx-auto">
                     {[currentYear, nextYear].map((year, index) => (
                         <div key={year}>
@@ -50,9 +50,9 @@ const YearSwitch: React.FC<YearSwitchProps> = ({ activeIndex, onClick }) => {
                         </div>
                     ))}
                     <div
-                        className="absolute top-0 rounded-lg laptop:rounded-xl transition-transform duration-300 bg-[#FEF9F6] z-0"
+                        className="absolute top-0 rounded-lg laptop:rounded-xl transition-transform duration-300 bg-white z-0"
                         style={{
-                            boxShadow: '0 0px 30px rgba(0, 0, 0, 0.4)',
+                            boxShadow: '0 0px 15px rgba(0, 0, 0, 0.4)',
                             transform: `translateX(${positions[activeIndex]})`,
                             width: `${buttonSize.width}px`,
                             height: `${buttonSize.height}px`

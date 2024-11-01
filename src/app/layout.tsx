@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
-import { ReservationContextProvider } from "@/app/context/YearGenderContext";
+import { ReservationContextProvider } from "@/app/context/ReservationContext";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 

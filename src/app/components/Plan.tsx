@@ -47,7 +47,7 @@ import freeHorizontalBed from "@/assets/beds/free_horizontal_bed.svg";
 import freeBed from "@/assets/beds/free_bed.svg";
 import Link from "next/link";
 import Button2 from "@/app/components/Button2";
-import {useFormData, ReservationContextProvider} from '@/app/context/YearGenderContext';
+import {useFormData, ReservationContextProvider} from '@/app/context/ReservationContext';
 
 export interface Bed {
     id: number;
@@ -326,7 +326,7 @@ export const Plan: React.FC<PlanProps> = ({
                                               beds = [], takenBedId, id = '1'
                                           }) => {
 
-    const { year, gender } = useFormData();
+    const { year, gender, setReservationFrom, setReservationTo } = useFormData();
 
     const params = useParams();
     if (id === '1') {
@@ -352,6 +352,12 @@ export const Plan: React.FC<PlanProps> = ({
         if (!bed.occupied) {
             setSelectedBed(bed);
             setShowMessage(true);
+
+            if (bed.availability) {
+                const [from, to] = bed.availability.split(' - ').map(date => new Date(date));
+                setReservationFrom(from);
+                setReservationTo(to);
+            }
         }
     };
 

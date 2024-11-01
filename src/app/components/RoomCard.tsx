@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from "next/image";
 import arrowButton from "../../assets/arrow_button.svg";
 import { getFirstRoomPhoto } from '@/app/api/rooms';
-import {YearGenderProvider} from "@/app/context/YearGenderContext";
+import {ReservationContextProvider} from "@/app/context/YearGenderContext";
 
 interface RoomCardProps {
     id?: number;

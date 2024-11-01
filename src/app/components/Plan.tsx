@@ -47,7 +47,7 @@ import freeHorizontalBed from "@/assets/beds/free_horizontal_bed.svg";
 import freeBed from "@/assets/beds/free_bed.svg";
 import Link from "next/link";
 import Button2 from "@/app/components/Button2";
-import {useYearGender, YearGenderProvider} from '@/app/context/YearGenderContext';
+import {useFormData, ReservationContextProvider} from '@/app/context/YearGenderContext';
 
 export interface Bed {
     id: number;
@@ -57,6 +57,7 @@ export interface Bed {
     horizontal?: boolean;
     room?: number;
     plan?: string;
+    availability?: string;
 }
 
 interface PlanProps {
@@ -325,7 +326,7 @@ export const Plan: React.FC<PlanProps> = ({
                                               beds = [], takenBedId, id = '1'
                                           }) => {
 
-    const { year, gender } = useYearGender();
+    const { year, gender } = useFormData();
 
     const params = useParams();
     if (id === '1') {
@@ -339,7 +340,8 @@ export const Plan: React.FC<PlanProps> = ({
         .filter(bed => bed.room === Number(id))
         .map(bed => ({
             ...bed,
-            occupied: beds.find(dbBed => dbBed.id === bed.id)?.occupied ?? bed.occupied
+            occupied: beds.find(dbBed => dbBed.id === bed.id)?.occupied ?? bed.occupied,
+            availability: beds.find(dbBed => dbBed.id === bed.id)?.availability ?? 'Free period: '
         }));
 
     const [selectedBed, setSelectedBed] = useState<Bed | null>(null);
@@ -439,7 +441,7 @@ export const Plan: React.FC<PlanProps> = ({
                              className="absolute bg-white rounded-2xl shadow-2xl p-8 flex flex-col gap-3 items-center"
                              style={getMessagePosition()}>
                             <p className={"text-3xl font-normal text-center"}>
-                                {/*{beds[selectedBed.id].*/}
+                                {selectedBed?.availability ?? 'No availability information'}
                                 The bed is free
                             </p>
                             <Link href={`/rooms/${id}/reservation/${selectedBed.id}`}>

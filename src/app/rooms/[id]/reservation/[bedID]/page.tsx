@@ -64,9 +64,6 @@ const FeedbackForm = () => {
                 formData.dateOfBirth,
                 Number(id), // roomId
                 Number(bedID), // bedId
-                // TODO: get these from the previous steps
-                new Date(2025, 1, 1), // startDate
-                new Date(2026, 1, 2), // endDate
             );
             router.push(`/rooms/${id}/reservation/${bedID}/end`);
 

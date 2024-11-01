@@ -12,7 +12,7 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import '../../carousel-custom.css';
 import BedCard from '@/app/components/BedCard';
-import {useYearGender, YearGenderProvider} from "@/app/context/YearGenderContext";
+import {useFormData, ReservationContextProvider} from "@/app/context/YearGenderContext";
 
 interface Room {
     // area: number;
@@ -47,7 +47,7 @@ const RoomDetails: React.FC = () => {
     const [details, setDetails] = useState<RoomDetail[]>([]);
     const [roomType, setRoomType] = useState<string>('both');
     const [images, setImages] = useState<string[]>([]);
-    const { year, gender } = useYearGender();
+    const { year, gender } = useFormData();
 
     useEffect(() => {
         if (id) {

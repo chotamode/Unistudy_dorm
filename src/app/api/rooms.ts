@@ -161,24 +161,23 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
             room: bed.room,
             cost: bed.cost,
             occupied: false,
-            availability: null
+            availability: undefined
         }));
     }
 
+    const startDate = new Date(year, 8, 1); // September 1st of the given year
+    const endDate = new Date(year + 1, 7, 31); // August 31st of the next year
+    const period = { from: startDate, to: endDate };
+
     const beds = data.map((bed) => {
-        const startDate = new Date(year, 8, 1); // September 1st of the given year
-        const endDate = new Date(year + 1, 7, 31); // August 31st of the next year
+        const reservations = bed.reservations.map((reservation) => ({
+            from: reservation.from,
+            to: reservation.to,
+            confirmed: reservation.confirmed
+        }));
 
-        const latestToDate = bed.reservations.reduce((latest, reservation) => {
-            if (reservation.confirmed) {
-                const reservationTo = new Date(reservation.to);
-                return reservationTo > latest ? reservationTo : latest;
-            }
-            return latest;
-        }, startDate);
-
-        const freePeriod = { from: latestToDate, to: endDate };
-        const occupied = latestToDate >= endDate;
+        const freePeriod = calculateFreePeriod(reservations, period);
+        const occupied = freePeriod.from >= freePeriod.to;
 
         console.log(`Bed ${bed.id} is occupied: ${occupied} "freePeriod": ${freePeriod.from} - ${freePeriod.to}`);
 
@@ -187,7 +186,7 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
             room: bed.room,
             cost: bed.cost,
             occupied,
-            availability: freePeriod
+            availability: `${freePeriod.from.toISOString()} - ${freePeriod.to.toISOString()}`
         };
     });
 
@@ -203,8 +202,8 @@ export const createReservation = async (
     tenantDateOfBirth: string,
     roomId: number,
     bedId: number,
-    from: Date,
-    to: Date
+    from?: Date,
+    to?: Date
 
 ) => {
     const today = new Date();
@@ -267,6 +266,44 @@ export const getRoomType = async (roomId: number) => {
     }
 
     return data;
+};
+
+type ReservationCalc = {
+    from: string;
+    to: string;
+    confirmed: boolean;
+};
+
+type Period = {
+    from: Date;
+    to: Date;
+};
+
+const calculateFreePeriod = (reservations: ReservationCalc[], period: Period): Period => {
+    // Filter reservations that fall within the given period
+    const filteredReservations = reservations.filter(reservation => {
+        const reservationFrom = new Date(reservation.from);
+        const reservationTo = new Date(reservation.to);
+        return (reservationFrom >= period.from && reservationFrom <= period.to) ||
+            ((reservationTo >= period.from && reservationTo <= period.to) || (reservationFrom >= period.from && reservationFrom <= period.to));
+    });
+
+    // If no reservations in the period, the whole period is free
+    if (filteredReservations.length === 0) {
+        return period;
+    }
+
+    // Find the latest 'to' date of the filtered reservations
+    const latestToDate = filteredReservations.reduce((latest, reservation) => {
+        const reservationTo = new Date(reservation.to);
+        return reservationTo > latest ? reservationTo : latest;
+    }, period.from);
+
+    // Calculate the free period from the latest 'to' date to the end of the period
+    const freePeriodFrom = latestToDate > period.from ? latestToDate : period.from;
+    const freePeriodTo = period.to;
+
+    return { from: freePeriodFrom, to: freePeriodTo };
 };
 
 //If at least one bed has free period

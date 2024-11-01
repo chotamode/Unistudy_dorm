@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
-import { YearGenderProvider } from "@/app/context/YearGenderContext";
+import { ReservationContextProvider } from "@/app/context/YearGenderContext";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -18,9 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={montserrat.className}>
-        <YearGenderProvider>
+        <ReservationContextProvider>
           {children}
-        </YearGenderProvider>
+        </ReservationContextProvider>
       </body>
     </html>
   );

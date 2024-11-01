@@ -9,7 +9,7 @@ import chosenBed from '../../../../assets/beds/chosen_bed.svg';
 import freeBed from '../../../../assets/beds/free_bed.svg';
 import {Bed, Plan} from "@/app/components/Plan";
 import finger from "@/assets/finger.svg";
-import {useYearGender, YearGenderProvider} from "@/app/context/YearGenderContext";
+import {useFormData, ReservationContextProvider} from "@/app/context/YearGenderContext";
 
 const BedSelect: React.FC = () => {
     const {id} = useParams();
@@ -17,7 +17,7 @@ const BedSelect: React.FC = () => {
     const searchParams = useSearchParams();
     // const year = searchParams.get('year');
     // const gender = searchParams.get('gender');
-    const { year, gender } = useYearGender();
+    const { year, gender } = useFormData();
 
     useEffect(() => {
         if (id) {

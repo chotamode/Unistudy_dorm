@@ -1,8 +1,8 @@
 import React from 'react';
-import { useYearGender } from '@/app/context/YearGenderContext';
+import { useFormData } from '@/app/context/YearGenderContext';
 
 const YearGenderDisplay: React.FC = () => {
-    const { year, gender } = useYearGender();
+    const { year, gender } = useFormData();
 
     if (year === undefined || gender === undefined) {
         return null;

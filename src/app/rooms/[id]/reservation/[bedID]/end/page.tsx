@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
 import { useFormData } from "@/app/context/ReservationContext";
 import GoToMainPageButton from "@/app/components/GoMainPageButton";
 import Layout from "@/app/components/Layout";
@@ -15,15 +16,31 @@ const Stage4Page = () => {
 
     const generatePDF = () => {
         const doc = new jsPDF();
-        doc.text(`Reservation Details`, 10, 10);
-        doc.text(`Name: ${name}`, 10, 20);
-        doc.text(`Surname: ${surname}`, 10, 30);
-        doc.text(`Phone Number: ${phoneNumber}`, 10, 40);
-        doc.text(`Email: ${email}`, 10, 50);
-        doc.text(`Gender: ${gender}`, 10, 60);
-        doc.text(`Date of Birth: ${dateOfBirth.toISOString().split('T')[0]}`, 10, 70);
-        doc.text(`Reservation From: ${reservationFrom}`, 10, 80);
-        doc.text(`Reservation To: ${reservationTo}`, 10, 90);
+
+        doc.setFontSize(16);
+        doc.text("Reservation Details", 14, 20);
+
+        const tableColumn = ["", ""];
+        const tableRows = [
+            ["Name", name],
+            ["Surname", surname],
+            ["Phone Number", phoneNumber],
+            ["Email", email],
+            ["Gender", gender],
+            ["Date of Birth", dateOfBirth.toISOString().split('T')[0]],
+            ["Reservation From", reservationFrom],
+            ["Reservation To", reservationTo],
+        ];
+
+        doc.autoTable({
+            startY: 30,
+            head: [tableColumn],
+            body: tableRows,
+            theme: 'grid',
+            styles: { fontSize: 12 },
+            headStyles: { fillColor: false }, // Убираем заливку цвета
+        });
+
         doc.save('reservation-details.pdf');
     };
 
@@ -42,8 +59,8 @@ const Stage4Page = () => {
                         <p className={"text-white"}>Kirovogradskaya street, 13A</p>
                     </div>
                 </div>
-                <p className={"underline mb-5"}>Downloading documents</p>
-                <button onClick={generatePDF} className="p-2 bg-blue-500 text-white rounded">Download PDF</button>
+
+                <button onClick={generatePDF} className="underline mb-5">Downloading documents</button>
                 <div className="max-custom-tablet:w-">
                     <GoToMainPageButton text="Go back to the main page"/>
                 </div>

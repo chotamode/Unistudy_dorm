@@ -58,6 +58,7 @@ export interface Bed {
     room?: number;
     plan?: string;
     availability?: string;
+    cost?: number;
 }
 
 interface PlanProps {
@@ -326,7 +327,7 @@ export const Plan: React.FC<PlanProps> = ({
                                               beds = [], takenBedId, id = '1'
                                           }) => {
 
-    const { year, gender, setReservationFrom, setReservationTo } = useFormData();
+    const {year, gender, setReservationFrom, setReservationTo} = useFormData();
 
     const params = useParams();
     if (id === '1') {
@@ -341,7 +342,8 @@ export const Plan: React.FC<PlanProps> = ({
         .map(bed => ({
             ...bed,
             occupied: beds.find(dbBed => dbBed.id === bed.id)?.occupied ?? bed.occupied,
-            availability: beds.find(dbBed => dbBed.id === bed.id)?.availability ?? 'Free period: '
+            availability: beds.find(dbBed => dbBed.id === bed.id)?.availability ?? 'Free period: ',
+            cost: Number(beds.find(dbBed => dbBed.id === bed.id)?.cost) || undefined
         }));
 
     const [selectedBed, setSelectedBed] = useState<Bed | null>(null);
@@ -395,7 +397,7 @@ export const Plan: React.FC<PlanProps> = ({
                 const screenPoint = point.matrixTransform(svgCTM);
                 const top = screenPoint.y - 300; // Подгонка по вертикали
                 const left = screenPoint.x - 20; // Подгонка по горизонтали
-                return { top, left };
+                return {top, left};
             }
 
         }
@@ -414,54 +416,59 @@ export const Plan: React.FC<PlanProps> = ({
         //             <Image src={finger} alt="Finger" layout="fill" objectFit="contain"/>
         //         </div>
         //     </div>
-            <div className="relative w-full h-full">
-                <svg ref={svgRef} className="absolute inset-0 w-full h-full" viewBox="0 0 100 100"
-                     preserveAspectRatio="xMidYMid meet">
-                    <image href={planImage.src} width="100%" height="100%"/>
-                    {bedsForPlan.map((bed) => (
-                        <image
-                            key={bed.id}
-                            href={bed.occupied || takenBedId === bed.id
-                                ? (bed.horizontal ? occupiedHorizontalBed.src : occupiedBed.src)
-                                : (selectedBed?.id === bed.id && !takenBedId
-                                    ? (bed.horizontal ? chosenHorizontalBed.src : chosenBed.src)
-                                    : (bed.horizontal ? freeHorizontalBed.src : freeBed.src))}
-                            x={bed.x}
-                            y={bed.y}
-                            width={bed.plan === 'small'
-                                ? (bed.horizontal ? 8 : 16)
-                                : (bed.horizontal ? 10 : 20)}
+        <div className="relative w-full h-full">
+            <svg ref={svgRef} className="absolute inset-0 w-full h-full" viewBox="0 0 100 100"
+                 preserveAspectRatio="xMidYMid meet">
+                <image href={planImage.src} width="100%" height="100%"/>
+                {bedsForPlan.map((bed) => (
+                    <image
+                        key={bed.id}
+                        href={bed.occupied || takenBedId === bed.id
+                            ? (bed.horizontal ? occupiedHorizontalBed.src : occupiedBed.src)
+                            : (selectedBed?.id === bed.id && !takenBedId
+                                ? (bed.horizontal ? chosenHorizontalBed.src : chosenBed.src)
+                                : (bed.horizontal ? freeHorizontalBed.src : freeBed.src))}
+                        x={bed.x}
+                        y={bed.y}
+                        width={bed.plan === 'small'
+                            ? (bed.horizontal ? 8 : 16)
+                            : (bed.horizontal ? 10 : 20)}
 
-                            height={bed.plan === 'small'
-                                ? (bed.horizontal ? 16 : 8)
-                                : (bed.horizontal ? 20 : 10)}
-                            onClick={() => handleBedClick(bed)}
-                            className="cursor-pointer"
-                        />
-                    ))}
+                        height={bed.plan === 'small'
+                            ? (bed.horizontal ? 16 : 8)
+                            : (bed.horizontal ? 20 : 10)}
+                        onClick={() => handleBedClick(bed)}
+                        className="cursor-pointer"
+                    />
+                ))}
 
-                </svg>
-                {selectedBed && showMessage && !takenBedId &&
-                    (
-                        <div ref={messageRef}
-                             className="absolute bg-white rounded-2xl shadow-2xl p-8 flex flex-col gap-3 items-center"
-                             style={getMessagePosition()}>
+            </svg>
+            {selectedBed && showMessage && !takenBedId &&
+                (
+                    <div ref={messageRef}
+                         className="absolute bg-white rounded-2xl shadow-2xl p-8 flex flex-col gap-3 items-center"
+                         style={getMessagePosition()}>
 
-                            <p className="text-3xl font-bold">
-                                The bed is free!
-                            </p>
+                        <p className="text-3xl font-bold">
+                            The bed is free!
+                        </p>
 
-                            <p className={"text-adxs font-normal text-center"}>
-                                {selectedBed?.availability ?? 'No availability information'}
-                            </p>
-                            <Link href={`/rooms/${id}/reservation/${selectedBed.id}`}>
-                                <Button2 className={"w-28 h-12 mt-2"} color={"bg-[#14803F]"}>
-                                    Book
-                                </Button2>
-                            </Link>
-                        </div>
-                    )}
-            </div>
+                        <p className={"text-adxs font-normal text-center"}>
+                            {selectedBed?.availability ?? 'No availability information'}
+                        </p>
+
+                        <p className={"text-adxs font-normal text-center"}>
+                            {selectedBed?.cost ?? 'No cost information'} Kč
+                        </p>
+
+                        <Link href={`/rooms/${id}/reservation/${selectedBed.id}`}>
+                            <Button2 className={"w-28 h-12 mt-2"} color={"bg-[#14803F]"}>
+                                Book
+                            </Button2>
+                        </Link>
+                    </div>
+                )}
+        </div>
         // </div>
     );
 };

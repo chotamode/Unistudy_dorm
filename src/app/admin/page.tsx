@@ -220,10 +220,10 @@ const AdminPage = () => {
                                         <ReservationCard
                                             key={reservation.id}
                                             reservation={reservation}
-                                            newFromDate={newFromDate}
-                                            newToDate={newToDate}
-                                            setNewFromDate={setNewFromDate}
-                                            setNewToDate={setNewToDate}
+                                            // newFromDate={newFromDate}
+                                            // newToDate={newToDate}
+                                            // setNewFromDate={setNewFromDate}
+                                            // setNewToDate={setNewToDate}
                                             handleSaveDates={handleSaveDates}
                                             handleUpdateReservation={handleUpdateReservation}
                                             roomToBedsMap={roomToBedsMap}

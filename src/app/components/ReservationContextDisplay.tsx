@@ -5,7 +5,7 @@ const ReservationContextDisplay: React.FC = () => {
     const { year, gender, name, surname, phoneNumber, email, dateOfBirth, reservationFrom, reservationTo } = useFormData();
 
     if (year === undefined || gender === undefined
-        // || true
+        || true
     ) {
         return null;
     }

@@ -186,7 +186,15 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
             room: bed.room,
             cost: bed.cost,
             occupied,
-            availability: `${freePeriod.from.toISOString()} - ${freePeriod.to.toISOString()}`
+            availability: `from: ${new Intl.DateTimeFormat('en-GB', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+            }).format(new Date(freePeriod.from)).replace(/\//g, '.')} to: ${new Intl.DateTimeFormat('en-GB', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+            }).format(new Date(freePeriod.to)).replace(/\//g, '.')}`
         };
     });
 
@@ -282,8 +290,8 @@ type Period = {
 const calculateFreePeriod = (reservations: ReservationCalc[], period: Period): Period => {
     // Filter reservations that fall within the given period
     const filteredReservations = reservations.filter(reservation => {
-        const reservationFrom = new Date(reservation.from);
-        const reservationTo = new Date(reservation.to);
+        const reservationFrom = new Date(`${reservation.from}T00:00:00`);
+        const reservationTo = new Date(`${reservation.to}T00:00:00`);
         return (reservationFrom >= period.from && reservationFrom <= period.to) ||
             ((reservationTo >= period.from && reservationTo <= period.to) || (reservationFrom >= period.from && reservationFrom <= period.to));
     });

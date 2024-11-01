@@ -16,8 +16,10 @@ import Image from "next/image";
 import {Plan} from "@/app/components/Plan";
 import { Bed as PlanBed } from '@/app/components/Plan';
 import { Bed as TypesBed } from '@/app/types';
+import freeBed from '../../assets/beds/free_bed.svg';
+import deleteimg from '../../assets/delete.svg';
 
-// git pls work
+
 const AdminPage = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
@@ -36,32 +38,47 @@ const AdminPage = () => {
     const [planBeds, setPlanBeds] = useState<PlanBed[]>([]);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [photoToDelete, setPhotoToDelete] = useState<string | null>(null);
+    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-        setSelectedFile(e.target.files[0]);
-    }
-};
 
-const handleUploadPhoto = async () => {
-    if (editRoomId !== null && selectedFile) {
-        await uploadPhotoAndAddToRoom(editRoomId, selectedFile);
-        setSelectedFile(null);
-        // Refresh room data after upload
-        const updatedRooms = await getRooms();
-        setRooms(updatedRooms);
-    }
-};
 
-const handleDeletePhoto = async (photoUrl: string) => {
-    if (editRoomId !== null) {
-        await deletePhotoFromRoom(editRoomId, photoUrl);
-        setPhotoToDelete(null);
-        // Refresh room data after deletion
-        const updatedRooms = await getRooms();
-        setRooms(updatedRooms);
-    }
-};
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+            setSelectedFiles(Array.from(event.target.files));
+        }
+    };
+
+    rooms.map(room => {
+        console.log(
+            room.image_urls
+        )
+
+    })
+
+    const handleUploadPhoto = async () => {
+        if (editRoomId !== null && selectedFiles.length > 0) {
+            for (const file of selectedFiles) {
+                await uploadPhotoAndAddToRoom(editRoomId, file);
+            }
+
+            setSelectedFiles([]);
+
+            // Refresh room data after upload
+            const updatedRooms = await getRooms();
+            setRooms(updatedRooms);
+        }
+    };
+
+    const handleDeletePhoto = async (photoUrl: string) => {
+        if (editRoomId !== null) {
+            await deletePhotoFromRoom(editRoomId, photoUrl);
+            setPhotoToDelete(null);
+            // Refresh room data after deletion
+            const updatedRooms = await getRooms();
+            setRooms(updatedRooms);
+        }
+    };
 
     useEffect(() => {
         const fetchBedsForReservations = async () => {
@@ -200,7 +217,7 @@ const handleDeletePhoto = async (photoUrl: string) => {
                                 <div className="flex justify-center flex-wrap mt-10 gap-5">
                                     {reservations.map(reservation => (
                                         <div key={reservation.id}
-                                             className=" mb-4 w-[740px] flex flex-col gap-5 items-center rounded-admin-large h-[940px] bg-[#EAF1F9] p-4 border ">
+                                             className=" mb-4 w-[740px] flex flex-col gap-5 items-center rounded-admin-large h-[960px] bg-[#EAF1F9] p-4  border ">
 
 
                                             <div className="w-[132px] mt-6 h-[132px]">
@@ -225,7 +242,7 @@ const handleDeletePhoto = async (photoUrl: string) => {
                                                         </p>
 
                                                         <p className="border-[#32648B] text-xs w-[50%] rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
-                                                             {reservation.confirmed ? 'Confirmed' : 'Pending'}
+                                                            {reservation.confirmed ? 'Confirmed' : 'Pending'}
                                                         </p>
 
                                                     </div>
@@ -264,25 +281,67 @@ const handleDeletePhoto = async (photoUrl: string) => {
 
                                                 </div>
 
-                                            </div>
+                                                <div>
 
+                                                    <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
+                                                        {reservation.bed ? `Bed ID: ${reservation.bed.id}` : 'No bed assigned'}
+                                                    </p>
+
+                                                    <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
+                                                        {reservation.bed?.room ? `Room ID: ${reservation.bed.room}` : 'No bed assigned'}
+                                                    </p>
+
+                                                </div>
+
+                                            </div>
 
 
                                             <div className="flex flex-row justify-between my-5 items-center  w-[540px]">
 
                                                 <div className="flex flex-col gap-4">
 
-                                                    Address and bed number
+                                                    Reservation period
 
-                                                    <div className="bg-[#FFFFFF] flex flex-col gap-2 rounded-2xl p-5">
+                                                    <div className="bg-[#FFFFFF] rounded-2xl mr-4 p-2">
+                                                        {/*
                                                         <p className="font-medium text-adxs">
-                                                          <strong>From:</strong>  {reservation.from}
+                                                         <strong>From:</strong>  {reservation.from}
                                                         </p>
 
                                                         <p className="font-medium text-adxs">
                                                           <strong>To:</strong> {reservation.to}
-                                                        </p>
+                                                        </p> */}
 
+
+                                                        <div className="flex w-60 gap-2 justify-center items-center flex-col mt-4">
+
+                                                            <label>
+                                                                From:
+                                                                <input
+                                                                    type="date"
+                                                                    value={newFromDate}
+                                                                    onChange={(e) => setNewFromDate(e.target.value)}
+                                                                    className="ml-2 p-2 border rounded"
+                                                                />
+                                                            </label>
+
+                                                            <label className="ml-6">
+                                                                To:
+                                                                <input
+                                                                    type="date"
+                                                                    value={newToDate}
+                                                                    onChange={(e) => setNewToDate(e.target.value)}
+                                                                    className="ml-2 p-2 border rounded"
+                                                                />
+                                                            </label>
+
+                                                            <button
+                                                                onClick={handleSaveDates}
+                                                                className="bg-[#0F478D] text-white px-4 py-2 rounded ml-4"
+                                                            >
+                                                                Save
+                                                            </button>
+                                                        </div>
 
                                                     </div>
 
@@ -290,8 +349,10 @@ const handleDeletePhoto = async (photoUrl: string) => {
 
 
                                                 {reservation.bed && (
-                                                    <div className="w-80 h-44 border-solid border-4">
-                                                        <Plan beds={roomToBedsMap[reservation.bed.room] ?? []} takenBedId={reservation.bed.id} id={reservation.bed.room} />
+                                                    <div className="w-80 h-60 mt-10">
+                                                        <Plan beds={roomToBedsMap[reservation.bed.room] ?? []}
+                                                              takenBedId={reservation.bed.id}
+                                                              id={reservation.bed.room}/>
                                                     </div>
                                                 )}
 
@@ -324,42 +385,42 @@ const handleDeletePhoto = async (photoUrl: string) => {
                                                 >
                                                     Cancel reservation
                                                 </button>
-                                                <button
-                                                    onClick={() => handleEditDates(reservation)}
-                                                    className="bg-[#0F478D] w-64 h-16 text-white px-4 py-2 rounded-xl ml-2"
-                                                >
-                                                    Сhange the date
-                                                </button>
+                                                {/*<button*/}
+                                                {/*    onClick={() => handleEditDates(reservation)}*/}
+                                                {/*    className="bg-[#0F478D] w-64 h-16 text-white px-4 py-2 rounded-xl ml-2"*/}
+                                                {/*>*/}
+                                                {/*    Сhange the date*/}
+                                                {/*</button>*/}
                                             </div>
 
-                                            {editReservationId === reservation.id && (
-                                                <div className="mt-4">
-                                                    <label>
-                                                        From:
-                                                        <input
-                                                            type="date"
-                                                            value={newFromDate}
-                                                            onChange={(e) => setNewFromDate(e.target.value)}
-                                                            className="ml-2 p-2 border rounded"
-                                                        />
-                                                    </label>
-                                                    <label className="ml-4">
-                                                        To:
-                                                        <input
-                                                            type="date"
-                                                            value={newToDate}
-                                                            onChange={(e) => setNewToDate(e.target.value)}
-                                                            className="ml-2 p-2 border rounded"
-                                                        />
-                                                    </label>
-                                                    <button
-                                                        onClick={handleSaveDates}
-                                                        className="bg-green-500 text-white px-4 py-2 rounded ml-4"
-                                                    >
-                                                        Save
-                                                    </button>
-                                                </div>
-                                            )}
+                                            {/*{editReservationId === reservation.id && (*/}
+                                            {/*    <div className="mt-4">*/}
+                                            {/*        <label>*/}
+                                            {/*            From:*/}
+                                            {/*            <input*/}
+                                            {/*                type="date"*/}
+                                            {/*                value={newFromDate}*/}
+                                            {/*                onChange={(e) => setNewFromDate(e.target.value)}*/}
+                                            {/*                className="ml-2 p-2 border rounded"*/}
+                                            {/*            />*/}
+                                            {/*        </label>*/}
+                                            {/*        <label className="ml-4">*/}
+                                            {/*            To:*/}
+                                            {/*            <input*/}
+                                            {/*                type="date"*/}
+                                            {/*                value={newToDate}*/}
+                                            {/*                onChange={(e) => setNewToDate(e.target.value)}*/}
+                                            {/*                className="ml-2 p-2 border rounded"*/}
+                                            {/*            />*/}
+                                            {/*        </label>*/}
+                                            {/*        <button*/}
+                                            {/*            onClick={handleSaveDates}*/}
+                                            {/*            className="bg-green-500 text-white px-4 py-2 rounded ml-4"*/}
+                                            {/*        >*/}
+                                            {/*            Save*/}
+                                            {/*        </button>*/}
+                                            {/*    </div>*/}
+                                            {/*)}*/}
                                         </div>
                                     ))}
                                 </div>
@@ -372,166 +433,229 @@ const handleDeletePhoto = async (photoUrl: string) => {
                                 <h2 className="text-2xl font-bold mt-8">Rooms</h2>
                                 <ul>
                                     {rooms.map(room => (
-                                        <li key={room.id} className="mb-4 p-4 border rounded">
-                                            <p><strong>Room ID:</strong> {room.id}</p>
-                                            <p><strong>Name:</strong> {room.name}</p>
-                                            <p><strong>Address:</strong> {room.address}</p>
+                                        <li key={room.id} className="mb-4 p-4 border bg-[#DBE9FB] rounded-3xl">
+                                            {/*<p><strong>Room ID:</strong> {room.id}</p> */}
+                                            <p className="font-bold mt-4 ml-3">{room.name}</p>
+                                            {/*<p><strong>Address:</strong> {room.address}</p>
                                             <p><strong>Mini Description:</strong> {room.mini_description}</p>
                                             <p><strong>Floor:</strong> {room.floor}</p>
                                             <p><strong>Area:</strong> {room.area}</p>
-                                            <p><strong>Description:</strong> {room.description}</p>
+                                             <p><strong>Description:</strong> {room.description}</p> */}
                                             <button
                                                 onClick={() => handleEditRoom(room)}
-                                                className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
+                                                className="bg-[#0F478D] font-bold my-6 text-white p-4 px-10 rounded-[9px] ml-2"
                                             >
                                                 Edit Room
                                             </button>
                                             {editRoomId === room.id && (
-                                                <div className="mt-4">
-                                                    <label>
-                                                        Name:
-                                                        <input
-                                                            type="text"
-                                                            value={newRoomDetails.name ?? ''}
-                                                            onChange={(e) => setNewRoomDetails({
-                                                                ...newRoomDetails,
-                                                                name: e.target.value
-                                                            })}
-                                                            className="ml-2 p-2 border rounded"
-                                                        />
-                                                    </label>
-                                                    <label className="ml-4">
-                                                        Address:
-                                                        <input
-                                                            type="text"
-                                                            value={newRoomDetails.address ?? ''}
-                                                            onChange={(e) => setNewRoomDetails({
-                                                                ...newRoomDetails,
-                                                                address: e.target.value
-                                                            })}
-                                                            className="ml-2 p-2 border rounded"
-                                                        />
-                                                    </label>
-                                                    <label className="ml-4">
-                                                        Mini Description:
-                                                        <input
-                                                            type="text"
-                                                            value={newRoomDetails.mini_description ?? ''}
-                                                            onChange={(e) => setNewRoomDetails({
-                                                                ...newRoomDetails,
-                                                                mini_description: e.target.value
-                                                            })}
-                                                            className="ml-2 p-2 border rounded"
-                                                        />
-                                                    </label>
-                                                    <label className="ml-4">
-                                                        Floor:
-                                                        <input
-                                                            type="number"
-                                                            value={newRoomDetails.floor ?? ''}
-                                                            onChange={(e) => setNewRoomDetails({
-                                                                ...newRoomDetails,
-                                                                floor: Number(e.target.value)
-                                                            })}
-                                                            className="ml-2 p-2 border rounded"
-                                                        />
-                                                    </label>
-                                                    <label className="ml-4">
-                                                        Area:
-                                                        <input
-                                                            type="number"
-                                                            value={newRoomDetails.area ?? ''}
-                                                            onChange={(e) => setNewRoomDetails({
-                                                                ...newRoomDetails,
-                                                                area: Number(e.target.value)
-                                                            })}
-                                                            className="ml-2 p-2 border rounded"
-                                                        />
-                                                    </label>
-                                                    <label className="ml-4">
-                                                        Description:
-                                                        <input
-                                                            type="text"
-                                                            value={newRoomDetails.description ?? ''}
-                                                            onChange={(e) => setNewRoomDetails({
-                                                                ...newRoomDetails,
-                                                                description: e.target.value
-                                                            })}
-                                                            className="ml-2 p-2 border rounded"
-                                                        />
-                                                    </label>
-                                                    <button
-                                                        onClick={handleSaveRoomDetails}
-                                                        className="bg-green-500 text-white px-4 py-2 rounded ml-4"
-                                                    >
-                                                        Save
-                                                    </button>
-                                                    <h3 className="text-xl font-bold mt-4">Beds</h3>
-                                                    <ul>
-                                                        {beds.map(bed => (
-                                                            <li key={bed.id} className="mb-2 p-2 border rounded">
-                                                                <p><strong>Bed ID:</strong> {bed.id}</p>
-                                                                <p><strong>Cost:</strong> {bed.cost}</p>
-                                                                <button
-                                                                    onClick={() => handleEditBed(bed)}
-                                                                    className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
-                                                                >
-                                                                    Edit Bed
-                                                                </button>
-                                                                {editBedId === bed.id && (
-                                                                    <div className="mt-2">
-                                                                        <label>
-                                                                            Cost:
-                                                                            <input
-                                                                                type="number"
-                                                                                value={newBedCost ?? ''}
-                                                                                onChange={(e) => setNewBedCost(Number(e.target.value))}
-                                                                                className="ml-2 p-2 border rounded"
-                                                                            />
-                                                                        </label>
+                                                <div className="mt-2 flex justify-center items-center flex-row">
+
+                                                    <div className="bg-white rounded-2xl p-8">
+                                                        <div className=" h-[400px] overflow-y-auto">
+                                                            <h3 className="text-xl mb-6 font-bold ">Photos</h3>
+                                                            <ul className="grid grid-cols-3 gap-2 max-w-[600px]">
+                                                                {room.image_urls != null && Array.isArray(JSON.parse(room.image_urls)) && JSON.parse(room.image_urls).map((url: string) => (
+                                                                    <li key={url} className="mb-2 p-2">
+                                                                        <img src={url} alt="Room Photo"
+                                                                             className="w-[197px] h-[173px] rounded-2xl object-cover"/>
                                                                         <button
-                                                                            onClick={handleSaveBedDetails}
-                                                                            className="bg-green-500 text-white px-4 py-2 rounded ml-4"
-                                                                        >
-                                                                            Save
+                                                                            onClick={() => handleDeletePhoto(url)}
+                                                                            className=" relative text-white px-4 py-2 rounded ml-2">
+                                                                            <div
+                                                                                className="absolute w-8 h-8 bottom-40 left-32   ">
+
+                                                                                <Image
+                                                                                    src={deleteimg}
+                                                                                    alt="delete-img"
+                                                                                    objectFit="cover"
+                                                                                    width={70}
+                                                                                    height={70}/>
+
+                                                                            </div>
+
                                                                         </button>
-                                                                    </div>
-                                                                )}
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                    <div className="mt-4">
-                                                        <label>
-                                                            Upload Photo:
-                                                            <input
-                                                                type="file"
-                                                                onChange={handleFileChange}
-                                                                className="ml-2 p-2 border rounded"
-                                                            />
-                                                        </label>
-                                                        <button
-                                                            onClick={handleUploadPhoto}
-                                                            className="bg-green-500 text-white px-4 py-2 rounded ml-4"
-                                                        >
-                                                            Upload
-                                                        </button>
+                                                                    </li>
+                                                                ))}
+                                                            </ul>
+                                                        </div>
+                                                        <div className="mt-4">
+                                                            <label>
+                                                                Upload Photo:
+                                                                <input
+                                                                    type="file"
+                                                                    multiple
+                                                                    onChange={handleFileChange}
+                                                                    className="ml-2 p-2 border rounded"
+                                                                />
+                                                            </label>
+                                                            <button
+                                                                onClick={handleUploadPhoto}
+                                                                className="bg-green-500 text-white px-4 py-2 rounded ml-4"
+                                                            >
+                                                                Upload
+                                                            </button>
+                                                        </div>
+
                                                     </div>
-                                                    <div className="mt-4">
-                                                        <h3 className="text-xl font-bold">Photos</h3>
-                                                        <ul>
-                                                            {room.image_urls && room.image_urls.map((url: string) => (
-                                                                <li key={url} className="mb-2 p-2 border rounded">
-                                                                    <img src={url} alt="Room Photo"
-                                                                         className="w-32 h-32 object-cover"/>
-                                                                    <button
-                                                                        onClick={() => handleDeletePhoto(url)}
-                                                                        className="bg-red-500 text-white px-4 py-2 rounded ml-2"
-                                                                    >
-                                                                        Delete
-                                                                    </button>
-                                                                </li>
+
+                                                    <div className="flex flex-col ml-40 w-[550px] gap-4">
+
+                                                        <div className="flex flex-col gap-2 desktopxxl:flex-row">
+                                                            <div>
+
+                                                                <label className=" ml-2 desktopxxl:ml-4">
+                                                                    Name:
+                                                                    <input
+                                                                        type="text"
+                                                                        value={newRoomDetails.name ?? ''}
+                                                                        onChange={(e) => setNewRoomDetails({
+                                                                            ...newRoomDetails,
+                                                                            name: e.target.value
+                                                                        })}
+                                                                        className="ml-2 p-2 w-96 border rounded-lg"
+                                                                    />
+                                                                </label>
+
+                                                            </div>
+
+                                                            <div>
+
+                                                                <label className="ml-4">
+                                                                    Floor:
+                                                                    <input
+                                                                        type="number"
+                                                                        value={newRoomDetails.floor ?? ''}
+                                                                        onChange={(e) => setNewRoomDetails({
+                                                                            ...newRoomDetails,
+                                                                            floor: Number(e.target.value)
+                                                                        })}
+                                                                        className="ml-2 p-2 border rounded-lg"
+                                                                    />
+                                                                </label>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                        {/*<div>*/}
+
+                                                        {/*    <label className="ml-4">*/}
+                                                        {/*        Address:*/}
+                                                        {/*        <input*/}
+                                                        {/*            type="text"*/}
+                                                        {/*            value={newRoomDetails.address ?? ''}*/}
+                                                        {/*            onChange={(e) => setNewRoomDetails({*/}
+                                                        {/*                ...newRoomDetails,*/}
+                                                        {/*                address: e.target.value*/}
+                                                        {/*            })}*/}
+                                                        {/*            className="ml-2 p-2 w-80 border rounded"*/}
+                                                        {/*        />*/}
+                                                        {/*    </label>*/}
+
+                                                        {/*</div>*/}
+
+
+                                                        {/*<div>*/}
+
+                                                        {/*    <label className="ml-4">*/}
+                                                        {/*        Mini Description:*/}
+                                                        {/*        <textarea*/}
+                                                        {/*            value={newRoomDetails.mini_description ?? ''}*/}
+                                                        {/*            onChange={(e) => setNewRoomDetails({*/}
+                                                        {/*                ...newRoomDetails,*/}
+                                                        {/*                mini_description: e.target.value*/}
+                                                        {/*            })}*/}
+                                                        {/*            className="ml-2 p-2 w-[420px] h-20  border rounded"*/}
+                                                        {/*        />*/}
+                                                        {/*    </label>*/}
+
+                                                        {/*</div>*/}
+
+
+                                                        <div>
+
+                                                            <label className="ml-4">
+                                                                Description:
+                                                                <textarea
+                                                                    value={newRoomDetails.description ?? ''}
+                                                                    onChange={(e) => setNewRoomDetails({
+                                                                        ...newRoomDetails,
+                                                                        description: e.target.value
+                                                                    })}
+                                                                    className="ml-2 p-2 w-5/6 h-32 border rounded-lg"
+                                                                />
+                                                            </label>
+
+                                                        </div>
+
+
+                                                        <div className="flex mt-4 justify-center items-center  ">
+                                                            <button
+                                                                onClick={handleSaveRoomDetails}
+                                                                className="bg-[#0F478D] text-white px-4 py-2 flex-grow  rounded-xl "
+                                                            >
+                                                                Save
+                                                            </button>
+                                                        </div>
+
+
+                                                        {/*<label className="ml-4">*/}
+                                                        {/*    Area:*/}
+                                                        {/*    <input*/}
+                                                        {/*        type="number"*/}
+                                                        {/*        value={newRoomDetails.area ?? ''}*/}
+                                                        {/*        onChange={(e) => setNewRoomDetails({*/}
+                                                        {/*            ...newRoomDetails,*/}
+                                                        {/*            area: Number(e.target.value)*/}
+                                                        {/*        })}*/}
+                                                        {/*        className="ml-2 p-2 border rounded"*/}
+                                                        {/*    />*/}
+                                                        {/*</label>*/}
+
+                                                        <h3 className="text-xl font-bold mt-4">Beds</h3>
+
+                                                        <div className="flex flex-row gap-4">
+                                                            {beds.map(bed => (
+
+                                                                    <div key={bed.id} className="mb-2 w-42 flex flex-col gap-1 p-2 border rounded">
+                                                                        <Image
+                                                                            src={freeBed}
+                                                                            alt="Bed"
+                                                                            objectFit="cover"
+                                                                            width={75}
+                                                                            height={75}
+                                                                        />
+                                                                        <p><strong>Bed ID:</strong> {bed.id}</p>
+                                                                        <p><strong>Cost:</strong> {bed.cost}</p>
+                                                                        <button
+                                                                            onClick={() => handleEditBed(bed)}
+                                                                            className="bg-[#0F478D] text-white px-4 py-2 rounded-xl"
+                                                                        >
+                                                                            Edit Bed
+                                                                        </button>
+                                                                        {editBedId === bed.id && (
+                                                                            <div className="mt-2">
+                                                                                <label>
+                                                                                    Cost:
+                                                                                    <input
+                                                                                        type="number"
+                                                                                        value={newBedCost ?? ''}
+                                                                                        onChange={(e) => setNewBedCost(Number(e.target.value))}
+                                                                                        className="ml-2 p-2 border rounded"
+                                                                                    />
+                                                                                </label>
+                                                                                <button
+                                                                                    onClick={handleSaveBedDetails}
+                                                                                    className="bg-[#0F478D] mt-3 text-white px-4 py-2 rounded-xl ml-4"
+                                                                                >
+                                                                                    Save
+                                                                                </button>
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
                                                             ))}
-                                                        </ul>
+                                                        </div>
+
                                                     </div>
                                                 </div>
                                             )}

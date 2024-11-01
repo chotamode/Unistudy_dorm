@@ -18,7 +18,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     // <YearGenderProvider>
-      <div className="min-h-screen flex flex-col h-screen">
+      <div className="min-h-screen overflow-x-hidden flex flex-col h-screen">
         <Header />
         {showYearGenderDisplay && <ReservationContextDisplay />}
         <main className="flex-grow pb-28">

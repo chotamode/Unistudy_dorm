@@ -13,7 +13,7 @@ const Header = () => {
 
     return (
         <header
-            className={`static top-0 left-0 w-full p-4 ${isGayBlueBackground ? 'bg-blue-100 tablet:bg-transparent' : isBlueBackground ? 'bg-[#0F478D] md:bg-transparent' : 'bg-transparent'} z-20`}>
+            className={`static top-0 left-0 w-full p-4 ${isGayBlueBackground ? 'bg-blue-100 laptop:bg-transparent' : isBlueBackground ? 'bg-[#0F478D] md:bg-transparent' : 'bg-transparent'} z-20`}>
             <nav className="flex flex-row justify-between items-center font-montserrat w-full">
                 {/* Logo */}
                 <div className="relative w-10 h-10 tablet:w-14 tablet:h-14 flex-shrink-0">

@@ -6,6 +6,7 @@ import {useParams, useRouter} from "next/navigation";
 import { createDefaultReservation } from '@/app/api/rooms';
 import Link from "next/link";
 import BlueBackground  from "@/app/components/BlueBackground";
+import ReservationBackground from "@/app/components/ReservationBackground";
 
 const FeedbackForm = () => {
     const [formData, setFormData] = useState({
@@ -74,8 +75,8 @@ const FeedbackForm = () => {
 
     return (
         <form onSubmit={handleSubmit}
-              className="flex flex-col gap-4 md:gap-6 w-full md:w-[528px] bg-[#0F478D] rounded-2xl p-6 md:p-8 px-5 md:px-12 py-14 md:py-10 mt-20 md:mt-0  mr-4 md:mr-16 mx-auto md:mx-auto justify-center md:justify-evenly">
-            <div className={"flex flex-col md:flex-row gap-4 w-full z-20"}>
+              className="flex flex-col gap-4 laptop:gap-6 w-full laptop:w-[528px] bg-[#0F478D] rounded-2xl p-6 laptop:p-8 px-5 laptop:px-12 py-14 laptop:py-10 mt-20 ipadmini:mt-10 laptop:mt-0  mr-4 laptop:mr-16 mx-0 laptop:mx-auto justify-center laptop:justify-evenly">
+            <div className={"flex flex-col desktop:flex-row gap-4 w-full z-20"}>
                 <label className="block text-sm font-medium -mb-2 text-white" htmlFor="name">
                     First Name<span className="text-red-500">*</span>
                 </label>
@@ -173,23 +174,26 @@ const Stage3Page = () => {
     return (
         <div className={"relative"}>
             <Layout>
-                <BlueBackground/>
-                <div className={"flex flex-col md:flex-row justify-center items-center h-full md:h-screen bg-blue-100 rounded-3xl mx-0 md:mx-20 py-16 md:py-24 px-7 md:px-0 gap-1 md:gap-0 pt-6 md:pt-0"}>
+                {/*<BlueBackground/>*/}
+                <ReservationBackground/>
+                <div className={"flex flex-col laptop:flex-row justify-center items-center h-full laptop:h-screen bg-blue-100 rounded-3xl mx-0 laptop:mx-20 py-16 laptop:py-24 px-7 laptop:px-0 gap-1 laptop:gap-0 pt-6 laptop:pt-0"}>
 
                 {/* Контейнер с текстом, поверх фона */}
                     <div
-                    className={"relative  flex flex-col w-full md:w-full justify-center pb-10 md:pb-0 items-center text-white h-full md:bg-transparent "}>
+                    className={"relative  flex flex-col w-full md:w-full justify-center pb-10 laptop:pb-0 items-center text-white h-full md:bg-transparent "}>
                     {/*Синий фон для десктопов*/}
-                        <div className={" hidden md:flex flex-col w-full justify-center items-center text-white bg-bg-stage3 bg-[length:115%_120%] bg-no-repeat h-full bg-left"}></div>
-                        <h1 className="static md:absolute md:pb-20 md:mb-4 mt-10 text-2xl md:text-5xl font-medium z-10">
-                            Here you can leave your
+                        <div
+                            className="hidden md:flex flex-col w-full justify-center items-center text-white bg-bg-stage3 bg-[length:115%_120%] bg-no-repeat h-full bg-left max-w-[1600px] mx-auto">
+                        </div>
+                        <h1 className="static laptop:absolute laptop:pb-20 laptop:mb-4 mt-10 text-2xl phone14:text-3xl minibook:text-3xl desktop2:text-5xl font-medium z-10">
+                        Here you can leave your
                         </h1>
-                        <h1 className="static md:absolute md:pt-20 md:mb-4 text-2xl md:text-5xl font-medium z-10">
+                        <h1 className="static laptop:absolute laptop:pt-20 laptop:mb-4 text-2xl phone14:text-3xl minibook:text-3xl desktop2:text-5xl font-medium z-10">
                             details for feedback!
                         </h1>
                     </div>
                     {/* Поля формы для обратной связи */}
-                    <div className={"w-full ml-3 md:ml-0 md:w-1/2 flex justify-center items-center md:items-start"}>
+                    <div className={"w-full ml-3 laptop:ml-0 ipadmini:w-[80vw] laptop:w-1/2 flex justify-center items-center laptop:items-start z-30"}>
                         <FeedbackForm/>
                     </div>
                 </div>

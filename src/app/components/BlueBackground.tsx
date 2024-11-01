@@ -6,3 +6,15 @@ const BlueBackground = () => {
 };
 
 export default BlueBackground;
+
+// import React from 'react';
+// import blueBgStageTop from '../../assets/bg_stage_top1.svg';
+//
+// const BlueBackground = () => {
+//     return (
+//         <div className="absolute top-0 left-0 w-full h-[40rem] bg-no-repeat bg-cover z-10"
+//              style={{ backgroundImage: `url(${blueBgStageTop})` }} />
+//     );
+// };
+//
+// export default BlueBackground;

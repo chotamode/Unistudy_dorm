@@ -183,7 +183,7 @@ const Stage3Page = () => {
                     className={"relative  flex flex-col w-full md:w-full justify-center pb-10 laptop:pb-0 items-center text-white h-full md:bg-transparent "}>
                     {/*Синий фон для десктопов*/}
                         <div
-                            className="hidden md:flex flex-col w-full justify-center items-center text-white bg-bg-stage3 bg-[length:115%_120%] bg-no-repeat h-full bg-left max-w-[1600px] mx-auto">
+                            className="hidden md:flex flex-col w-full justify-center items-center text-white bg-bg-stage3 bg-[length:115%_120%] bg-no-repeat h-full bg-left mx-auto">
                         </div>
                         <h1 className="static laptop:absolute laptop:pb-20 laptop:mb-4 mt-10 text-2xl phone14:text-3xl minibook:text-3xl desktop2:text-5xl font-medium z-10">
                         Here you can leave your

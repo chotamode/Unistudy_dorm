@@ -21,9 +21,9 @@ const Header = () => {
                         <Image src={logo} alt="Logo" fill/>
                     </Link>
                 </div>
-                <div className={" text-sm tablet:text-bold font-medium"}>
+                <div className={"text-sm tablet:text-bold font-medium"}>
                     <Link href="/contacts">
-                        <div className="text-white md:text-black cursor-pointer">Contacts</div>
+                        <div className="text-black cursor-pointer">Contacts</div>
                     </Link>
                 </div>
             </nav>

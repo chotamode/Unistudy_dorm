@@ -63,11 +63,12 @@ const config: Config = {
                 'zfold': '280px',
                 'phonese': '350px',
                 'phonexs': '390px',
-                'phonexr': '413px',
+                'phone14': '430px',
                 'phonepixel': '411px',
 
                 'ipadmini': '768px',
                 'tablet': '620px',
+                'surface': '912px',
                 'custom-tablet': '517px',
                 // => @media (min-width: 640px) { ... }
 

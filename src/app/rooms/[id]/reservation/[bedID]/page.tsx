@@ -74,7 +74,7 @@ const FeedbackForm = () => {
 
     return (
         <form onSubmit={handleSubmit}
-              className="flex flex-col gap-4 md:gap-6 w-full md:w-[528px] bg-[#0F478D] rounded-2xl p-6 md:p-8 px-5 md:px-12 py-14 md:py-10 mt-20 md:mt-0  mr-4 md:mr-16 mx-auto md:mx-auto justify-center md:justify-evenly h-4/6">
+              className="flex flex-col gap-4 md:gap-6 w-full md:w-[528px] bg-[#0F478D] rounded-2xl p-6 md:p-8 px-5 md:px-12 py-14 md:py-10 mt-20 md:mt-0  mr-4 md:mr-16 mx-auto md:mx-auto justify-center md:justify-evenly">
             <div className={"flex flex-col md:flex-row gap-4 w-full z-20"}>
                 <label className="block text-sm font-medium -mb-2 text-white" htmlFor="name">
                     First Name<span className="text-red-500">*</span>

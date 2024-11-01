@@ -357,7 +357,11 @@ export const Plan: React.FC<PlanProps> = ({
             setShowMessage(true);
 
             if (bed.availability) {
-                const [from, to] = bed.availability.split(' - ').map(date => new Date(date));
+                console.log("ROOM AVSWAILABILITY", bed.availability);
+                const [from, to] = bed.availability.split(' - ').map(date => {
+                    const [day, month, year] = date.split('/');
+                    return new Date(`${year}-${month}-${day}`);
+                });
                 setReservationFrom(from);
                 setReservationTo(to);
             }
@@ -398,7 +402,7 @@ export const Plan: React.FC<PlanProps> = ({
                 const screenPoint = point.matrixTransform(svgCTM);
                 const top = screenPoint.y - 300; // Подгонка по вертикали
                 const left = screenPoint.x - 20; // Подгонка по горизонтали
-                return { top, left };
+                return {top, left};
             }
 
         }
@@ -425,23 +429,23 @@ export const Plan: React.FC<PlanProps> = ({
 
     return (
 
-            <div className="relative w-full h-full">
-                <svg ref={svgRef} className="absolute inset-0 w-full h-full" viewBox="0 0 100 100"
-                     preserveAspectRatio="xMidYMid meet">
-                    <image href={planImage.src} width="100%" height="100%"/>
-                    {bedsForPlan.map((bed) => (
-                        <image
-                            key={bed.id}
-                            href={bed.occupied || takenBedId === bed.id
-                                ? (bed.horizontal ? occupiedHorizontalBed.src : occupiedBed.src)
-                                : (selectedBed?.id === bed.id && !takenBedId
-                                    ? (bed.horizontal ? chosenHorizontalBed.src : chosenBed.src)
-                                    : (bed.horizontal ? freeHorizontalBed.src : freeBed.src))}
-                            x={bed.x}
-                            y={bed.y}
-                            width={bed.plan === 'small'
-                                ? (bed.horizontal ? 8 : 16)
-                                : (bed.horizontal ? 10 : 20)}
+        <div className="relative w-full h-full">
+            <svg ref={svgRef} className="absolute inset-0 w-full h-full" viewBox="0 0 100 100"
+                 preserveAspectRatio="xMidYMid meet">
+                <image href={planImage.src} width="100%" height="100%"/>
+                {bedsForPlan.map((bed) => (
+                    <image
+                        key={bed.id}
+                        href={bed.occupied || takenBedId === bed.id
+                            ? (bed.horizontal ? occupiedHorizontalBed.src : occupiedBed.src)
+                            : (selectedBed?.id === bed.id && !takenBedId
+                                ? (bed.horizontal ? chosenHorizontalBed.src : chosenBed.src)
+                                : (bed.horizontal ? freeHorizontalBed.src : freeBed.src))}
+                        x={bed.x}
+                        y={bed.y}
+                        width={bed.plan === 'small'
+                            ? (bed.horizontal ? 8 : 16)
+                            : (bed.horizontal ? 10 : 20)}
 
                         height={bed.plan === 'small'
                             ? (bed.horizontal ? 16 : 8)
@@ -481,7 +485,7 @@ export const Plan: React.FC<PlanProps> = ({
                         </Link>
                     </div>
                 )}
-            </div>
+        </div>
         // </div>
     );
 };

@@ -60,9 +60,15 @@ const config: Config = {
             },
             screens: {
                 'phone': '500px',
+                'zfold': '280px',
+                'phonese': '350px',
                 'phonexs': '390px',
+                'phone14': '430px',
+                'phonepixel': '411px',
 
+                'ipadmini': '768px',
                 'tablet': '620px',
+                'surface': '912px',
                 'custom-tablet': '517px',
 
                 'laptop': '1024px',

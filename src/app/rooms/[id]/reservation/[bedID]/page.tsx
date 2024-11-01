@@ -20,6 +20,7 @@ const FeedbackForm = () => {
     const { bedID, id } = useParams();
     const [isSubmitted, setIsSubmitted] = useState(false);
     const router = useRouter();
+    const today = new Date().toISOString().split('T')[0];
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
@@ -28,6 +29,19 @@ const FeedbackForm = () => {
                 ...formData,
                 [name]: e.target.checked,
             });
+        } else if (type === 'date') {
+            // Получаем сегодняшнюю дату в формате YYYY-MM-DD
+            const today = new Date().toISOString().split('T')[0];
+            if (value <= today) {
+                setFormData({
+                    ...formData,
+                    [name]: value,
+                });
+            } else {
+                // Опционально: Вы можете показать сообщение об ошибке пользователю
+                // Например, установить состояние ошибки или вывести уведомление
+                console.warn('Дата не может быть в будущем');
+            }
         } else {
             setFormData({
                 ...formData,
@@ -132,6 +146,9 @@ const FeedbackForm = () => {
                 value={formData.dateOfBirth}
                 onChange={handleChange}
                 className="p-2 border rounded-xl w-[431px] h-12"
+                max={today}
+
+
                 required
             />
             <label className="flex items-center">

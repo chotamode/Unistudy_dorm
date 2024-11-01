@@ -217,7 +217,7 @@ const AdminPage = () => {
                                 <div className="flex justify-center flex-wrap mt-10 gap-5">
                                     {reservations.map(reservation => (
                                         <div key={reservation.id}
-                                             className=" mb-4 w-[740px] flex flex-col gap-5 items-center rounded-admin-large h-[960px] bg-[#EAF1F9] p-4  border ">
+                                             className=" mb-4 w-[740px] flex flex-col gap-5 items-center rounded-admin-large h-[1080px] bg-[#EAF1F9] p-4  border ">
 
 
                                             <div className="w-[132px] mt-6 h-[132px]">
@@ -287,11 +287,15 @@ const AdminPage = () => {
                                                         {reservation.bed ? `Bed ID: ${reservation.bed.id}` : 'No bed assigned'}
                                                     </p>
 
+                                                </div>
+
+                                                <div>
                                                     <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
                                                         {reservation.bed?.room ? `Room ID: ${reservation.bed.room}` : 'No bed assigned'}
                                                     </p>
-
                                                 </div>
+
+
 
                                             </div>
 
@@ -322,6 +326,8 @@ const AdminPage = () => {
                                                                     value={newFromDate}
                                                                     onChange={(e) => setNewFromDate(e.target.value)}
                                                                     className="ml-2 p-2 border rounded"
+                                                                    max="9999-12-31"
+                                                                    min="1900-01-01"
                                                                 />
                                                             </label>
 
@@ -332,6 +338,8 @@ const AdminPage = () => {
                                                                     value={newToDate}
                                                                     onChange={(e) => setNewToDate(e.target.value)}
                                                                     className="ml-2 p-2 border rounded"
+                                                                    max="9999-12-31"
+                                                                    min="1900-01-01"
                                                                 />
                                                             </label>
 

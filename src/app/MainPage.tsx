@@ -6,7 +6,7 @@ import { getRooms, getRoomType, getRoomAvailability } from './api/rooms';
 import Image from 'next/image';
 import IconSwitch from '@/app/components/IconSwitch';
 import YearSwitch from "@/app/components/YearSwitch";
-import { useYearGender } from '@/app/context/YearGenderContext';
+import { useFormData } from '@/app/context/YearGenderContext';
 
 interface Room {
     id: number;
@@ -20,7 +20,7 @@ interface Room {
 const MainPage = () => {
     const [rooms, setRooms] = useState<Room[]>([]);
     const [filteredRooms, setFilteredRooms] = useState<Room[]>([]);
-    const { year, gender, setYear, setGender } = useYearGender();
+    const { year, gender, setYear, setGender } = useFormData();
 
     useEffect(() => {
         const fetchRooms = async () => {

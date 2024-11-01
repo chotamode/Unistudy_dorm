@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Header from './Header';
 import Footer from './Footer';
-import { YearGenderProvider } from "@/app/context/YearGenderContext";
+import { ReservationContextProvider } from "@/app/context/YearGenderContext";
 import YearGenderDisplay from "@/app/components/YearGenderDisplay";
 import CookieConsent from "./CookieConsent";
 

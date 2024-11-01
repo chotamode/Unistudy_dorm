@@ -226,6 +226,8 @@ export const createReservation = async (
     from?: Date,
     to?: Date
 ) => {
+    console.log('Creating reservation from:', from, 'to:', to);
+
     const today = new Date();
     const currentYear = today.getFullYear();
     const nextYear = currentYear + 1;
@@ -233,8 +235,12 @@ export const createReservation = async (
     let startDate = from ? from : new Date(currentYear, 8, 1); // September 1st of the current year
     const endDate = to ? to : new Date(nextYear, 7, 30); // August 30st of the next year
 
-    const reservationFrom = startDate.toISOString().split('T')[0];
-    const reservationTo = endDate.toISOString().split('T')[0];
+    console.log('Start date:', startDate, 'End date:', endDate);
+
+    const reservationFrom = startDate.toDateString();
+    const reservationTo = endDate.toDateString();
+
+    console.log('Reservation from:', reservationFrom, 'to:', reservationTo);
 
     const {data, error} = await supabase.rpc('create_reservation', {
         tenant_name: tenantName,

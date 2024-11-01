@@ -166,7 +166,7 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
     }
 
     const startDate = new Date(year, 8, 1); // September 1st of the given year
-    const endDate = new Date(year + 1, 7, 31); // August 31st of the next year
+    const endDate = new Date(year + 1, 7, 30); // August 31st of the next year
     const period = { from: startDate, to: endDate };
 
     const beds = data.map((bed) => {
@@ -180,21 +180,14 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
         const occupied = freePeriod.from >= freePeriod.to;
 
         console.log(`Bed ${bed.id} is occupied: ${occupied} "freePeriod": ${freePeriod.from} - ${freePeriod.to}`);
+        console.log('cost', bed.cost);
 
         return {
             id: bed.id,
             room: bed.room,
             cost: bed.cost,
             occupied,
-            availability: `from: ${new Intl.DateTimeFormat('en-GB', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-            }).format(new Date(freePeriod.from)).replace(/\//g, '.')} to: ${new Intl.DateTimeFormat('en-GB', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-            }).format(new Date(freePeriod.to)).replace(/\//g, '.')}`
+            availability: `${freePeriod.from.toDateString()} - ${freePeriod.to.toDateString()}`
         };
     });
 
@@ -290,8 +283,8 @@ type Period = {
 const calculateFreePeriod = (reservations: ReservationCalc[], period: Period): Period => {
     // Filter reservations that fall within the given period
     const filteredReservations = reservations.filter(reservation => {
-        const reservationFrom = new Date(`${reservation.from}T00:00:00`);
-        const reservationTo = new Date(`${reservation.to}T00:00:00`);
+        const reservationFrom = new Date(reservation.from);
+        const reservationTo = new Date(reservation.to);
         return (reservationFrom >= period.from && reservationFrom <= period.to) ||
             ((reservationTo >= period.from && reservationTo <= period.to) || (reservationFrom >= period.from && reservationFrom <= period.to));
     });

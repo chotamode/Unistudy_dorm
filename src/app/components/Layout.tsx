@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import Header from './Header';
 import Footer from './Footer';
-import { ReservationContextProvider } from "@/app/context/YearGenderContext";
-import YearGenderDisplay from "@/app/components/YearGenderDisplay";
+import { ReservationContextProvider } from "@/app/context/ReservationContext";
+import ReservationContextDisplay from "@/app/components/ReservationContextDisplay";
 import CookieConsent from "./CookieConsent";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -20,7 +20,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     // <YearGenderProvider>
       <div className="min-h-screen flex flex-col h-screen">
         <Header />
-        {showYearGenderDisplay && <YearGenderDisplay />}
+        {showYearGenderDisplay && <ReservationContextDisplay />}
         <main className="flex-grow pb-28">
           {children}
         </main>

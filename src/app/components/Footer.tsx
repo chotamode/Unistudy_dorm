@@ -66,10 +66,6 @@ const Footer = () => {
 
                 </div>
 
-                <div>
-                    <p>Made in Solonobeach</p>
-                </div>
-
             </div>
         </footer>
     );

@@ -6,44 +6,56 @@ import { getRooms, getRoomType, getRoomAvailability } from './api/rooms';
 import Image from 'next/image';
 import IconSwitch from '@/app/components/IconSwitch';
 import YearSwitch from "@/app/components/YearSwitch";
-import { useFormData } from '@/app/context/YearGenderContext';
+import { useFormData } from '@/app/context/ReservationContext';
 
 interface Room {
     id: number;
     name: string;
     address: string;
-//  description: string;
     price_month: number;
     image: string;
+    roomType?: 'male' | 'female' | 'both';
 }
 
 const MainPage = () => {
     const [rooms, setRooms] = useState<Room[]>([]);
     const [filteredRooms, setFilteredRooms] = useState<Room[]>([]);
     const { year, gender, setYear, setGender } = useFormData();
+    const [showAll, setShowAll] = useState(false);
 
     useEffect(() => {
         const fetchRooms = async () => {
             const roomsData = await getRooms();
-            setRooms(roomsData);
+            const roomsWithTypes = await Promise.all(
+                roomsData.map(async (room) => {
+                    const roomType = await getRoomType(room.id, year);
+                    return { ...room, roomType };
+                })
+            );
+            setRooms(roomsWithTypes);
         };
-        fetchRooms().then(r => r);
-    }, []);
+        fetchRooms();
+    }, [year]);
 
     useEffect(() => {
         const filterRooms = async () => {
             const filtered = await Promise.all(
                 rooms.map(async (room) => {
-                    const roomType = await getRoomType(room.id);
                     const isAvailable = await getRoomAvailability(room.id, year);
-                    const matchesGender = roomType === gender || roomType === 'both';
-                    return matchesGender && (isAvailable) ? room : null;
+                    const matchesGender = room.roomType === gender || room.roomType === 'both';
+                    return matchesGender && isAvailable ? room : null;
                 })
             );
             setFilteredRooms(filtered.filter(room => room !== null) as Room[]);
         };
         filterRooms();
     }, [rooms, gender, year]);
+
+    const handleShowMore = () => {
+        setShowAll(!showAll);
+    };
+
+    const roomsToDisplay = showAll ? filteredRooms : filteredRooms.slice(0, 3);
 
     return (
         <div>
@@ -73,18 +85,23 @@ const MainPage = () => {
                     <YearSwitch activeIndex={year === new Date().getFullYear() ? 0 : 1} onClick={setYear} />
                     <h2 className="lg:text-8xl md:text-7xl sm:text-6xl font-semibold text-black mb-20 mt-24 text-center">Spare rooms</h2>
                     <div className="grid grid-cols-1 justify-items-center desktop:grid-cols-2 medium-desktop:grid-cols-3">
-                        {filteredRooms.map((room) => (
+                        {roomsToDisplay.map((room) => (
                             <RoomCard
                                 key={room.id}
                                 id={room.id}
                                 name={room.name}
                                 background={room.image}
                                 address={room.address}
-                                // description={room.description}
-                                // gender={gender}
-                                // year={year}
+                                gender={room.roomType}
                             />
                         ))}
+                    </div>
+                    <div className="flex flex-row justify-center items-center">
+                        {filteredRooms.length > 3 && (
+                            <button onClick={handleShowMore} className="mt-8 py-4 px-24 font-medium text-3xl bg-[#0F478D] text-white rounded-xl">
+                                {showAll ? 'Show less' : 'More'}
+                            </button>
+                        )}
                     </div>
                 </main>
             </div>

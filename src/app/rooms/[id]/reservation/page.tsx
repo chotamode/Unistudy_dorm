@@ -9,7 +9,7 @@ import chosenBed from '../../../../assets/beds/chosen_bed.svg';
 import freeBed from '../../../../assets/beds/free_bed.svg';
 import {Bed, Plan} from "@/app/components/Plan";
 import finger from "@/assets/finger.svg";
-import {useFormData, ReservationContextProvider} from "@/app/context/YearGenderContext";
+import {useFormData, ReservationContextProvider} from "@/app/context/ReservationContext";
 
 const BedSelect: React.FC = () => {
     const {id} = useParams();

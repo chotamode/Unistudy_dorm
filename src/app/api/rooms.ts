@@ -136,7 +136,7 @@ export const getRoomById = async (roomId: number) => {
 };
 
 export const getBedsByRoomId = async (roomId: number, year?: number) => {
-    const {data, error} = await supabase
+    const { data, error } = await supabase
         .from('bed')
         .select(`
             id,
@@ -165,12 +165,13 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
             cost: bed.cost,
             occupied: false,
             availability: undefined,
+            reservations: [] // Ensure reservations property is always defined
         }));
     }
 
     const startDate = new Date(year, 8, 1);
     const endDate = new Date(year + 1, 7, 30);
-    const period = {from: startDate, to: endDate};
+    const period = { from: startDate, to: endDate };
 
     const beds = data.map((bed) => {
         const reservations = bed.reservations.map((reservation) => ({
@@ -188,7 +189,8 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
             room: bed.room,
             cost: bed.cost,
             occupied,
-            availability: `${freePeriod.from.toDateString()} - ${freePeriod.to.toDateString()}`
+            availability: `${freePeriod.from.toDateString()} - ${freePeriod.to.toDateString()}`,
+            reservations // Ensure reservations property is included
         };
     });
 
@@ -257,8 +259,25 @@ export const getRoomDetailsByRoomId = async (roomId: number) => {
 // if there are no confirmed reservations in that period, return 'both'
 export const getRoomType = async (roomId: number, year: number) => {
     const beds = await getBedsByRoomId(roomId, year);
-    const activeReservations = getActiveReservationsForPeriod()
 
+    const startDate = new Date(year, 8, 1);
+    const endDate = new Date(year + 1, 7, 30);
+    const period = { from: startDate, to: endDate };
+
+    const activeReservations = beds.flatMap(bed =>
+        getActiveReservationsForPeriod(bed.reservations, period)
+    );
+
+    const hasMale = activeReservations.some(reservation => reservation.gender === 'male');
+    const hasFemale = activeReservations.some(reservation => reservation.gender === 'female');
+
+    if (hasMale) {
+        return 'male';
+    } else if (hasFemale) {
+        return 'female';
+    } else {
+        return 'both';
+    }
 };
 
 type ReservationCalc = {

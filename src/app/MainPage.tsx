@@ -31,20 +31,20 @@ const MainPage = () => {
         fetchRooms().then(r => r);
     }, []);
 
-    useEffect(() => {
-        const filterRooms = async () => {
-            const filtered = await Promise.all(
-                rooms.map(async (room) => {
-                    const roomType = await getRoomType(room.id);
-                    const isAvailable = await getRoomAvailability(room.id, year);
-                    const matchesGender = roomType === gender || roomType === 'both';
-                    return matchesGender && (isAvailable) ? room : null;
-                })
-            );
-            setFilteredRooms(filtered.filter(room => room !== null) as Room[]);
-        };
-        filterRooms();
-    }, [rooms, gender, year]);
+useEffect(() => {
+    const filterRooms = async () => {
+        const filtered = await Promise.all(
+            rooms.map(async (room) => {
+                const roomType = await getRoomType(room.id, year);
+                const isAvailable = await getRoomAvailability(room.id, year);
+                const matchesGender = roomType === gender || roomType === 'both';
+                return matchesGender && isAvailable ? { ...room, roomType } : null;
+            })
+        );
+        setFilteredRooms(filtered.filter(room => room !== null) as Room[]);
+    };
+    filterRooms();
+}, [rooms, gender, year]);
 
     const handleShowMore = () => {
         setShowAll(!showAll); // <-- Added function

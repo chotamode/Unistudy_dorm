@@ -49,39 +49,39 @@ const RoomDetails: React.FC = () => {
     const [images, setImages] = useState<string[]>([]);
     const { year, gender } = useFormData();
 
-    useEffect(() => {
-        if (id) {
-            const fetchRoom = async () => {
-                const roomData = await getRoomById(Number(id));
-                setRoom(roomData);
-            };
-            fetchRoom().then(r => r);
+useEffect(() => {
+    if (id) {
+        const fetchRoom = async () => {
+            const roomData = await getRoomById(Number(id));
+            setRoom(roomData);
+        };
+        fetchRoom().then(r => r);
 
-            const fetchBeds = async () => {
-                const bedsData = await getBedsByRoomId(Number(id));
-                setBeds(bedsData);
-            };
-            fetchBeds().then(r => r);
+        const fetchBeds = async () => {
+            const bedsData = await getBedsByRoomId(Number(id), year);
+            setBeds(bedsData);
+        };
+        fetchBeds().then(r => r);
 
-            const fetchDetails = async () => {
-                const detailsData = await getRoomDetailsByRoomId(Number(id));
-                setDetails(detailsData);
-            };
-            fetchDetails().then(r => r);
+        const fetchDetails = async () => {
+            const detailsData = await getRoomDetailsByRoomId(Number(id));
+            setDetails(detailsData);
+        };
+        fetchDetails().then(r => r);
 
-            const fetchRoomType = async () => {
-                const type = await getRoomType(Number(id));
-                setRoomType(type);
-            };
-            fetchRoomType().then(r => r);
+        const fetchRoomType = async () => {
+            const type = await getRoomType(Number(id), year);
+            setRoomType(type);
+        };
+        fetchRoomType().then(r => r);
 
-            const fetchImages = async () => {
-                const imageUrls = await getRoomImages(Number(id));
-                setImages(imageUrls.length > 0 ? imageUrls : Array(5).fill(placeholderImage.src));
-            };
-            fetchImages().then(r => r);
-        }
-    }, [id]);
+        const fetchImages = async () => {
+            const imageUrls = await getRoomImages(Number(id));
+            setImages(imageUrls.length > 0 ? imageUrls : Array(5).fill(placeholderImage.src));
+        };
+        fetchImages().then(r => r);
+    }
+}, [id, year]);
 
     if (!room) {
         return <div>Loading...</div>;

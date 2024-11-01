@@ -25,7 +25,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           {children}
         </main>
         <Footer />
+          <CookieConsent/>
       </div>
+
     // </YearGenderProvider>
   );
 };

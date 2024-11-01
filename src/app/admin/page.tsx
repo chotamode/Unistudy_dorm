@@ -478,22 +478,36 @@ const AdminPage = () => {
                                                                 ))}
                                                             </ul>
                                                         </div>
-                                                        <div className="mt-4">
-                                                            <label>
+                                                        <div className="mt-4 relative">
+                                                            <label
+                                                                className="hidden text-lg font-semibold mb-2 text-gray-700">
                                                                 Upload Photo:
-                                                                <input
-                                                                    type="file"
-                                                                    multiple
-                                                                    onChange={handleFileChange}
-                                                                    className="ml-2 p-2 border rounded"
-                                                                />
                                                             </label>
-                                                            <button
-                                                                onClick={handleUploadPhoto}
-                                                                className="bg-green-500 text-white px-4 py-2 rounded ml-4"
-                                                            >
-                                                                Upload
-                                                            </button>
+
+
+
+
+                                                            <div className="flex flex-row">
+                                                                <div
+                                                                    className="flex items-center justify-center w-full sm:w-auto bg-[#0F478D] text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-2xl transform transition duration-300 ease-in-out hover:scale-105 cursor-pointer"
+                                                                >
+                                                                    <input
+                                                                        type="file"
+                                                                        multiple
+                                                                        onChange={handleFileChange}
+                                                                        className="absolute z-20 w-full h-full opacity-0 cursor-pointer"
+                                                                    />
+                                                                    Choose Files
+                                                                </div>
+
+
+                                                                <button
+                                                                    onClick={handleUploadPhoto}
+                                                                    className="mt-4 w-full sm:w-auto bg-[#0F478D]  text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 ml-4"
+                                                                >
+                                                                    Upload
+                                                                </button>
+                                                            </div>
                                                         </div>
 
                                                     </div>

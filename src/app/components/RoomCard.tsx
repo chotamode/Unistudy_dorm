@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from "next/image";
 import arrowButton from "../../assets/arrow_button.svg";
 import { getFirstRoomPhoto } from '@/app/api/rooms';
+import {YearGenderProvider} from "@/app/context/YearGenderContext";
 
 interface RoomCardProps {
     id?: number;
@@ -25,8 +26,8 @@ const RoomCard: React.FC<RoomCardProps> = ({
     apart_name = "Penthouse Apartment",
     background = "/images/rommbg.png",
     floor = "Fifth Floor",
-    gender = 'both',
-    year = new Date().getFullYear(),
+    // gender = 'both',
+    // year = new Date().getFullYear(),
 }) => {
     const [firstPhoto, setFirstPhoto] = useState<string>(background);
 
@@ -53,7 +54,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
                            large-desktop:min-h-[37rem] large-desktop:w-[32rem]"
                 style={{ backgroundImage: `url(${firstPhoto})` }}
             >
-                <Link href={`../rooms/${id}?year=${year}&gender=${gender}`}>
+                <Link href={`../rooms/${id}`}>
                     <div className="absolute inset-0 bg-black opacity-50 z-0"></div>
                     <div className="px-4 text-white mb-8 filter z-10 relative font-semibold">
                         <h2 className="text-xxl font-black mb-2">{name}</h2>
@@ -69,20 +70,21 @@ const RoomCard: React.FC<RoomCardProps> = ({
                 className="md:hidden rounded-xxl flex flex-col justify-end items-center
                            bg-white overflow-hidden h-mlg w-mlg"
             >
-                <Link href={`../rooms/${id}?year=${year}&gender=${gender}`}>
-                    <div className="flex bg-cover bg-no-repeat bg-center rounded-xl
+                    <Link href={`../rooms/${id}`}>
+                        <div className="flex bg-cover bg-no-repeat bg-center rounded-xl
                                     my-2 bg-clip-content w-[22rem] h-[13.5rem]"
-                         style={{ backgroundImage: `url(${firstPhoto})` }}
-                    ></div>
-                    <div className="flex flex-row justify-between items-end w-[368px] px-2 text-black mb-2 filter font-semibold">
-                        <div className="flex flex-col">
-                            <h2 className="text-xxl font-black mb-2">{name}</h2>
+                             style={{ backgroundImage: `url(${firstPhoto})` }}
+                        ></div>
+                        <div className="flex flex-row justify-between items-end w-[368px] px-2 text-black mb-2 filter font-semibold">
+                            <div className="flex flex-col">
+                                <h2 className="text-xxl font-black mb-2">{name}</h2>
+                            </div>
+                            <div className="flex flex-col">
+                                <Image src={arrowButton} width={40} height={40} alt={arrowButton}></Image>
+                            </div>
                         </div>
-                        <div className="flex flex-col">
-                            <Image src={arrowButton} width={40} height={40} alt={arrowButton}></Image>
-                        </div>
-                    </div>
-                </Link>
+                    </Link>
+
             </div>
         </div>
     );

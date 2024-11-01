@@ -21,6 +21,10 @@ const YearSwitch: React.FC<YearSwitchProps> = ({ activeIndex, onClick }) => {
         setPositions(newPositions);
     };
 
+    const handleYearClick = (index: number) => {
+        onClick(index === 0 ? currentYear : nextYear);
+    };
+
     useEffect(() => {
         updatePositionsAndSizes();
         window.addEventListener('resize', updatePositionsAndSizes);
@@ -29,10 +33,8 @@ const YearSwitch: React.FC<YearSwitchProps> = ({ activeIndex, onClick }) => {
 
     return (
         <div className="flex flex-col items-center">
-
-            <div className=" flex justify-center items-center mt-8 w-[360px] h-[60px] laptop:w-[450px] laptop:h-[110px] rounded-2xl laptop:rounded-3xl"
+            <div className="flex justify-center items-center mt-8 w-[360px] h-[60px] laptop:w-[450px] laptop:h-[110px] rounded-2xl laptop:rounded-3xl"
                 style={{boxShadow: '0 0px 30px rgba(0, 0, 0, 0.4)'}}>
-
                 <div className="relative flex mx-auto">
                     {[currentYear, nextYear].map((year, index) => (
                         <div key={year}>
@@ -41,7 +43,7 @@ const YearSwitch: React.FC<YearSwitchProps> = ({ activeIndex, onClick }) => {
                                     buttonRefs.current[index] = el!;
                                 }}
                                 className="rounded-lg flex items-center justify-center relative transition-all duration-300 z-10 w-40"
-                                onClick={() => onClick(index === 0 ? currentYear : nextYear)}
+                                onClick={() => handleYearClick(index)}
                             >
                                 <span className="laptop:p-3 laptop:text-2xl">{`${year} • ${year + 1}`}</span>
                             </button>

@@ -12,6 +12,7 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import '../../carousel-custom.css';
 import BedCard from '@/app/components/BedCard';
+import {useYearGender, YearGenderProvider} from "@/app/context/YearGenderContext";
 
 interface Room {
     // area: number;
@@ -39,13 +40,14 @@ interface RoomDetail {
 const RoomDetails: React.FC = () => {
     const { id } = useParams();
     const searchParams = useSearchParams();
-    const year = searchParams.get('year');
-    const gender = searchParams.get('gender');
+    // const year = searchParams.get('year');
+    // const gender = searchParams.get('gender');
     const [room, setRoom] = useState<Room | null>(null);
     const [beds, setBeds] = useState<Bed[]>([]);
     const [details, setDetails] = useState<RoomDetail[]>([]);
     const [roomType, setRoomType] = useState<string>('both');
     const [images, setImages] = useState<string[]>([]);
+    const { year, gender } = useYearGender();
 
     useEffect(() => {
         if (id) {
@@ -139,25 +141,28 @@ const RoomDetails: React.FC = () => {
                     <p className="bg-[#DBE9FB] text-adxs w-[350px] tablet:w-[570px] py-6 px-4 rounded-3xl">
                         {room.description}
                     </p>
-                    <p className={"border-b-2 border-[#0F478D] w-fit pr-12 font-medium"}>
-                        Area: {room.area} m²
-                    </p>
+                    {/*<p className={"border-b-2 border-[#0F478D] w-fit pr-12 font-medium"}>*/}
+                    {/*    Area: {room.area} m²*/}
+                    {/*</p>*/}
                     <h3 className={"font-bold"}>
                         Available places:
                     </h3>
+
                     <div className={"flex flex-row flex-wrap gap-4"}>
                         {beds.map(bed => (
                             <BedCard key={bed.id} bed={bed} year={Number(year)} />
                         ))}
 
                     </div>
-                    <Link href={`/rooms/${id}/reservation`}>
-                        <div className="flex max-mdsuperbook:mt-4  w-full justify-center tablet:justify-start ">
-                            <Button2 className="w-80 tablet:w-52">
-                                Book a bed
-                            </Button2>
-                        </div>
-                    </Link>
+                    {/*<YearGenderProvider>*/}
+                        <Link href={`/rooms/${id}/reservation`}>
+                            <div className="flex mt-4 max-mdsuperbook:mt-4 w-full justify-center tablet:justify-start ">
+                                <Button2 className={"w-80 tablet:w-52"}>
+                                    Book a bed
+                                </Button2>
+                            </div>
+                        </Link>
+                    {/*</YearGenderProvider>*/}
                 </div>
             </div>
         </Layout>

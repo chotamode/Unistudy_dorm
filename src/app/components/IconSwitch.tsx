@@ -51,7 +51,7 @@ const IconSwitch: React.FC<IconSwitchProps> = ({activeIndex, onClick}) => {
                                 onClick={() => handleClick(index)}
                             >
                                 <Image src={gender === 'female' ? maleIcon : femaleIcon}
-                                       alt={`Только для ${gender === 'male' ? 'мальчиков' : 'девочек'}`}
+                                       alt={`Только для ${gender === 'male' ? 'boys' : 'girls'}`}
                                        className="w-full h-full p-6"/>
                             </button>
                             <p className="text-lg font-normal text-center mt-4">

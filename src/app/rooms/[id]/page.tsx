@@ -14,7 +14,7 @@ import '../../carousel-custom.css';
 import BedCard from '@/app/components/BedCard';
 
 interface Room {
-    area: number;
+    // area: number;
     id: number;
     name: string;
     address: string;

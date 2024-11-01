@@ -135,6 +135,21 @@ export const getRoomById = async (roomId: number) => {
     return data;
 };
 
+export const getTenantById = async (tenantId: number) => {
+    const { data, error } = await supabase
+        .from('tenant')
+        .select('gender')
+        .eq('id', tenantId)
+        .single();
+
+    if (error) {
+        console.error('Error fetching tenant details:', error);
+        return null;
+    }
+
+    return data;
+};
+
 export const getBedsByRoomId = async (roomId: number, year?: number) => {
     const { data, error } = await supabase
         .from('bed')
@@ -146,9 +161,7 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
                 from,
                 to,
                 confirmed,
-                tenant:reserved_by!inner (
-                    gender
-                )
+                reserved_by
             )
         `)
         .eq('room', roomId);
@@ -173,12 +186,15 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
     const endDate = new Date(year + 1, 8, 30);
     const period = { from: startDate, to: endDate };
 
-    const beds = data.map((bed) => {
-        const reservations = bed.reservations.map((reservation) => ({
-            from: reservation.from,
-            to: reservation.to,
-            confirmed: reservation.confirmed,
-            gender: reservation.tenant.gender
+    const beds = await Promise.all(data.map(async (bed) => {
+        const reservations = await Promise.all(bed.reservations.map(async (reservation) => {
+            const tenant = await getTenantById(reservation.reserved_by);
+            return {
+                from: reservation.from,
+                to: reservation.to,
+                confirmed: reservation.confirmed,
+                gender: tenant ? tenant.gender : null
+            };
         }));
 
         const freePeriod = calculateFreePeriod(reservations, period);
@@ -193,7 +209,7 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
                 `${freePeriod.from.toDateString()} - ${freePeriod.to.toDateString()}`,
             reservations // Ensure reservations property is included
         };
-    });
+    }));
 
     return beds;
 };

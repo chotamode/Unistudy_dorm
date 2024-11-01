@@ -26,8 +26,8 @@ const RoomCard: React.FC<RoomCardProps> = ({
     apart_name = "Penthouse Apartment",
     background = "/images/rommbg.png",
     floor = "Fifth Floor",
-    // gender = 'both',
-    // year = new Date().getFullYear(),
+    gender = 'both',
+    year = new Date().getFullYear(),
 }) => {
     const [firstPhoto, setFirstPhoto] = useState<string>(background);
 
@@ -60,7 +60,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
                         <h2 className="text-xxl font-black mb-2">{name}</h2>
                         <div className="text-adxs my-4">
                             <p>{floor} | {apart_name}</p>
-                            <p>{sex}</p>
+                            <p>{gender === 'both' ? 'For boys and girls' : `For ${gender === 'male' ? 'boys' : 'girls'} only`}</p>
                         </div>
                         <Button2 className="h-10 w-40 text-xs">Book now</Button2>
                     </div>
@@ -70,21 +70,20 @@ const RoomCard: React.FC<RoomCardProps> = ({
                 className="md:hidden rounded-xxl flex flex-col justify-end items-center
                            bg-white overflow-hidden h-mlg w-mlg"
             >
-                    <Link href={`../rooms/${id}`}>
-                        <div className="flex bg-cover bg-no-repeat bg-center rounded-xl
-                                    my-2 bg-clip-content w-[22rem] h-[13.5rem]"
-                             style={{ backgroundImage: `url(${firstPhoto})` }}
-                        ></div>
-                        <div className="flex flex-row justify-between items-end w-[368px] px-2 text-black mb-2 filter font-semibold">
-                            <div className="flex flex-col">
-                                <h2 className="text-xxl font-black mb-2">{name}</h2>
-                            </div>
-                            <div className="flex flex-col">
-                                <Image src={arrowButton} width={40} height={40} alt={arrowButton}></Image>
-                            </div>
+                <Link href={`../rooms/${id}`}>
+                    <div className="flex bg-cover bg-no-repeat bg-center rounded-xl
+                                my-2 bg-clip-content w-[22rem] h-[13.5rem]"
+                         style={{ backgroundImage: `url(${firstPhoto})` }}
+                    ></div>
+                    <div className="flex flex-row justify-between items-end w-[368px] px-2 text-black mb-2 filter font-semibold">
+                        <div className="flex flex-col">
+                            <h2 className="text-xxl font-black mb-2">{name}</h2>
                         </div>
-                    </Link>
-
+                        <div className="flex flex-col">
+                            <Image src={arrowButton} width={40} height={40} alt={arrowButton}></Image>
+                        </div>
+                    </div>
+                </Link>
             </div>
         </div>
     );

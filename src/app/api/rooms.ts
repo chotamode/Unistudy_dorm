@@ -206,7 +206,7 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
             cost: bed.cost,
             occupied,
             availability: freePeriod.freeDays < 30 ? undefined :
-                `${freePeriod.from.toDateString()} - ${freePeriod.to.toDateString()}`,
+                `${freePeriod.from.toLocaleDateString('en-GB')} - ${freePeriod.to.toLocaleDateString('en-GB')}`,
             reservations // Ensure reservations property is included
         };
     }));

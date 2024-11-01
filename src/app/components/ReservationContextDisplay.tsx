@@ -4,7 +4,8 @@ import { useFormData } from '@/app/context/ReservationContext';
 const ReservationContextDisplay: React.FC = () => {
     const { year, gender, name, surname, phoneNumber, email, dateOfBirth, reservationFrom, reservationTo } = useFormData();
 
-    if (year === undefined || gender === undefined) {
+    if (year === undefined || gender === undefined || true
+    ) {
         return null;
     }
 

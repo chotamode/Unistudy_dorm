@@ -397,7 +397,7 @@ export const Plan: React.FC<PlanProps> = ({
                 const screenPoint = point.matrixTransform(svgCTM);
                 const top = screenPoint.y - 300; // Подгонка по вертикали
                 const left = screenPoint.x - 20; // Подгонка по горизонтали
-                return {top, left};
+                return { top, left };
             }
 
         }

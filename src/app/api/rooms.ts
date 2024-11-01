@@ -135,7 +135,7 @@ export const getRoomById = async (roomId: number) => {
     return data;
 };
 
-export const getBedsByRoomId = async (roomId: number, year?: number) => {
+const getBedsByRoomId = async (roomId: number, year?: number) => {
     const { data, error } = await supabase
         .from('bed')
         .select(`
@@ -178,7 +178,7 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
             from: reservation.from,
             to: reservation.to,
             confirmed: reservation.confirmed,
-            gender: reservation.tenant ? reservation.tenant.gender : null
+            gender: reservation.tenant.length > 0 ? reservation.tenant[0].gender : null
         }));
 
         const freePeriod = calculateFreePeriod(reservations, period);
@@ -189,7 +189,8 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
             room: bed.room,
             cost: bed.cost,
             occupied,
-            availability: `${freePeriod.from.toDateString()} - ${freePeriod.to.toDateString()}`,
+            availability: freePeriod.freeDays < 30 ? undefined :
+                `${freePeriod.from.toDateString()} - ${freePeriod.to.toDateString()}`,
             reservations // Ensure reservations property is included
         };
     });

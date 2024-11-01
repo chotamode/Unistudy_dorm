@@ -12,9 +12,9 @@ interface Room {
     id: number;
     name: string;
     address: string;
-//  description: string;
     price_month: number;
     image: string;
+    roomType?: 'male' | 'female' | 'both';
 }
 
 const MainPage = () => {
@@ -26,28 +26,33 @@ const MainPage = () => {
     useEffect(() => {
         const fetchRooms = async () => {
             const roomsData = await getRooms();
-            setRooms(roomsData);
+            const roomsWithTypes = await Promise.all(
+                roomsData.map(async (room) => {
+                    const roomType = await getRoomType(room.id, year);
+                    return { ...room, roomType };
+                })
+            );
+            setRooms(roomsWithTypes);
         };
-        fetchRooms().then(r => r);
-    }, []);
+        fetchRooms();
+    }, [year]);
 
-useEffect(() => {
-    const filterRooms = async () => {
-        const filtered = await Promise.all(
-            rooms.map(async (room) => {
-                const roomType = await getRoomType(room.id, year);
-                const isAvailable = await getRoomAvailability(room.id, year);
-                const matchesGender = roomType === gender || roomType === 'both';
-                return matchesGender && isAvailable ? { ...room, roomType } : null;
-            })
-        );
-        setFilteredRooms(filtered.filter(room => room !== null) as Room[]);
-    };
-    filterRooms();
-}, [rooms, gender, year]);
+    useEffect(() => {
+        const filterRooms = async () => {
+            const filtered = await Promise.all(
+                rooms.map(async (room) => {
+                    const isAvailable = await getRoomAvailability(room.id, year);
+                    const matchesGender = room.roomType === gender || room.roomType === 'both';
+                    return matchesGender && isAvailable ? room : null;
+                })
+            );
+            setFilteredRooms(filtered.filter(room => room !== null) as Room[]);
+        };
+        filterRooms();
+    }, [rooms, gender, year]);
 
     const handleShowMore = () => {
-        setShowAll(!showAll); // <-- Added function
+        setShowAll(!showAll);
     };
 
     const roomsToDisplay = showAll ? filteredRooms : filteredRooms.slice(0, 3);
@@ -87,9 +92,7 @@ useEffect(() => {
                                 name={room.name}
                                 background={room.image}
                                 address={room.address}
-                                // description={room.description}
-                                // gender={gender}
-                                // year={year}
+                                gender={room.roomType}
                             />
                         ))}
                     </div>

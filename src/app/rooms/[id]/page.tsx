@@ -150,7 +150,7 @@ useEffect(() => {
 
                     <div className={"flex flex-row flex-wrap gap-4"}>
                         {beds.map(bed => (
-                            <BedCard key={bed.id} bed={bed} year={Number(year)} />
+                            <BedCard key={bed.id} bed={bed} year={Number(year)} roomId={Number(id)}/>
                         ))}
 
                     </div>

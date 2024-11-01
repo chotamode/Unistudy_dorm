@@ -125,29 +125,6 @@ const AdminPage = () => {
         }
     };
 
-    const handleUpdateReservation = async (reservationId: number, confirmed: boolean) => {
-        await updateReservationStatus(reservationId, confirmed);
-        setReservations(reservations.map(reservation =>
-            reservation.id === reservationId ? {...reservation, confirmed} : reservation
-        ));
-    };
-
-    const handleEditDates = (reservation: Reservation) => {
-        setEditReservationId(reservation.id);
-        setNewFromDate(reservation.from);
-        setNewToDate(reservation.to);
-    };
-
-    const handleSaveDates = async () => {
-        if (editReservationId !== null) {
-            await updateReservationDates(editReservationId, newFromDate, newToDate);
-            setReservations(reservations.map(reservation =>
-                reservation.id === editReservationId ? {...reservation, from: newFromDate, to: newToDate} : reservation
-            ));
-            setEditReservationId(null);
-        }
-    };
-
     const handleEditRoom = async (room: Room) => {
         setEditRoomId(room.id);
         setNewRoomDetails(room);
@@ -224,8 +201,6 @@ const AdminPage = () => {
                                             // newToDate={newToDate}
                                             // setNewFromDate={setNewFromDate}
                                             // setNewToDate={setNewToDate}
-                                            handleSaveDates={handleSaveDates}
-                                            handleUpdateReservation={handleUpdateReservation}
                                             roomToBedsMap={roomToBedsMap}
                                         />
                                     ))}

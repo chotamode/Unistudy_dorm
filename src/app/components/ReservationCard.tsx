@@ -1,32 +1,72 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Plan } from '@/app/components/Plan';
-import { Reservation, Bed } from '@/app/types';
+import { Reservation, Bed, Room } from '@/app/types';
+import { getRoomById, updateReservationDates, updateReservationStatus } from '@/app/api/rooms';
 
 interface ReservationCardProps {
     reservation: Reservation;
-    handleSaveDates: () => void;
-    handleUpdateReservation: (reservationId: number, confirmed: boolean) => void;
     roomToBedsMap: Record<number, Bed[]>;
 }
 
-const ReservationCard: React.FC<ReservationCardProps> = ({
-    reservation,
-    handleSaveDates,
-    handleUpdateReservation,
-    roomToBedsMap
-}) => {
-    const [newFromDate, setNewFromDate] = useState(reservation.from);
-    const [newToDate, setNewToDate] = useState(reservation.to);
+const ReservationCard: React.FC<ReservationCardProps> = ({ reservation, roomToBedsMap }) => {
+    const useReservation = (initialReservation: Reservation) => {
+        const [reservation, setReservation] = useState(initialReservation);
+        const [newFromDate, setNewFromDate] = useState(initialReservation.from);
+        const [newToDate, setNewToDate] = useState(initialReservation.to);
+        const [room, setRoom] = useState<Room | null>(null);
 
-    useEffect(() => {
-        setNewFromDate(reservation.from);
-        setNewToDate(reservation.to);
-    }, [reservation]);
+        useEffect(() => {
+            setNewFromDate(initialReservation.from);
+            setNewToDate(initialReservation.to);
+        }, [initialReservation]);
+
+        useEffect(() => {
+            const fetchRoomDetails = async () => {
+                if (reservation.bed?.room) {
+                    const roomDetails = await getRoomById(reservation.bed.room);
+                    setRoom(roomDetails);
+                }
+            };
+            fetchRoomDetails();
+        }, [reservation.bed?.room]);
+
+        const saveDates = async () => {
+            await updateReservationDates(reservation.id, newFromDate, newToDate);
+            setReservation({ ...reservation, from: newFromDate, to: newToDate });
+        };
+
+        const handleUpdateReservation = async (confirmed: boolean) => {
+            await updateReservationStatus(reservation.id, confirmed);
+            setReservation({ ...reservation, confirmed });
+        };
+
+        return {
+            reservation,
+            newFromDate,
+            newToDate,
+            room,
+            setNewFromDate,
+            setNewToDate,
+            saveDates,
+            handleUpdateReservation,
+        };
+    };
+
+    const {
+        reservation: updatedReservation,
+        newFromDate,
+        newToDate,
+        room,
+        setNewFromDate,
+        setNewToDate,
+        saveDates,
+        handleUpdateReservation,
+    } = useReservation(reservation);
 
     return (
-        <div key={reservation.id}
-             className=" mb-4 w-[740px] flex flex-col gap-5 items-center rounded-admin-large h-[1080px] bg-[#EAF1F9] p-4  border ">
+        <div key={updatedReservation.id}
+             className=" mb-4 w-[740px] flex flex-col gap-5 items-center rounded-admin-large h-fit pb-14 bg-[#EAF1F9] p-4  border ">
 
             <div className="w-[132px] mt-6 h-[132px]">
                 <Image
@@ -42,43 +82,52 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
                 <div>
                     <div className="flex flex-row gap-2">
                         <p className="border-[#32648B] text-xs w-[50%] rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
-                            {reservation.tenant.name} {reservation.tenant.surname}
+                            {updatedReservation.tenant.name} {updatedReservation.tenant.surname}
                         </p>
                         <p className="border-[#32648B] text-xs w-[50%] rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
-                            {reservation.confirmed ? 'Confirmed' : 'Pending'}
+                            {updatedReservation.confirmed ? 'Confirmed' : 'Pending'}
                         </p>
                     </div>
                 </div>
                 <div>
                     <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
-                        {reservation.tenant.phone}
+                        {updatedReservation.tenant.phone}
                     </p>
                 </div>
                 <div>
                     <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
-                        {reservation.tenant.email}
+                        {updatedReservation.tenant.email}
                     </p>
                 </div>
                 <div>
                     <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
-                        {reservation.tenant.gender}
+                        {updatedReservation.tenant.gender}
                     </p>
                 </div>
                 <div>
                     <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
-                        {reservation.tenant.date_of_birth}
+                        {updatedReservation.tenant.date_of_birth}
                     </p>
                 </div>
                 <div>
                     <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
-                        {reservation.bed ? `Bed ID: ${reservation.bed.id}` : 'No bed assigned'}
+                        {updatedReservation.bed ? `Bed ID: ${updatedReservation.bed.id}` : 'No bed assigned'}
                     </p>
                 </div>
-                <div>
-                    <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
-                        {reservation.bed?.room ? `Room ID: ${reservation.bed.room}` : 'No bed assigned'}
-                    </p>
-                </div>
+                {room && (
+                    <>
+                        <div>
+                            <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
+                                Room Name: {room.name}
+                            </p>
+                        </div>
+                        <div>
+                            <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
+                                Room Address: {room.address}
+                            </p>
+                        </div>
+                    </>
+                )}
             </div>
 
             <div className="flex flex-row justify-between my-5 items-center  w-[540px]">
@@ -109,7 +158,7 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
                                 />
                             </label>
                             <button
-                                onClick={handleSaveDates}
+                                onClick={saveDates}
                                 className="bg-[#0F478D] text-white px-4 py-2 rounded ml-4"
                             >
                                 Save
@@ -117,24 +166,24 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
                         </div>
                     </div>
                 </div>
-                {reservation.bed && (
+                {updatedReservation.bed && (
                     <div className="w-80 h-60 mt-10">
-                        <Plan beds={roomToBedsMap[reservation.bed.room] ?? []}
-                              takenBedId={reservation.bed.id}
-                              id={reservation.bed.room}/>
+                        <Plan beds={roomToBedsMap[updatedReservation.bed.room] ?? []}
+                              takenBedId={updatedReservation.bed.id}
+                              id={updatedReservation.bed.room}/>
                     </div>
                 )}
             </div>
 
             <div className="flex flex-row flex-wrap justify-center w-[540px] gap-4">
                 <button
-                    onClick={() => handleUpdateReservation(reservation.id, true)}
+                    onClick={() => handleUpdateReservation(true)}
                     className="bg-[#0F478D]  w-64 h-16 text-white px-4 py-2 rounded-xl mr-2"
                 >
                     Confirm reservation
                 </button>
                 <button
-                    onClick={() => handleUpdateReservation(reservation.id, false)}
+                    onClick={() => handleUpdateReservation(false)}
                     className="bg-[#0F478D] w-64 h-16 text-white px-4 py-2 rounded-xl"
                 >
                     Cancel reservation

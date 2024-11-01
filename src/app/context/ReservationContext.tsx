@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-interface YearGenderContextProps {
+interface ReservationContextProps {
     year: number;
     gender: 'male' | 'female';
     setYear: (year: number) => void;
@@ -15,6 +15,7 @@ interface YearGenderContextProps {
     dateOfBirth: Date;
     reservationFrom: Date;
     reservationTo: Date;
+    consent: boolean;
 
     setName: (name: string) => void;
     setSurname: (surname: string) => void;
@@ -23,9 +24,10 @@ interface YearGenderContextProps {
     setDateOfBirth: (dateOfBirth: Date) => void; // Updated to Date
     setReservationFrom: (reservationFrom: Date) => void;
     setReservationTo: (reservationTo: Date) => void;
+    setConsent: (consent: boolean) => void;
 }
 
-const YearGenderContext = createContext<YearGenderContextProps | undefined>(undefined);
+const ReservationContext = createContext<ReservationContextProps | undefined>(undefined);
 
 export const ReservationContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [year, setYear] = useState<number>(new Date().getFullYear());
@@ -37,16 +39,18 @@ export const ReservationContextProvider: React.FC<{ children: ReactNode }> = ({ 
     const [dateOfBirth, setDateOfBirth] = useState<Date>(new Date());
     const [reservationFrom, setReservationFrom] = useState<Date>(new Date());
     const [reservationTo, setReservationTo] = useState<Date>(new Date());
+    const [consent, setConsent] = useState<boolean>(false);
 
     return (
-        <YearGenderContext.Provider value={{ year, gender, name, surname, phoneNumber, email, dateOfBirth, reservationFrom, reservationTo, setYear, setGender, setName, setSurname, setPhoneNumber, setEmail, setDateOfBirth, setReservationFrom, setReservationTo }}>
+        <ReservationContext.Provider value={{ year, gender, name, surname, phoneNumber, email, dateOfBirth, reservationFrom, reservationTo, consent,
+            setYear, setGender, setName, setSurname, setPhoneNumber, setEmail, setDateOfBirth, setReservationFrom, setReservationTo, setConsent }}>
             {children}
-        </YearGenderContext.Provider>
+        </ReservationContext.Provider>
     );
 };
 
 export const useFormData = () => {
-    const context = useContext(YearGenderContext);
+    const context = useContext(ReservationContext);
     if (!context) {
         throw new Error('useYearGender must be used within a YearGenderProvider');
     }

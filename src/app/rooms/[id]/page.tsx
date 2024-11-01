@@ -12,7 +12,7 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import '../../carousel-custom.css';
 import BedCard from '@/app/components/BedCard';
-import {useFormData, ReservationContextProvider} from "@/app/context/YearGenderContext";
+import {useFormData, ReservationContextProvider} from "@/app/context/ReservationContext";
 
 interface Room {
     // area: number;

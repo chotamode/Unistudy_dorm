@@ -6,6 +6,7 @@ import { getRooms, getRoomType, getRoomAvailability } from './api/rooms';
 import Image from 'next/image';
 import IconSwitch from '@/app/components/IconSwitch';
 import YearSwitch from "@/app/components/YearSwitch";
+import { useYearGender } from '@/app/context/YearGenderContext';
 
 interface Room {
     id: number;
@@ -19,8 +20,7 @@ interface Room {
 const MainPage = () => {
     const [rooms, setRooms] = useState<Room[]>([]);
     const [filteredRooms, setFilteredRooms] = useState<Room[]>([]);
-    const [gender, setGender] = useState<'male' | 'female' | 'both'>('female'); // Default to 'female'
-    const [year, setYear] = useState<number>(new Date().getFullYear());
+    const { year, gender, setYear, setGender } = useYearGender();
 
     useEffect(() => {
         const fetchRooms = async () => {
@@ -36,7 +36,7 @@ const MainPage = () => {
                 rooms.map(async (room) => {
                     const roomType = await getRoomType(room.id);
                     const isAvailable = await getRoomAvailability(room.id, year);
-                    const matchesGender = gender === 'both' || roomType === gender || roomType === 'both';
+                    const matchesGender = roomType === gender || roomType === 'both';
                     return matchesGender && (isAvailable) ? room : null;
                 })
             );
@@ -69,10 +69,10 @@ const MainPage = () => {
             </div>
             <div className="min-h-screen p-8 md:px-0 lg:px-18 xl:px-52 pt-28">
                 <main>
-                    <IconSwitch activeIndex={1} onClick={setGender} /> {/* Default to 'female' */}
+                    <IconSwitch activeIndex={gender === 'male' ? 0 : 1} onClick={setGender} />
                     <YearSwitch activeIndex={year === new Date().getFullYear() ? 0 : 1} onClick={setYear} />
                     <h2 className="lg:text-8xl md:text-7xl sm:text-6xl font-semibold text-black mb-20 mt-24 text-center">Spare rooms</h2>
-                    <div className="grid grid-cols-1 justify-items-center desktop:grid-cols-2  medium-desktop:grid-cols-3">
+                    <div className="grid grid-cols-1 justify-items-center desktop:grid-cols-2 medium-desktop:grid-cols-3">
                         {filteredRooms.map((room) => (
                             <RoomCard
                                 key={room.id}
@@ -80,9 +80,9 @@ const MainPage = () => {
                                 name={room.name}
                                 background={room.image}
                                 address={room.address}
-                                description={room.description}
-                                gender={gender}
-                                year={year}
+                                // description={room.description}
+                                // gender={gender}
+                                // year={year}
                             />
                         ))}
                     </div>

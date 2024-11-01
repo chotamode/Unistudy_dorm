@@ -57,7 +57,9 @@ const AdminPage = () => {
             for (const file of selectedFiles) {
                 await uploadPhotoAndAddToRoom(editRoomId, file);
             }
+
             setSelectedFiles([]);
+
             // Refresh room data after upload
             const updatedRooms = await getRooms();
             setRooms(updatedRooms);
@@ -271,6 +273,18 @@ const AdminPage = () => {
 
                                                     <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
                                                         {reservation.tenant.date_of_birth}
+                                                    </p>
+
+                                                </div>
+
+                                                <div>
+
+                                                    <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
+                                                        {reservation.bed ? `Bed ID: ${reservation.bed.id}` : 'No bed assigned'}
+                                                    </p>
+
+                                                    <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
+                                                        {reservation.bed?.room ? `Room ID: ${reservation.bed.room}` : 'No bed assigned'}
                                                     </p>
 
                                                 </div>

@@ -2,68 +2,73 @@
 
 import React, { useState } from 'react';
 import Layout from "@/app/components/Layout";
-import {useParams, useRouter} from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { createReservation } from '@/app/api/rooms';
-import Link from "next/link";
+import { useFormData } from "@/app/context/ReservationContext";
 
 const FeedbackForm = () => {
-    const [formData, setFormData] = useState({
-        name: '',
-        surname: '',
-        phoneNumber: '',
-        email: '',
-        gender: '',
-        dateOfBirth: '',
-        consent: false,
-    });
-
     const { bedID, id } = useParams();
-    const [isSubmitted, setIsSubmitted] = useState(false);
     const router = useRouter();
     const today = new Date().toISOString().split('T')[0];
+    const consent = true;
+
+    const {
+        name, surname, phoneNumber, email, gender, dateOfBirth,
+        setName, setSurname, setPhoneNumber, setEmail, setGender, setDateOfBirth, setConsent,
+        reservationFrom, reservationTo
+    } = useFormData();
+
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
         if (type === 'checkbox' && e.target instanceof HTMLInputElement) {
-            setFormData({
-                ...formData,
-                [name]: e.target.checked,
-            });
+            setConsent(e.target.checked);
         } else if (type === 'date') {
-            // Получаем сегодняшнюю дату в формате YYYY-MM-DD
-            const today = new Date().toISOString().split('T')[0];
             if (value <= today) {
-                setFormData({
-                    ...formData,
-                    [name]: value,
-                });
+                setDateOfBirth(new Date(value));
             } else {
-                // Опционально: Вы можете показать сообщение об ошибке пользователю
-                // Например, установить состояние ошибки или вывести уведомление
-                console.warn('Дата не может быть в будущем');
+                console.warn('Date cannot be in the future');
             }
         } else {
-            setFormData({
-                ...formData,
-                [name]: value,
-            });
+            switch (name) {
+                case 'name':
+                    setName(value);
+                    break;
+                case 'surname':
+                    setSurname(value);
+                    break;
+                case 'phoneNumber':
+                    setPhoneNumber(value);
+                    break;
+                case 'email':
+                    setEmail(value);
+                    break;
+                case 'gender':
+                    setGender(value as 'male' | 'female');
+                    break;
+                default:
+                    break;
+            }
         }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Submitting form with data:", formData);
+        console.log("Submitting form with data:", { name, surname, phoneNumber, email, gender, dateOfBirth });
 
         try {
             const result = await createReservation(
-                formData.name,
-                formData.surname,
-                formData.phoneNumber,
-                formData.gender,
-                formData.email,
-                formData.dateOfBirth,
+                name,
+                surname,
+                phoneNumber,
+                gender,
+                email,
+                dateOfBirth.toISOString(),
                 Number(id), // roomId
                 Number(bedID), // bedId
+                reservationFrom,
+                reservationTo
             );
             router.push(`/rooms/${id}/reservation/${bedID}/end`);
 
@@ -93,7 +98,7 @@ const FeedbackForm = () => {
                     type="text"
                     name="name"
                     placeholder="Name"
-                    value={formData.name}
+                    value={name}
                     onChange={handleChange}
                     className="p-2 w-52 border rounded-xl h-12"
                     required
@@ -102,7 +107,7 @@ const FeedbackForm = () => {
                     type="text"
                     name="surname"
                     placeholder="Surname"
-                    value={formData.surname}
+                    value={surname}
                     onChange={handleChange}
                     className="p-2 border rounded-xl w-52 h-12"
                     required
@@ -112,7 +117,7 @@ const FeedbackForm = () => {
                 type="tel"
                 name="phoneNumber"
                 placeholder="Phone Number"
-                value={formData.phoneNumber}
+                value={phoneNumber}
                 onChange={handleChange}
                 className="p-2 border rounded-xl w-[431px] h-12"
                 required
@@ -121,14 +126,14 @@ const FeedbackForm = () => {
                 type="email"
                 name="email"
                 placeholder="Email"
-                value={formData.email}
+                value={email}
                 onChange={handleChange}
                 className="p-2 border rounded-xl w-[431px] h-12"
                 required
             />
             <select
                 name="gender"
-                value={formData.gender}
+                value={gender}
                 onChange={handleChange}
                 className="p-2 border rounded-xl w-[431px] h-12"
                 required
@@ -140,19 +145,17 @@ const FeedbackForm = () => {
             <input
                 type="date"
                 name="dateOfBirth"
-                value={formData.dateOfBirth}
+                value={dateOfBirth.toISOString().split('T')[0]}
                 onChange={handleChange}
                 className="p-2 border rounded-xl w-[431px] h-12"
                 max={today}
-
-
                 required
             />
             <label className="flex items-center">
                 <input
                     type="checkbox"
                     name="consent"
-                    checked={formData.consent}
+                    checked={consent}
                     onChange={handleChange}
                     className="mr-2"
                     required
@@ -163,7 +166,6 @@ const FeedbackForm = () => {
         </form>
     );
 };
-
 
 const Stage3Page = () => {
     return (

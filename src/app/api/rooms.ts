@@ -1,9 +1,9 @@
 import {supabase} from '@/supabaseClient';
 import {Reservation} from '@/app/types';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 
 export const getFirstRoomPhoto = async (roomId: number) => {
-    const { data, error } = await supabase
+    const {data, error} = await supabase
         .from('room')
         .select('image_urls')
         .eq('id', roomId)
@@ -24,7 +24,7 @@ export const uploadPhotoAndAddToRoom = async (roomId: number, file: File) => {
     console.log(uniqueFileName);
 
     // Step 1: Upload the photo to Supabase storage
-    const { data: uploadData, error: uploadError } = await supabase.storage
+    const {data: uploadData, error: uploadError} = await supabase.storage
         .from('photos')
         .upload(`public/room_photos/${roomId}/${uniqueFileName}`, file);
 
@@ -34,14 +34,14 @@ export const uploadPhotoAndAddToRoom = async (roomId: number, file: File) => {
     }
 
     // Step 2: Get the public URL of the uploaded photo
-    const { data } = supabase.storage
+    const {data} = supabase.storage
         .from('photos')
         .getPublicUrl(`public/room_photos/${roomId}/${uniqueFileName}`);
 
     const publicURL = data.publicUrl;
 
     // Step 3: Add the photo URL to the room's image_urls field
-    const { data: roomData, error } = await supabase
+    const {data: roomData, error} = await supabase
         .from('room')
         .select('image_urls')
         .eq('id', roomId)
@@ -55,9 +55,9 @@ export const uploadPhotoAndAddToRoom = async (roomId: number, file: File) => {
     const imageUrls = roomData.image_urls ? JSON.parse(roomData.image_urls) : [];
     imageUrls.push(publicURL);
 
-    const { data: updateData, error: updateError } = await supabase
+    const {data: updateData, error: updateError} = await supabase
         .from('room')
-        .update({ image_urls: JSON.stringify(imageUrls) })
+        .update({image_urls: JSON.stringify(imageUrls)})
         .eq('id', roomId);
 
     if (updateError) {
@@ -69,7 +69,7 @@ export const uploadPhotoAndAddToRoom = async (roomId: number, file: File) => {
 };
 
 export const deletePhotoFromRoom = async (roomId: number, photoUrl: string) => {
-    const { data, error } = await supabase
+    const {data, error} = await supabase
         .from('room')
         .select('image_urls')
         .eq('id', roomId)
@@ -83,9 +83,9 @@ export const deletePhotoFromRoom = async (roomId: number, photoUrl: string) => {
     const imageUrls = data.image_urls ? JSON.parse(data.image_urls) : [];
     const updatedImageUrls = imageUrls.filter((url: string) => url !== photoUrl);
 
-    const { data: updateData, error: updateError } = await supabase
+    const {data: updateData, error: updateError} = await supabase
         .from('room')
-        .update({ image_urls: JSON.stringify(updatedImageUrls) })
+        .update({image_urls: JSON.stringify(updatedImageUrls)})
         .eq('id', roomId);
 
     if (updateError) {
@@ -97,7 +97,7 @@ export const deletePhotoFromRoom = async (roomId: number, photoUrl: string) => {
 };
 
 export const getRoomImages = async (roomId: number) => {
-    const { data, error } = await supabase
+    const {data, error} = await supabase
         .from('room')
         .select('image_urls')
         .eq('id', roomId)
@@ -135,6 +135,21 @@ export const getRoomById = async (roomId: number) => {
     return data;
 };
 
+export const getTenantById = async (tenantId: number) => {
+    const { data, error } = await supabase
+        .from('tenant')
+        .select('gender')
+        .eq('id', tenantId)
+        .single();
+
+    if (error) {
+        console.error('Error fetching tenant details:', error);
+        return null;
+    }
+
+    return data;
+};
+
 export const getBedsByRoomId = async (roomId: number, year?: number) => {
     const { data, error } = await supabase
         .from('bed')
@@ -145,7 +160,8 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
             reservations:reservation (
                 from,
                 to,
-                confirmed
+                confirmed,
+                reserved_by
             )
         `)
         .eq('room', roomId);
@@ -161,42 +177,39 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
             room: bed.room,
             cost: bed.cost,
             occupied: false,
-            availability: undefined
+            availability: undefined,
+            reservations: [] // Ensure reservations property is always defined
         }));
     }
 
-    const startDate = new Date(year, 8, 1); // September 1st of the given year
-    const endDate = new Date(year + 1, 7, 31); // August 31st of the next year
+    const startDate = new Date(year, 9, 1);
+    const endDate = new Date(year + 1, 8, 30);
     const period = { from: startDate, to: endDate };
 
-    const beds = data.map((bed) => {
-        const reservations = bed.reservations.map((reservation) => ({
-            from: reservation.from,
-            to: reservation.to,
-            confirmed: reservation.confirmed
+    const beds = await Promise.all(data.map(async (bed) => {
+        const reservations = await Promise.all(bed.reservations.map(async (reservation) => {
+            const tenant = await getTenantById(reservation.reserved_by);
+            return {
+                from: reservation.from,
+                to: reservation.to,
+                confirmed: reservation.confirmed,
+                gender: tenant ? tenant.gender : null
+            };
         }));
 
         const freePeriod = calculateFreePeriod(reservations, period);
-        const occupied = freePeriod.from >= freePeriod.to;
-
-        console.log(`Bed ${bed.id} is occupied: ${occupied} "freePeriod": ${freePeriod.from} - ${freePeriod.to}`);
+        const occupied = freePeriod.freeDays < 30;
 
         return {
             id: bed.id,
             room: bed.room,
             cost: bed.cost,
             occupied,
-            availability: `from: ${new Intl.DateTimeFormat('en-GB', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-            }).format(new Date(freePeriod.from)).replace(/\//g, '.')} to: ${new Intl.DateTimeFormat('en-GB', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-            }).format(new Date(freePeriod.to)).replace(/\//g, '.')}`
+            availability: freePeriod.freeDays < 30 ? undefined :
+                `${freePeriod.from.toDateString()} - ${freePeriod.to.toDateString()}`,
+            reservations // Ensure reservations property is included
         };
-    });
+    }));
 
     return beds;
 };
@@ -212,25 +225,18 @@ export const createReservation = async (
     bedId: number,
     from?: Date,
     to?: Date
-
 ) => {
     const today = new Date();
     const currentYear = today.getFullYear();
     const nextYear = currentYear + 1;
 
-    let startDate = new Date(currentYear, 8, 2); // September 1st of the current year
-
-    if (today > startDate) {
-        startDate = new Date(nextYear, 7, 31); // August 30st of the next year
-    }
-
-    const endDate = new Date(startDate);
-    endDate.setFullYear(startDate.getFullYear() + 1);
+    let startDate = from ? from : new Date(currentYear, 9, 1); // September 1st of the current year
+    const endDate = to ? to : new Date(nextYear, 8, 30); // August 30st of the next year
 
     const reservationFrom = startDate.toISOString().split('T')[0];
     const reservationTo = endDate.toISOString().split('T')[0];
 
-    const { data, error } = await supabase.rpc('create_reservation', {
+    const {data, error} = await supabase.rpc('create_reservation', {
         tenant_name: tenantName,
         tenant_surname: tenantSurname,
         tenant_phone_number: tenantPhoneNumber,
@@ -265,21 +271,38 @@ export const getRoomDetailsByRoomId = async (roomId: number) => {
     return data;
 }
 
-export const getRoomType = async (roomId: number) => {
-    const {data, error} = await supabase.rpc('get_room_type', {room_id: roomId});
+// if at least one bed has confirmed reservation in that period by male, return 'male'
+// if at least one bed has confirmed reservation in that period by female, return 'female'
+// if there are no confirmed reservations in that period, return 'both'
+export const getRoomType = async (roomId: number, year: number) => {
+    const beds = await getBedsByRoomId(roomId, year);
 
-    if (error) {
-        console.error('Error fetching room type:', error);
+    const startDate = new Date(year, 9, 1);
+    const endDate = new Date(year + 1, 8, 30);
+    const period = { from: startDate, to: endDate };
+
+    const activeReservations = beds.flatMap(bed =>
+        getActiveReservationsForPeriod(bed.reservations, period)
+    );
+
+    const hasMale = activeReservations.some(reservation => reservation.gender === 'male');
+    const hasFemale = activeReservations.some(reservation => reservation.gender === 'female');
+
+    console.log('room active reservations:', activeReservations);
+    if (hasMale) {
+        return 'male';
+    } else if (hasFemale) {
+        return 'female';
+    } else {
         return 'both';
     }
-
-    return data;
 };
 
 type ReservationCalc = {
     from: string;
     to: string;
     confirmed: boolean;
+    gender: string;
 };
 
 type Period = {
@@ -287,45 +310,42 @@ type Period = {
     to: Date;
 };
 
-const calculateFreePeriod = (reservations: ReservationCalc[], period: Period): Period => {
-    // Filter reservations that fall within the given period
-    const filteredReservations = reservations.filter(reservation => {
-        const reservationFrom = new Date(`${reservation.from}T00:00:00`);
-        const reservationTo = new Date(`${reservation.to}T00:00:00`);
-        return (reservationFrom >= period.from && reservationFrom <= period.to) ||
-            ((reservationTo >= period.from && reservationTo <= period.to) || (reservationFrom >= period.from && reservationFrom <= period.to));
+const getActiveReservationsForPeriod = (reservations: ReservationCalc[], period: Period): ReservationCalc[] => {
+    return reservations.filter(reservation => {
+        const reservationFrom = new Date(reservation.from);
+        const reservationTo = new Date(reservation.to);
+        return (reservationFrom <= period.to && reservationTo >= period.from && reservation.confirmed);
     });
+};
 
-    // If no reservations in the period, the whole period is free
-    if (filteredReservations.length === 0) {
-        return period;
+const calculateFreePeriod = (reservations: ReservationCalc[], period: Period): {
+    from: Date,
+    to: Date,
+    freeDays: number
+} => {
+    const activeReservations = getActiveReservationsForPeriod(reservations, period);
+
+    if (activeReservations.length === 0) {
+        const freeDays = (period.to.getTime() - period.from.getTime()) / (1000 * 60 * 60 * 24);
+        return {from: period.from, to: period.to, freeDays};
     }
 
-    // Find the latest 'to' date of the filtered reservations
-    const latestToDate = filteredReservations.reduce((latest, reservation) => {
+    const latestToDate = activeReservations.reduce((latest, reservation) => {
         const reservationTo = new Date(reservation.to);
         return reservationTo > latest ? reservationTo : latest;
     }, period.from);
 
-    // Calculate the free period from the latest 'to' date to the end of the period
     const freePeriodFrom = latestToDate > period.from ? latestToDate : period.from;
     const freePeriodTo = period.to;
+    const freeDays = (freePeriodTo.getTime() - freePeriodFrom.getTime()) / (1000 * 60 * 60 * 24);
 
-    return { from: freePeriodFrom, to: freePeriodTo };
+    return {from: freePeriodFrom, to: freePeriodTo, freeDays};
 };
 
-//If at least one bed has free period
-// from 1 september of year - 1
-// until 30 august of year
 export const getRoomAvailability = async (roomId: number, year: number) => {
-    const {data, error} = await supabase.rpc('get_room_availability', {room_id: roomId, year});
+    const beds = await getBedsByRoomId(roomId, year);
 
-    if (error) {
-        console.error('Error fetching room availability:', error);
-        return false;
-    }
-
-    return data;
+    return beds.some(bed => !bed.occupied);
 }
 
 type Room = {
@@ -345,7 +365,7 @@ export const checkBedAvailability = async (bedId: number, from: Date, to: Date) 
         return null;
     }
 
-    const { data, error } = await supabase
+    const {data, error} = await supabase
         .from('reservation')
         .select('from, to')
         .eq('bed', bedId)
@@ -369,13 +389,13 @@ export const checkBedAvailability = async (bedId: number, from: Date, to: Date) 
         }
 
         return acc;
-    }, { from: from, to: to });
+    }, {from: from, to: to});
 
     return freePeriod;
 };
 
 export const getReservations = async (): Promise<Reservation[]> => {
-    const { data, error } = await supabase
+    const {data, error} = await supabase
         .from('reservation')
         .select(`
             id,
@@ -445,9 +465,9 @@ export const updateReservationStatus = async (reservationId: number, confirmed: 
 };
 
 export const updateReservationDates = async (reservationId: number, from: string, to: string) => {
-    const { data, error } = await supabase
+    const {data, error} = await supabase
         .from('reservation')
-        .update({ from, to })
+        .update({from, to})
         .eq('id', reservationId);
 
     if (error) {
@@ -459,7 +479,7 @@ export const updateReservationDates = async (reservationId: number, from: string
 };
 
 export const updateRoomDetails = async (roomId: number, details: Partial<Room>) => {
-    const { data, error } = await supabase
+    const {data, error} = await supabase
         .from('room')
         .update(details)
         .eq('id', roomId);
@@ -473,9 +493,9 @@ export const updateRoomDetails = async (roomId: number, details: Partial<Room>) 
 };
 
 export const updateBedCost = async (bedId: number, cost: number) => {
-    const { data, error } = await supabase
+    const {data, error} = await supabase
         .from('bed')
-        .update({ cost })
+        .update({cost})
         .eq('id', bedId);
 
     if (error) {

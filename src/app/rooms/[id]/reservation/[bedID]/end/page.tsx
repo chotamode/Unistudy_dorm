@@ -1,9 +1,63 @@
+"use client";
+
+import React, { useEffect, useState } from 'react';
+import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
+import { useFormData } from "@/app/context/ReservationContext";
 import GoToMainPageButton from "@/app/components/GoMainPageButton";
 import Layout from "@/app/components/Layout";
 import Image from 'next/image';
 import geoIcon from '@/assets/geoIcon.svg';
+import { useParams } from "next/navigation";
+import { getRoomById } from "@/app/api/rooms";
 
-const stage4Page = () => {
+const Stage4Page = () => {
+    const { bedID, id } = useParams();
+    const { year, gender, name, surname, phoneNumber, email, dateOfBirth, reservationFrom, reservationTo } = useFormData();
+    const [room, setRoom] = useState<any>(null);
+
+    useEffect(() => {
+        const fetchRoom = async () => {
+            const roomData = await getRoomById(Number(id));
+            setRoom(roomData);
+        };
+        fetchRoom();
+    }, [id]);
+
+    const generatePDF = () => {
+        const doc = new jsPDF();
+
+        doc.setFontSize(16);
+        doc.text("Reservation Details", 14, 20);
+
+        const tableColumn = ["", ""];
+        const tableRows = [
+            ["Name", name],
+            ["Surname", surname],
+            ["Phone Number", phoneNumber],
+            ["Email", email],
+            ["Gender", gender],
+            ["Date of Birth", dateOfBirth.toISOString().split('T')[0]],
+            ["Reservation From", reservationFrom],
+            ["Reservation To", reservationTo],
+        ];
+
+        doc.autoTable({
+            startY: 30,
+            head: [tableColumn],
+            body: tableRows,
+            theme: 'grid',
+            styles: { fontSize: 12 },
+            headStyles: { fillColor: false },
+        });
+
+        doc.save('reservation-details.pdf');
+    };
+
+    if (!room) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <Layout>
             <div className={"flex flex-col justify-center items-center h-[47rem] bg-blue-100 rounded-3xl mx-20"}>
@@ -16,10 +70,11 @@ const stage4Page = () => {
                         <Image src={geoIcon} alt="Geo Icon"/>
                     </div>
                     <div className={"bg-[#0F478D] rounded-3xl py-4 px-12 mb-2"}>
-                        <p className={"text-white"}>Kirovogradskaya street, 13A</p>
+                        <p className={"text-white"}>{room.address}</p>
                     </div>
                 </div>
-                <p className={"underline mb-5"}>Downloading documents</p>
+
+                <button onClick={generatePDF} className="underline mb-5">Downloading documents</button>
                 <div className="max-custom-tablet:w-">
                     <GoToMainPageButton text="Go back to the main page"/>
                 </div>
@@ -28,4 +83,4 @@ const stage4Page = () => {
     );
 }
 
-export default stage4Page;
+export default Stage4Page;

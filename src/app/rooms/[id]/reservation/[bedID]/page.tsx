@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Layout from "@/app/components/Layout";
 import {useParams, useRouter} from "next/navigation";
-import { createDefaultReservation } from '@/app/api/rooms';
+import { createReservation } from '@/app/api/rooms';
 import Link from "next/link";
 
 const FeedbackForm = () => {
@@ -41,14 +41,18 @@ const FeedbackForm = () => {
         console.log("Submitting form with data:", formData);
 
         try {
-            const result = await createDefaultReservation(
+            const result = await createReservation(
                 formData.name,
                 formData.surname,
+                formData.phoneNumber,
                 formData.gender,
                 formData.email,
                 formData.dateOfBirth,
                 Number(id), // roomId
                 Number(bedID), // bedId
+                // TODO: get these from the previous steps
+                new Date(2025, 1, 1), // startDate
+                new Date(2026, 1, 2), // endDate
             );
             router.push(`/rooms/${id}/reservation/${bedID}/end`);
 

@@ -1,6 +1,7 @@
 import {supabase} from '@/supabaseClient';
 import {Reservation} from '@/app/types';
 import {v4 as uuidv4} from 'uuid';
+import { format } from 'date-fns';
 
 export const getFirstRoomPhoto = async (roomId: number) => {
     const {data, error} = await supabase
@@ -205,8 +206,7 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
             room: bed.room,
             cost: bed.cost,
             occupied,
-            availability: freePeriod.freeDays < 30 ? undefined :
-                `${freePeriod.from.toDateString()} - ${freePeriod.to.toDateString()}`,
+            availability: `${format(freePeriod.from, 'dd.MM.yyyy')} - ${format(freePeriod.to, 'dd.MM.yyyy')}`,
             reservations // Ensure reservations property is included
         };
     }));
@@ -231,7 +231,7 @@ export const createReservation = async (
     const nextYear = currentYear + 1;
 
     let startDate = from ? from : new Date(currentYear, 9, 1); // September 1st of the current year
-    const endDate = to ? to : new Date(nextYear, 8, 30); // August 30st of the next year
+    const endDate = to ? to : new Date(nextYear, 8, 30); // August  of the next year
 
     const reservationFrom = startDate.toISOString().split('T')[0];
     const reservationTo = endDate.toISOString().split('T')[0];

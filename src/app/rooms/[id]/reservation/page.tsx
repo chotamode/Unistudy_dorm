@@ -9,18 +9,20 @@ import chosenBed from '../../../../assets/beds/chosen_bed.svg';
 import freeBed from '../../../../assets/beds/free_bed.svg';
 import {Bed, Plan} from "@/app/components/Plan";
 import finger from "@/assets/finger.svg";
+import {useYearGender, YearGenderProvider} from "@/app/context/YearGenderContext";
 
 const BedSelect: React.FC = () => {
     const {id} = useParams();
     const [beds, setBeds] = useState<Bed[]>([]);
     const searchParams = useSearchParams();
-    const year = searchParams.get('year');
-    const gender = searchParams.get('gender');
+    // const year = searchParams.get('year');
+    // const gender = searchParams.get('gender');
+    const { year, gender } = useYearGender();
 
     useEffect(() => {
         if (id) {
             const fetchBeds = async () => {
-                const bedsData = await getBedsByRoomId(Number(id));
+                const bedsData = await getBedsByRoomId(Number(id), year);
                 setBeds(bedsData);
             };
             fetchBeds().then(r => r);
@@ -44,8 +46,7 @@ const BedSelect: React.FC = () => {
                             <Image src={finger} alt="Finger" layout="fill" objectFit="contain"/>
                         </div>
                     </div>
-
-                    <Plan beds={beds}/>
+                        <Plan beds={beds}/>
                 </div>
                 <div className={"flex flex-row gap-4 mt-14"}>
                     <div className={"flex flex-col items-center text-xl"}>

@@ -135,19 +135,19 @@ export const getRoomById = async (roomId: number) => {
     return data;
 };
 
-export const getBedsByRoomId = async (roomId: number) => {
-    const {data, error} = await supabase
+export const getBedsByRoomId = async (roomId: number, year?: number) => {
+    const { data, error } = await supabase
         .from('bed')
         .select(`
-      id,
-      room,
-      cost,
-      reservations:reservation (
-        from,
-        to,
-        confirmed
-      )
-    `)
+            id,
+            room,
+            cost,
+            reservations:reservation (
+                from,
+                to,
+                confirmed
+            )
+        `)
         .eq('room', roomId);
 
     if (error) {
@@ -155,24 +155,46 @@ export const getBedsByRoomId = async (roomId: number) => {
         return [];
     }
 
-    return data.map(bed => {
-        const isOccupied = bed.reservations.some(reservation => {
-            const fromDate = new Date(reservation.from);
-            const toDate = new Date(reservation.to);
-            const now = new Date();
-            return reservation.confirmed && now >= fromDate && now <= toDate;
-        });
+    if (year === undefined) {
+        return data.map((bed) => ({
+            id: bed.id,
+            room: bed.room,
+            cost: bed.cost,
+            occupied: false,
+            availability: null
+        }));
+    }
+
+    const beds = data.map((bed) => {
+        const startDate = new Date(year, 8, 1); // September 1st of the given year
+        const endDate = new Date(year + 1, 7, 31); // August 31st of the next year
+
+        const latestToDate = bed.reservations.reduce((latest, reservation) => {
+            if (reservation.confirmed) {
+                const reservationTo = new Date(reservation.to);
+                return reservationTo > latest ? reservationTo : latest;
+            }
+            return latest;
+        }, startDate);
+
+        const freePeriod = { from: latestToDate, to: endDate };
+        const occupied = latestToDate >= endDate;
+
+        console.log(`Bed ${bed.id} is occupied: ${occupied} "freePeriod": ${freePeriod.from} - ${freePeriod.to}`);
 
         return {
             id: bed.id,
             room: bed.room,
-            occupied: isOccupied,
-            cost: bed.cost
+            cost: bed.cost,
+            occupied,
+            availability: freePeriod
         };
     });
+
+    return beds;
 };
 
-export const createDefaultReservation = async (
+export const createReservation = async (
     tenantName: string,
     tenantSurname: string,
     tenantPhoneNumber: string,
@@ -181,6 +203,8 @@ export const createDefaultReservation = async (
     tenantDateOfBirth: string,
     roomId: number,
     bedId: number,
+    from: Date,
+    to: Date
 
 ) => {
     const today = new Date();

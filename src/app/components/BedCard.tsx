@@ -53,8 +53,8 @@ const BedCard: React.FC<BedCardProps> = ({ bed, year }) => {
                     height={75}
                 />
             </div>
-            <p className="text-xs">{bed.id}</p>
-            <div className="flex text-xs gap-4 flex-row">
+            {/*<p className="text-xs">{bed.id}</p>*/}
+            <div className="flex text-xs gap-4 flex-row mt-4">
                 <p className="text-xs">{availability}</p>
                 <p>{bed.cost} kč</p>
             </div>

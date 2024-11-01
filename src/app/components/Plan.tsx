@@ -388,7 +388,7 @@ export const Plan: React.FC<PlanProps> = ({
             if (svgCTM) {
                 const screenPoint = point.matrixTransform(svgCTM);
                 const top = screenPoint.y - 300; // Подгонка по вертикали
-                const left = screenPoint.x; // Подгонка по горизонтали
+                const left = screenPoint.x - 20; // Подгонка по горизонтали
                 return { top, left };
             }
 
@@ -440,9 +440,13 @@ export const Plan: React.FC<PlanProps> = ({
                         <div ref={messageRef}
                              className="absolute bg-white rounded-2xl shadow-2xl p-8 flex flex-col gap-3 items-center"
                              style={getMessagePosition()}>
-                            <p className={"text-3xl font-normal text-center"}>
+
+                            <p className="text-3xl font-bold">
+                                The bed is free!
+                            </p>
+
+                            <p className={"text-adxs font-normal text-center"}>
                                 {selectedBed?.availability ?? 'No availability information'}
-                                The bed is free
                             </p>
                             <Link href={`/rooms/${id}/reservation/${selectedBed.id}`}>
                                 <Button2 className={"w-28 h-12 mt-2"} color={"bg-[#14803F]"}>

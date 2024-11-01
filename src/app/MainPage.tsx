@@ -6,7 +6,7 @@ import { getRooms, getRoomType, getRoomAvailability } from './api/rooms';
 import Image from 'next/image';
 import IconSwitch from '@/app/components/IconSwitch';
 import YearSwitch from "@/app/components/YearSwitch";
-import { useFormData } from '@/app/context/YearGenderContext';
+import { useFormData } from '@/app/context/ReservationContext';
 
 interface Room {
     id: number;

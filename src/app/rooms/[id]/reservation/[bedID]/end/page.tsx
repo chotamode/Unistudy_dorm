@@ -2,8 +2,16 @@ import GoToMainPageButton from "@/app/components/GoMainPageButton";
 import Layout from "@/app/components/Layout";
 import Image from 'next/image';
 import geoIcon from '@/assets/geoIcon.svg';
+import { useFormData } from "@/app/context/ReservationContext";
+import {useParams} from "next/navigation";
 
-const stage4Page = () => {
+const Stage4Page = () => {
+
+    // id is id pf room, bedID is id of bed
+    // TODO: all data should be in pdf file
+    const { bedID, id } = useParams();
+    const { year, gender, name, surname, phoneNumber, email, dateOfBirth, reservationFrom, reservationTo } = useFormData();
+
     return (
         <Layout>
             <div className={"flex flex-col justify-center items-center h-[47rem] bg-blue-100 rounded-3xl mx-20"}>
@@ -28,4 +36,4 @@ const stage4Page = () => {
     );
 }
 
-export default stage4Page;
+export default Stage4Page;

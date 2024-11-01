@@ -349,6 +349,7 @@ export const Plan: React.FC<PlanProps> = ({
     const [selectedBed, setSelectedBed] = useState<Bed | null>(null);
     const [showMessage, setShowMessage] = useState(false);
     const messageRef = useRef<HTMLDivElement>(null);
+    const [isMobile, setIsMobile] = useState(false);
 
     const handleBedClick = (bed: Bed) => {
         if (!bed.occupied) {
@@ -404,35 +405,43 @@ export const Plan: React.FC<PlanProps> = ({
         return undefined;
     };
 
+    useEffect(() => {
+        // Функция для установки состояния isMobile на основе ширины экрана
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 740);
+        };
+
+        // Устанавливаем начальное значение
+        handleResize();
+
+        // Добавляем слушатель изменения размера окна
+        window.addEventListener('resize', handleResize);
+
+        // Удаляем слушатель при размонтировании компонента
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     return (
-        // <div className={"flex justify-center bg-[#F6F4F2]  py-8 px-4  rounded-3xl relative w-full md:h-[700px] phone:h-[550px] phonexs:h-[450px] h-[350px]  minibook:h-full"}
-        //      style={{boxShadow: 'inset 0 7px 10px rgba(0, 0, 0, 0.3), 0 7px 10px rgba(0, 0, 0, 0.2)'}}>
-        //     <div
-        //         className="absolute  top-[-30px] left-1/2 transform -translate-x-1/2 px-6 pr-2 w-80 h-16 bg-[#0F478D] rounded-2xl flex flex-row items-center">
-        //         <p className="w-3/4 text-white text-center font-semibold whitespace-nowrap text-sm">
-        //             To book a bed, click on the bed
-        //         </p>
-        //         <div className="relative ml-8 z-0 w-1/4 h-4">
-        //             <Image src={finger} alt="Finger" layout="fill" objectFit="contain"/>
-        //         </div>
-        //     </div>
-        <div className="relative w-full h-full">
-            <svg ref={svgRef} className="absolute inset-0 w-full h-full" viewBox="0 0 100 100"
-                 preserveAspectRatio="xMidYMid meet">
-                <image href={planImage.src} width="100%" height="100%"/>
-                {bedsForPlan.map((bed) => (
-                    <image
-                        key={bed.id}
-                        href={bed.occupied || takenBedId === bed.id
-                            ? (bed.horizontal ? occupiedHorizontalBed.src : occupiedBed.src)
-                            : (selectedBed?.id === bed.id && !takenBedId
-                                ? (bed.horizontal ? chosenHorizontalBed.src : chosenBed.src)
-                                : (bed.horizontal ? freeHorizontalBed.src : freeBed.src))}
-                        x={bed.x}
-                        y={bed.y}
-                        width={bed.plan === 'small'
-                            ? (bed.horizontal ? 8 : 16)
-                            : (bed.horizontal ? 10 : 20)}
+
+            <div className="relative w-full h-full">
+                <svg ref={svgRef} className="absolute inset-0 w-full h-full" viewBox="0 0 100 100"
+                     preserveAspectRatio="xMidYMid meet">
+                    <image href={planImage.src} width="100%" height="100%"/>
+                    {bedsForPlan.map((bed) => (
+                        <image
+                            key={bed.id}
+                            href={bed.occupied || takenBedId === bed.id
+                                ? (bed.horizontal ? occupiedHorizontalBed.src : occupiedBed.src)
+                                : (selectedBed?.id === bed.id && !takenBedId
+                                    ? (bed.horizontal ? chosenHorizontalBed.src : chosenBed.src)
+                                    : (bed.horizontal ? freeHorizontalBed.src : freeBed.src))}
+                            x={bed.x}
+                            y={bed.y}
+                            width={bed.plan === 'small'
+                                ? (bed.horizontal ? 8 : 16)
+                                : (bed.horizontal ? 10 : 20)}
 
                         height={bed.plan === 'small'
                             ? (bed.horizontal ? 16 : 8)
@@ -446,18 +455,22 @@ export const Plan: React.FC<PlanProps> = ({
             {selectedBed && showMessage && !takenBedId &&
                 (
                     <div ref={messageRef}
-                         className="absolute bg-white rounded-2xl shadow-2xl p-8 flex flex-col gap-3 items-center"
-                         style={getMessagePosition()}>
+                         className="absolute  bg-white w-[23rem]  rounded-2xl shadow-2xl p-8 flex flex-col gap-3 items-center left-1/2 md:left-auto transform -translate-x-1/2"
+                         style={
+                             isMobile
+                                 ? {bottom: '-15rem', left: '50%', transform: 'translateX(-50%)'}
+                                 : getMessagePosition()
+                         }>
 
-                        <p className="text-3xl font-bold">
+                        <p className={"text-3xl font-normal text-center"}>
                             The bed is free!
                         </p>
 
-                        <p className={"text-adxs font-normal text-center"}>
+                        <p className={"text-3xl font-normal text-center"}>
                             {selectedBed?.availability ?? 'No availability information'}
                         </p>
 
-                        <p className={"text-adxs font-normal text-center"}>
+                        <p className={"text-3xl font-normal text-center"}>
                             {selectedBed?.cost ?? 'No cost information'} Kč
                         </p>
 
@@ -468,7 +481,7 @@ export const Plan: React.FC<PlanProps> = ({
                         </Link>
                     </div>
                 )}
-        </div>
+            </div>
         // </div>
     );
 };

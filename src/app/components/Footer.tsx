@@ -14,7 +14,7 @@ const Footer = () => {
                            rounded-large"
             >
                 <div className="flex flex-col md:flex-row justify-start items-start flex-wrap md:justify-between md:w-full">
-                    <div className="flex flex-col md:flex-row flex-wrap justify-start items-start md:gap-2 lg:gap-20 minibook:gap-14 mr-10">
+                    <div className="flex flex-col laptop:flex-row flex-wrap justify-start items-start md:gap-2 lg:gap-20 minibook:gap-14 mr-10">
                         <div className="relative mb-5 md:mr-10 w-14 h-14 lg:w-20 lg:h-20 flex-shrink-0">
                             <Link href="/">
                                 <Image src={logo} alt="Logo" fill/>
@@ -47,13 +47,13 @@ const Footer = () => {
                 </div>
 
             </div>
-            <div className="flex flex-row flex-wrap justify-between text-stone-400 font-medium text-xs py-6 px-14">
+            <div className="flex flex-row flex-wrap justify-between text-stone-400 font-medium text-xs py-6 px-4 md:px-14">
 
-                <div className=" flex justify-around">
+                <div className=" flex flex-row justify-around">
 
-                    <p> &copy; Copyright 2024. UniStudy</p>
+                    <p> &copy; Copyright 2024. UniStudy </p>
 
-                    <div className="flex px-28 gap-16">
+                    <div className="flex flex-row px-0 ml-10 gap-14">
                         <Link href={`../rooms`}>
                             Privacy policy
                         </Link>

@@ -2,9 +2,11 @@
 
 import React, { useState } from 'react';
 import Layout from "@/app/components/Layout";
-import { useParams, useRouter } from "next/navigation";
-import { createReservation } from '@/app/api/rooms';
-import { useFormData } from "@/app/context/ReservationContext";
+import {useParams, useRouter} from "next/navigation";
+import {createReservation} from '@/app/api/rooms';
+import Link from "next/link";
+import {useFormData} from "@/app/context/ReservationContext";
+import BlueBackground from "@/app/components/BlueBackground";
 
 const FeedbackForm = () => {
     const { bedID, id } = useParams();
@@ -92,56 +94,74 @@ const FeedbackForm = () => {
 
     return (
         <form onSubmit={handleSubmit}
-              className="flex flex-col gap-6 w-[528px] h-4/6 bg-[#0F478D] rounded-2xl py-10 px-12 h-588 mr-16">
-            <div className={"flex flex-row gap-4 w-full"}>
+              className="flex flex-col gap-4 md:gap-6 w-full md:w-[528px] bg-[#0F478D] rounded-2xl p-6 md:p-8 px-5 md:px-12 py-14 md:py-10 mt-20 md:mt-0  mr-4 md:mr-16 mx-auto md:mx-auto justify-center md:justify-evenly">
+            <div className={"flex flex-col md:flex-row gap-4 w-full z-20"}>
+                <label className="block text-sm font-medium -mb-2 text-white" htmlFor="name">
+                    First Name<span className="text-red-500">*</span>
+                </label>
                 <input
                     type="text"
                     name="name"
                     placeholder="Name"
                     value={name}
                     onChange={handleChange}
-                    className="p-2 w-52 border rounded-xl h-12"
+                    className="p-2 border rounded-xl w-full h-12"
                     required
                 />
+                <label className="block text-sm font-medium -mb-2 text-white" htmlFor="name">
+                    Surname<span className="text-red-500">*</span>
+                </label>
                 <input
                     type="text"
                     name="surname"
                     placeholder="Surname"
                     value={surname}
                     onChange={handleChange}
-                    className="p-2 border rounded-xl w-52 h-12"
+                    className="p-2 border rounded-xl w-full h-12"
                     required
                 />
             </div>
+            <label className="block text-sm font-medium -mb-2 text-white" htmlFor="name">
+                Phone Number<span className="text-red-500">*</span>
+            </label>
             <input
                 type="tel"
                 name="phoneNumber"
                 placeholder="Phone Number"
                 value={phoneNumber}
                 onChange={handleChange}
-                className="p-2 border rounded-xl w-[431px] h-12"
+                className="p-2 border rounded-xl w-full h-12"
                 required
             />
+            <label className="block text-sm font-medium -mb-2 text-white" htmlFor="name">
+                Email<span className="text-red-500">*</span>
+            </label>
             <input
                 type="email"
                 name="email"
                 placeholder="Email"
                 value={email}
                 onChange={handleChange}
-                className="p-2 border rounded-xl w-[431px] h-12"
+                className="p-2 border rounded-xl w-full h-12"
                 required
             />
+            <label className="block text-sm font-medium -mb-2 text-white" htmlFor="name">
+                What is your gender?<span className="text-red-500">*</span>
+            </label>
             <select
                 name="gender"
                 value={gender}
                 onChange={handleChange}
-                className="p-2 border rounded-xl w-[431px] h-12"
+                className="p-2 border rounded-xl w-full h-12"
                 required
             >
                 <option value="" disabled>Select Gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
             </select>
+            <label className="block text-sm font-medium -mb-2 text-white" htmlFor="name">
+                Your date of birth<span className="text-red-500">*</span>
+            </label>
             <input
                 type="date"
                 name="dateOfBirth"
@@ -151,7 +171,7 @@ const FeedbackForm = () => {
                 max={today}
                 required
             />
-            <label className="flex items-center">
+            <label className="flex items-center text-white">
                 <input
                     type="checkbox"
                     name="consent"
@@ -162,24 +182,40 @@ const FeedbackForm = () => {
                 />
                 I consent to data processing
             </label>
-            <button type="submit" className="p-2 bg-blue-500 text-white rounded">Confirm</button>
+            <button type="submit" className="hidden md:block p-2 bg-blue-500 text-white rounded">Confirm</button>
+            <button type="submit" className="md:hidden p-2 w-1/2 bg-white text-black font-bold rounded-3xl">Confirm
+            </button>
         </form>
     );
 };
 
 const Stage3Page = () => {
     return (
-        <Layout>
-            <div className={"flex flex-col mdsuperbook:flex-row justify-center items-center h-[900px] mdsuperbook:bg-blue-100 rounded-3xl mx-20 "}>
-                <div
-                    className={"hidden mdsuperbook:flex flex-col w-[976px] h-[651px] justify-center items-center text-white bg-form-adaptive-bg bg-bg-stage3 bg-[length:105%_100%] bg-no-repeat  bg-left"}>
-                    <h1 className=" mb-4 text-2xl mdsuperbook:text-3xl desktopxl:text-4xl desktopxxl:text-5xl font-medium">Here you can leave your</h1>
-                    <h1 className=" mb-4  text-2xl mdsuperbook:text-3xl desktopxl:text-4xl desktopxxl:text-5xl font-medium">details for feedback!</h1>
+        <div className={"relative"}>
+            <Layout>
+                <BlueBackground/>
+                <div className={"flex flex-col md:flex-row justify-center items-center h-full md:h-screen bg-blue-100 rounded-3xl mx-0 md:mx-20 py-16 md:py-24 px-7 md:px-0 gap-1 md:gap-0 pt-6 md:pt-0"}>
+
+                {/* Контейнер с текстом, поверх фона */}
+                    <div
+                    className={"relative  flex flex-col w-full md:w-full justify-center pb-10 md:pb-0 items-center text-white h-full md:bg-transparent "}>
+                    {/*Синий фон для десктопов*/}
+                        <div className={" hidden md:flex flex-col w-full justify-center items-center text-white bg-bg-stage3 bg-[length:115%_120%] bg-no-repeat h-full bg-left"}></div>
+                        <h1 className="static md:absolute md:pb-20 md:mb-4 mt-10 text-2xl md:text-5xl font-medium z-10">
+                            Here you can leave your
+                        </h1>
+                        <h1 className="static md:absolute md:pt-20 md:mb-4 text-2xl md:text-5xl font-medium z-10">
+                            details for feedback!
+                        </h1>
+                    </div>
+                    {/* Поля формы для обратной связи */}
+                    <div className={"w-full ml-3 md:ml-0 md:w-1/2 flex justify-center items-center md:items-start"}>
+                        <FeedbackForm/>
+                    </div>
                 </div>
-                <FeedbackForm />
-            </div>
-        </Layout>
-    );
+            </Layout>
+        </div>
+);
 }
 
 export default Stage3Page;

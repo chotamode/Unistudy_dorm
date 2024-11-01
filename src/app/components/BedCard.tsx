@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import freeBed from '../../assets/beds/free_bed.svg';
-import { checkBedAvailability } from '@/app/api/rooms';
+import { getBedsByRoomId } from '@/app/api/rooms';
 
 interface Bed {
     id: number;
@@ -12,28 +12,20 @@ interface Bed {
 interface BedCardProps {
     bed: Bed;
     year: number;
+    roomId: number;
 }
 
-const BedCard: React.FC<BedCardProps> = ({ bed, year }) => {
+const BedCard: React.FC<BedCardProps> = ({ bed, year, roomId }) => {
     const [availability, setAvailability] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchAvailability = async () => {
-            const from = new Date(year, 8, 1); // September 1st of the given year
-            const to = new Date(year + 1, 7, 31); // August 31st of the next year
-            const freePeriod = await checkBedAvailability(bed.id, from, to);
-            if (freePeriod) {
-                const fromDate = new Date(freePeriod.from).toLocaleDateString('en-GB', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: '2-digit'
-                }).replace(/\//g, '.');
-                const toDate = new Date(freePeriod.to).toLocaleDateString('en-GB', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: '2-digit'
-                }).replace(/\//g, '.');
-                setAvailability(`${fromDate} • ${toDate}`);
+            const beds = await getBedsByRoomId(roomId, year);
+            const currentBed = beds.find(b => b.id === bed.id);
+            console.log("currentBed", currentBed);
+            if (currentBed) {
+                const freePeriod = currentBed.availability;
+                setAvailability(freePeriod ? freePeriod : 'Not available');
             } else {
                 setAvailability('Not available');
             }
@@ -53,7 +45,6 @@ const BedCard: React.FC<BedCardProps> = ({ bed, year }) => {
                     height={75}
                 />
             </div>
-            {/*<p className="text-xs">{bed.id}</p>*/}
             <div className="flex text-xs gap-4 flex-row mt-4">
                 <p className="text-xs">{availability}</p>
                 <p>{bed.cost} kč</p>

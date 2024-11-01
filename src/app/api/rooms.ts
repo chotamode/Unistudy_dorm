@@ -180,6 +180,7 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
         const occupied = freePeriod.from >= freePeriod.to;
 
         console.log(`Bed ${bed.id} is occupied: ${occupied} "freePeriod": ${freePeriod.from} - ${freePeriod.to}`);
+        console.log('cost', bed.cost);
 
         return {
             id: bed.id,

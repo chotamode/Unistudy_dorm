@@ -182,8 +182,8 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
         }));
     }
 
-    const startDate = new Date(year, 9, 1);
-    const endDate = new Date(year + 1, 8, 30);
+    const startDate = new Date(year, 8, 1);
+    const endDate = new Date(year + 1, 7, 30);
     const period = { from: startDate, to: endDate };
 
     const beds = await Promise.all(data.map(async (bed) => {
@@ -230,8 +230,8 @@ export const createReservation = async (
     const currentYear = today.getFullYear();
     const nextYear = currentYear + 1;
 
-    let startDate = from ? from : new Date(currentYear, 9, 1); // September 1st of the current year
-    const endDate = to ? to : new Date(nextYear, 8, 30); // August 30st of the next year
+    let startDate = from ? from : new Date(currentYear, 8, 1); // September 1st of the current year
+    const endDate = to ? to : new Date(nextYear, 7, 30); // August 30st of the next year
 
     const reservationFrom = startDate.toISOString().split('T')[0];
     const reservationTo = endDate.toISOString().split('T')[0];
@@ -277,8 +277,8 @@ export const getRoomDetailsByRoomId = async (roomId: number) => {
 export const getRoomType = async (roomId: number, year: number) => {
     const beds = await getBedsByRoomId(roomId, year);
 
-    const startDate = new Date(year, 9, 1);
-    const endDate = new Date(year + 1, 8, 30);
+    const startDate = new Date(year, 8, 1);
+    const endDate = new Date(year + 1, 7, 30);
     const period = { from: startDate, to: endDate };
 
     const activeReservations = beds.flatMap(bed =>

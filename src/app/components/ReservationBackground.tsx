@@ -3,7 +3,7 @@ import React from 'react';
 const ReservationBackground = () => {
     return (
         <svg
-            className="absolute inset-0 w-full h-auto ipadmini:h-[35rem]  laptop:hidden"
+            className="absolute inset-0 w-full h-auto ipadmini:h-[35rem] laptop:hidden pointer-events-none"
             width="430"
             height="300"
             viewBox="0 0 430 300"

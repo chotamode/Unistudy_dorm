@@ -98,7 +98,7 @@ const MainPage = () => {
                     </div>
                     <div className="flex flex-row justify-center items-center">
                         {filteredRooms.length > 3 && (
-                            <button onClick={handleShowMore} className="mt-8 py-4 px-24 font-medium text-3xl bg-[#0F478D] text-white rounded-xl">
+                            <button onClick={handleShowMore} className="mt-8 py-4 px-16 md:px-24 font-medium text-xl iphonexs:text-2xl laptop:text-3xl bg-[#0F478D] text-white rounded-xl">
                                 {showAll ? 'Show less' : 'More'}
                             </button>
                         )}

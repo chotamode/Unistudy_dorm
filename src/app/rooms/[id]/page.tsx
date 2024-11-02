@@ -157,7 +157,7 @@ useEffect(() => {
                     {/*<YearGenderProvider>*/}
                         <Link href={`/rooms/${id}/reservation`}>
                             <div className="flex mt-4 max-mdsuperbook:mt-4 w-full justify-center tablet:justify-start ">
-                                <Button2 className={"w-80 tablet:w-52"}>
+                                <Button2 className={"w-96 tablet:w-52"}>
                                     Book a bed
                                 </Button2>
                             </div>

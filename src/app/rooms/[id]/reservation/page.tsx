@@ -37,13 +37,13 @@ const BedSelect: React.FC = () => {
             <div className="relative flex flex-col items-center h-[85vh] mx-0 px-4 pt-10 phone:pt-8 md:mx-12 laptop:mx-24 desktop:mx-36 large-desktop:mx-48 mt-24 md:mt-8">
                 {/* Надпись и иконка пальца */}
                 <div
-                    className="absolute -top-12 md:top-[-2rem] left-1/2 transform -translate-x-1/2
-                           px-6 pr-2 w-80 h-auto md:h-16 bg-transparent md:bg-[#0F478D]
+                    className="absolute -top-10 md:top-[-2rem] left-1/2 transform -translate-x-1/2
+                           px-6 pr-4 md:pr-0 w-80 h-auto md:h-16 bg-transparent md:bg-[#0F478D]
                            rounded-2xl flex items-center justify-center z-10">
                     <p className="w-full text-black md:text-white text-center font-semibold whitespace-nowrap text-sm py-4 md:py-0">
                         To book a bed, click on the bed
                     </p>
-                    <div className="relative ml-8 w-6 h-6 hidden md:block">
+                    <div className="relative pl-4 ml-3 w-5 h-5 hidden md:block">
                         <Image src={finger} alt="Finger" layout="fill" objectFit="contain" />
                     </div>
                 </div>

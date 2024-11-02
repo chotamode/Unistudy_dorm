@@ -6,8 +6,7 @@ import {useParams, useRouter} from "next/navigation";
 import {createReservation} from '@/app/api/rooms';
 import Link from "next/link";
 import {useFormData} from "@/app/context/ReservationContext";
-import BlueBackground from "@/app/components/BlueBackground";
-import BlueBackground  from "@/app/components/BlueBackground";
+// import BlueBackground  from "@/app/components/BlueBackground";
 import ReservationBackground from "@/app/components/ReservationBackground";
 
 const FeedbackForm = () => {
@@ -207,10 +206,10 @@ const Stage3Page = () => {
                         <div
                             className="hidden md:flex flex-col w-full justify-center items-center text-white bg-bg-stage3 bg-[length:115%_120%] bg-no-repeat h-full bg-left mx-auto">
                         </div>
-                        <h1 className="static laptop:absolute laptop:pb-20 laptop:mb-4 mt-10 text-2xl phone14:text-3xl minibook:text-3xl desktop2:text-5xl font-medium z-10">
+                        <h1 className="static laptop:absolute laptop:pb-20 laptop:mb-4 mt-10 text-2xl zfold:text-xl phone14:text-3xl minibook:text-3xl desktop2:text-5xl font-medium z-10">
                         Here you can leave your
                         </h1>
-                        <h1 className="static laptop:absolute laptop:pt-20 laptop:mb-4 text-2xl phone14:text-3xl minibook:text-3xl desktop2:text-5xl font-medium z-10">
+                        <h1 className="static laptop:absolute laptop:pt-20 laptop:mb-4 text-2xl zfold:text-xl phone14:text-3xl minibook:text-3xl desktop2:text-5xl font-medium z-10">
                             details for feedback!
                         </h1>
                     </div>

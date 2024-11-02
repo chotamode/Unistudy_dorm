@@ -459,22 +459,22 @@ export const Plan: React.FC<PlanProps> = ({
             {selectedBed && showMessage && !takenBedId &&
                 (
                     <div ref={messageRef}
-                         className="absolute  bg-white w-[23rem]  rounded-2xl shadow-2xl p-8 flex flex-col gap-3 items-center left-1/2 md:left-auto transform -translate-x-1/2"
+                         className="absolute  bg-white w-[23rem]  rounded-2xl shadow-2xl p-5  laptop:p-8 flex flex-col gap-1 laptop:gap-3 items-center left-1/2 md:left-auto transform -translate-x-1/2"
                          style={
                              isMobile
                                  ? {bottom: '-15rem', left: '50%', transform: 'translateX(-50%)'}
                                  : getMessagePosition()
                          }>
 
-                        <p className={"text-3xl font-normal text-center"}>
+                        <p className={"text-xl ipadmini:text-2xl laptop:text-3xl font-normal text-center"}>
                             The bed is free!
                         </p>
 
-                        <p className={"text-3xl font-normal text-center"}>
+                        <p className={"text-xl ipadmini:text-2xl laptop:text-2xl font-normal text-center"}>
                             {selectedBed?.availability ?? 'No availability information'}
                         </p>
 
-                        <p className={"text-3xl font-normal text-center"}>
+                        <p className={"text-xl ipadmini:text-2xl laptop:text-3xl font-normal text-center"}>
                             {selectedBed?.cost ?? 'No cost information'} Kč
                         </p>
 

@@ -196,7 +196,7 @@ const Stage3Page = () => {
         <div className={"relative"}>
             <Layout>
                 {/*<BlueBackground/>*/}
-                <ReservationBackground/>
+                {/*<ReservationBackground/>*/}
                 <div className={"flex flex-col laptop:flex-row justify-center items-center h-full laptop:h-screen bg-blue-100 rounded-3xl mx-0 laptop:mx-20 py-16 laptop:py-24 px-7 laptop:px-0 gap-1 laptop:gap-0 pt-6 laptop:pt-0"}>
 
                 {/* Контейнер с текстом, поверх фона */}

@@ -79,6 +79,8 @@ const config: Config = {
 
                 'desktop': '1280px',
 
+                'desktop2': '1350px',
+
                 'desktopxl': '1480px',
 
                 'desktopxxl': '1670px',

@@ -41,7 +41,11 @@ const Footer = () => {
                             <p className=" w-60 ">+420 773 037 688</p>
                         </div>
                         <div className={"flex flex-row justify-start md:justify-end gap-x-2"}>
-                           <div className="relative  w-6 h-6  lg:w-10 lg:h-10 xl:w-12 xl:h-12"> <Link href="https://www.instagram.com/roomrent.cz?igsh=M29ka3JsdXFkZG8z"> <Image src={instaLogo} alt="Instagram" fill/> </Link></div>
+                           <div className="relative  w-6 h-6  lg:w-10 lg:h-10 xl:w-12 xl:h-12">
+                               <Link href="https://www.instagram.com/roomrent.cz?igsh=M29ka3JsdXFkZG8z">
+                                   <Image src={instaLogo} alt="Instagram" fill/>
+                               </Link>
+                           </div>
                         </div>
                     </div>
                 </div>

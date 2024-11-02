@@ -7,6 +7,7 @@ import instagramLogo from "@/assets/social_media/inst_logo.svg";
 import facebookLogo from "@/assets/social_media/fb_logo.svg";
 import arrowRight from "@/assets/arrow_right.svg";
 import GoToMainPageButton from "@/app/components/GoMainPageButton";
+import Link from "next/link";
 
 const contacts = () => {
     return (
@@ -17,8 +18,6 @@ const contacts = () => {
                 </h1>
 
                 <div className={"flex flex-row gap-5 sm:gap-28 md:gap-40 justify-center items-center flex-wrap"}>
-
-
 
                     <div className={"flex flex-col w-40 tablet:w-56 custom-tablet:w-48 items-center gap-2 lg:gap-10"}>
                         <div className="tablet:max-lg:w-24  max-tablet:w-14">
@@ -51,7 +50,9 @@ const contacts = () => {
                             <Image src={socialIcon} alt="Social icon"/>
                         </div>
                         <div className={"flex phone:max-sm:w-6 max-tablet:w-6 flex-row gap-4"}>
+                            <Link href="https://www.instagram.com/roomrent.cz?igsh=M29ka3JsdXFkZG8z">
                             <Image src={instagramLogo} alt="Instagram logo"/>
+                            </Link>
                         </div>
                     </div>
                 </div>

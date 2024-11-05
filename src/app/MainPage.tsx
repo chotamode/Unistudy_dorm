@@ -68,13 +68,11 @@ const MainPage = () => {
                     height={2160}
                 />
                 <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center">
-                    <h1 className="text-1xl phonexs:text-2xl phone:text-3xl md:text-5xl lg:text-[4.2rem] xl:text-[5rem] font-bold text-black p-4 sm:p-12 md:p-16 rounded-xl text-center">
-                        <div className="text-white">Student housing rentals</div>
+                    <h1 className="text-1xl phonexs:text-xl phone:text-2xl md:text-5xl lg:text-[4.2rem] xl:text-[5rem] font-bold text-black p-4 sm:p-12 md:p-16 rounded-xl text-center">
+                        <div className="text-white">Student housing rentals in Prague</div>
                         <div className="text-[#A6D0FF]"> — easy and convenient!</div>
                         <p className="hidden sm:block text-white mt-2 text-xs sm:text-xs md:text-sm lg:text-xl font-light sm:w-2/3 md:w-1/2 mx-auto">
-                            We understand how important it is for students to find comfortable and affordable housing,
-                            so we have created a platform that helps you quickly and efficiently choose an apartment
-                            that is right for you.
+                            Three building reconstructed based on student&apos;s needs. Dormitory style accommodatoin, residences and apartments. Single, double, triple options and morel
                         </p>
                     </h1>
                 </div>
@@ -83,7 +81,7 @@ const MainPage = () => {
                 <main>
                     <IconSwitch activeIndex={gender === 'male' ? 0 : 1} onClick={setGender} />
                     <YearSwitch activeIndex={year === new Date().getFullYear() ? 0 : 1} onClick={setYear} />
-                    <h2 className="lg:text-8xl md:text-7xl sm:text-6xl font-semibold text-black mb-20 mt-24 text-center">Spare rooms</h2>
+                    <h2 className="lg:text-8xl md:text-7xl sm:text-6xl font-semibold text-black mb-20 mt-24 text-center">What&apos;s available</h2>
                     <div className="grid grid-cols-1 justify-items-center desktop:grid-cols-2 medium-desktop:grid-cols-3">
                         {roomsToDisplay.map((room) => (
                             <RoomCard

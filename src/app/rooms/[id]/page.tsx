@@ -132,7 +132,7 @@ useEffect(() => {
                     </h1>
                     <ul className="list-disc text-adxs px-2 list-inside">
                         <h3 className="font-bold text-adxs">
-                            {roomType === 'both' ? 'For boys and girls ' : `For ${roomType === 'male' ? 'boys' : 'girls'} only`}
+                            {roomType === 'both' ? `For ${gender === 'male' ? 'boys' : 'girls'}` : `For ${roomType === 'male' ? 'boys' : 'girls'} only`}
                         </h3>
                         {details.map((detail) => (
                             <li key={detail.id}>{detail.detail}</li>

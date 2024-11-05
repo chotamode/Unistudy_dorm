@@ -66,8 +66,8 @@ const Stage4Page = () => {
         <Layout>
             <div className={"flex flex-col justify-center items-center h-[47rem] bg-blue-100 rounded-0 tablet:rounded-3xl mx-0 sm:mx-10 md:mx-20 "}>
                 <div className={"flex flex-col justify-center items-center gap-2 mb-6 md:mb-10"}>
-                    <h1 className={"zfold:text-3xl phone:text-4xl md:text-5xl laptop:text-7xl font-semibold text-center"}>Now the manager will</h1>
-                    <h1 className={"zfold:text-3xl phone:text-4xl md:text-5xl laptop:text-7xl font-semibold text-center"}>contact you</h1>
+                    <p className={"zfold:text-3xl phone:text-4xl md:text-5xl laptop:text-6xl font-semibold text-center"}>Thank you! Our manager </p>
+                    <p className={"zfold:text-3xl phone:text-4xl md:text-5xl laptop:text-6xl font-semibold text-center"}>will contact you shortly.</p>
                 </div>
                 <div className={"flex flex-row items-center pr-8 laptop:pr-16 laptop:mr-1 gap- laptop:gap-2"}>
                     <Image src={geoIcon} alt="Geo Icon" className="w-10 h-10 laptop:w-16 laptop:h-16"/>

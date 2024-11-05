@@ -13,7 +13,7 @@ const FeedbackForm = () => {
     const { bedID, id } = useParams();
     const router = useRouter();
     const today = new Date().toISOString().split('T')[0];
-    const consent = true;
+    const [consent, setConsentState] = useState(false);
 
     const {
         name, surname, phoneNumber, email, gender, dateOfBirth,
@@ -26,6 +26,7 @@ const FeedbackForm = () => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
         if (type === 'checkbox' && e.target instanceof HTMLInputElement) {
+            setConsentState(e.target.checked);
             setConsent(e.target.checked);
         } else if (type === 'date') {
             if (value <= today) {
@@ -178,10 +179,10 @@ const FeedbackForm = () => {
                     name="consent"
                     checked={consent}
                     onChange={handleChange}
-                    className="mr-2"
+                    className="mr-2 w-5 h-5 rounded-full border-2 border-white bg-transparent cursor-pointer"
                     required
                 />
-                I consent to data processing
+                I agree to data processing
             </label>
             <button type="submit" className="hidden md:block p-2 bg-blue-500 text-white rounded">Confirm</button>
             <button type="submit" className="md:hidden p-2 w-1/2 bg-white text-black font-bold rounded-3xl">Confirm
@@ -206,11 +207,11 @@ const Stage3Page = () => {
                         <div
                             className="hidden md:flex flex-col w-full justify-center items-center text-white bg-bg-stage3 bg-[length:115%_120%] bg-no-repeat h-full bg-left mx-auto">
                         </div>
-                        <h1 className="static laptop:absolute laptop:pb-20 laptop:mb-4 mt-10 text-2xl zfold:text-xl phone14:text-3xl minibook:text-3xl desktop2:text-5xl font-medium z-10">
-                        Here you can leave your
+                        <h1 className="static laptop:absolute laptop:pb-20 laptop:mb-4 mt-10 text-center text-2xl zfold:text-xl phone14:text-3xl minibook:text-3xl desktop2:text-4xl font-medium z-10">
+                            Would you like to book a room?
                         </h1>
-                        <h1 className="static laptop:absolute laptop:pt-20 laptop:mb-4 text-2xl zfold:text-xl phone14:text-3xl minibook:text-3xl desktop2:text-5xl font-medium z-10">
-                            details for feedback!
+                        <h1 className="static laptop:absolute laptop:pt-20 laptop:mb-4 text-center  text-2xl zfold:text-xl phone14:text-3xl minibook:text-3xl desktop2:text-4xl font-medium z-10">
+                            Leave your contact details and we will get back to you!
                         </h1>
                     </div>
                     {/* Поля формы для обратной связи */}

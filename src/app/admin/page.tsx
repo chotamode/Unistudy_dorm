@@ -86,12 +86,15 @@ const AdminPage = () => {
             const bedsData = await Promise.all(
                 reservations.map(async (reservation) => {
                     if (reservation.bed) {
+                        // console.log("Fetching beds for reservation", reservation);
+                        // console.log("Room ID", reservation.bed.room);
+                        // console.log("Beds", await getBedsByRoomId(reservation.bed.room));
                         return getBedsByRoomId(reservation.bed.room);
                     }
                     return [];
                 })
             );
-            setBeds(bedsData.flat());
+            const beds = bedsData.flat();
         };
 
         if (reservations.length > 0) {
@@ -130,6 +133,7 @@ const AdminPage = () => {
         setNewRoomDetails(room);
         const bedsData = await getBedsByRoomId(room.id);
         setBeds(bedsData);
+        console.log("Beds", bedsData);
     };
 
     const handleSaveRoomDetails = async () => {
@@ -159,13 +163,14 @@ const AdminPage = () => {
 
     const roomToBedsMap = beds.reduce((acc, bed) => {
         if (!acc[bed.room]) {
+            console.log("Room", bed.room);
             acc[bed.room] = [];
         }
         acc[bed.room].push(bed);
         return acc;
     }, {} as Record<number, TypesBed[]>);
 
-    console.log(roomToBedsMap);
+    console.log("Room to Beds Map", roomToBedsMap);
 
     return (
         <Layout>
@@ -366,6 +371,7 @@ const AdminPage = () => {
                                                                             width={75}
                                                                             height={75}
                                                                         />
+                                                                        {/*<p>Room id: {bed.room}</p>*/}
                                                                         <p><strong>Bed ID:</strong> {bed.id}</p>
                                                                         <p><strong>Cost:</strong> {bed.cost}</p>
                                                                         <button

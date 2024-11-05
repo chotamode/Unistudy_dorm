@@ -24,8 +24,8 @@ const CookieConsent = () => {
 
     return (
         isVisible && (
-            <div className="fixed bottom-0 left-0 right-0 bg-blue-100 p-4 rounded-3xl flex max-laptop:flex-col flex-row justify-between items-center">
-                    <p className="text-sm">
+            <div  className="sticky bottom-0 z-20 left-0 right-0 bg-blue-100 p-4 rounded-3xl flex max-laptop:flex-col flex-row justify-between items-center">
+                    <p className=" text-adxs tablet:text-sm">
                         By clicking &quot;Accept Cookies&quot;, you agree to the storing of cookies on your device to enhance site navigation, analyze site usage, and assist in our marketing efforts.
                     </p>
                     <div className="flex mt-6 laptop:mt-0 space-x-2">

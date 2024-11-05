@@ -40,6 +40,7 @@ const Stage4Page = () => {
             ["Date of Birth", dateOfBirth.toISOString().split('T')[0]],
             ["Reservation From", reservationFrom],
             ["Reservation To", reservationTo],
+            ["Address:", room.address],
         ];
 
         doc.autoTable({

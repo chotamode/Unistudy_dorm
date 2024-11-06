@@ -478,7 +478,7 @@ export const Plan: React.FC<PlanProps> = ({
                             {selectedBed?.cost ?? 'No cost information'} Kč
                         </p>
 
-                        <Link href={`/rooms/${id}/reservation/${selectedBed.id}`}>
+                        <Link href={`../${id}/reservation/${selectedBed.id}`}>
                             <Button2 className={"w-28 h-12 mt-2"} color={"bg-[#14803F]"}>
                                 Book
                             </Button2>

@@ -8,6 +8,7 @@ import {ReservationContextProvider} from "@/app/context/ReservationContext";
 
 interface RoomCardProps {
     id?: number;
+    dorm?: string;
     name?: string;
     address?: string;
     sex?: string;
@@ -20,6 +21,7 @@ interface RoomCardProps {
 
 const RoomCard: React.FC<RoomCardProps> = ({
                                                id = 1,
+                                               dorm = 'dorm',
                                                name = "Default Room Name",
                                                address = "Default Address",
                                                sex = "Girls only",
@@ -55,9 +57,10 @@ const RoomCard: React.FC<RoomCardProps> = ({
                 style={{backgroundImage: `url(${firstPhoto})`}}
             >
                 <Link className={"relative w-full h-full"}
-                    href={`../rooms/${id}`}>
+                      href={`../${dorm}/rooms/${id}`}>
                     <div className="absolute inset-0 bg-black opacity-50 z-0"></div>
-                    <div className="px-4 text-white filter z-10 relative font-semibold w-full h-full flex flex-col justify-end pb-6">
+                    <div
+                        className="px-4 text-white filter z-10 relative font-semibold w-full h-full flex flex-col justify-end pb-6">
                         <h2 className="text-xxl font-black mb-2">{name}</h2>
                         <div className="text-adxs my-4">
                             <p>{floor} | {apart_name}</p>
@@ -71,7 +74,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
                 className="md:hidden rounded-xxl flex flex-col justify-end items-center
                            bg-white overflow-hidden h-mlg w-mlg"
             >
-                <Link href={`../rooms/${id}`}>
+                <Link href={`../${dorm}/rooms/${id}`}>
                     <div className="flex bg-cover bg-no-repeat bg-center rounded-xl
             my-2 bg-clip-content w-[22rem] h-[13.5rem]"
                          style={{backgroundImage: `url(${firstPhoto})`}}

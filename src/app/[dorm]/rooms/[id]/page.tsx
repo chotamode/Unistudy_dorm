@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
-import { getRoomById, getBedsByRoomId, getRoomDetailsByRoomId, getRoomType, getRoomImages } from '../../api/rooms';
+import { getRoomById, getBedsByRoomId, getRoomDetailsByRoomId, getRoomType, getRoomImages } from '../../../api/rooms';
 import Image from 'next/image';
 import Layout from "@/app/components/Layout";
 import placeholderImage from '@/assets/placeholder_room.jpg';
@@ -10,7 +10,7 @@ import Button2 from "@/app/components/Button2";
 import Link from "next/link";
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import '../../carousel-custom.css';
+import '../../../carousel-custom.css';
 import BedCard from '@/app/components/BedCard';
 import {useFormData, ReservationContextProvider} from "@/app/context/ReservationContext";
 
@@ -39,6 +39,7 @@ interface RoomDetail {
 
 const RoomDetails: React.FC = () => {
     const { id } = useParams();
+    const { dorm } = useParams();
     const searchParams = useSearchParams();
     // const year = searchParams.get('year');
     // const gender = searchParams.get('gender');
@@ -155,7 +156,7 @@ useEffect(() => {
 
                     </div>
                     {/*<YearGenderProvider>*/}
-                        <Link href={`/rooms/${id}/reservation`}>
+                        <Link href={`../rooms/${id}/reservation`}>
                             <div className="flex mt-4 max-mdsuperbook:mt-4 w-full justify-center tablet:justify-start ">
                                 <Button2 className={"w-96 tablet:w-52"}>
                                     Book a bed

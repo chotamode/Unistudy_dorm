@@ -228,6 +228,12 @@ export const createReservation = async (
 ) => {
     console.log('Creating reservation from:', from, 'to:', to);
 
+    // throw error if to or from date is not provided
+    if (!from || !to) {
+        console.error('Error: Please provide both from and to dates.');
+        return { error: 'Please provide both from and to dates.' };
+    }
+
     const today = new Date();
     const currentYear = today.getFullYear();
     const nextYear = currentYear + 1;
@@ -242,7 +248,16 @@ export const createReservation = async (
 
     console.log('Reservation from:', reservationFrom, 'to:', reservationTo);
 
-    const {data, error} = await supabase.rpc('create_reservation', {
+    // Fetch the room type for the specified period
+    const roomType = await getRoomType(roomId, currentYear);
+
+    // Check if the tenant's gender matches the room's gender restriction
+    if (roomType !== 'both' && roomType !== tenantGender) {
+        console.error('Error: This room is reserved for a different gender during the specified period.');
+        return { error: 'This room is reserved for a different gender during the specified period.' };
+    }
+
+    const { data, error } = await supabase.rpc('create_reservation', {
         tenant_name: tenantName,
         tenant_surname: tenantSurname,
         tenant_phone_number: tenantPhoneNumber,

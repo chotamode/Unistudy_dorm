@@ -6,8 +6,8 @@ import Image from 'next/image';
 import Layout from "@/app/components/Layout";
 import Link from "next/link";
 import {getBedsByRoomId} from '@/app/api/rooms';
-import chosenBed from '../../../../assets/beds/chosen_bed.svg';
-import freeBed from '../../../../assets/beds/free_bed.svg';
+import chosenBed from '../../../../../assets/beds/chosen_bed.svg';
+import freeBed from '../../../../../assets/beds/free_bed.svg';
 import {Bed, Plan} from "@/app/components/Plan";
 import finger from "@/assets/finger.svg";
 import {useFormData, ReservationContextProvider} from "@/app/context/ReservationContext";
@@ -72,7 +72,7 @@ const BedSelect: React.FC = () => {
 
                 {/* Кнопка назад */}
                 <div className="my-10">
-                    <Link href={`/rooms/${id}`}>
+                    <Link href={`../rooms/${id}`}>
                         <Button2 className="w-full md:w-60 mt-12 md:mt-0">
                             Go back
                         </Button2>

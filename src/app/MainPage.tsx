@@ -7,9 +7,11 @@ import Image from 'next/image';
 import IconSwitch from '@/app/components/IconSwitch';
 import YearSwitch from "@/app/components/YearSwitch";
 import { useFormData } from '@/app/context/ReservationContext';
+import {useParams, useSearchParams} from "next/navigation";
 
 interface Room {
     id: number;
+    dorm: string;
     name: string;
     address: string;
     price_month: number;
@@ -18,6 +20,8 @@ interface Room {
 }
 
 const MainPage = () => {
+    const dormParam = useParams().dorm;
+    const dorm = Array.isArray(dormParam) ? dormParam[0] : dormParam;
     const [rooms, setRooms] = useState<Room[]>([]);
     const [filteredRooms, setFilteredRooms] = useState<Room[]>([]);
     const { year, gender, setYear, setGender } = useFormData();
@@ -43,7 +47,10 @@ const MainPage = () => {
                 rooms.map(async (room) => {
                     const isAvailable = await getRoomAvailability(room.id, year);
                     const matchesGender = room.roomType === gender || room.roomType === 'both';
-                    return matchesGender && isAvailable ? room : null;
+                    // if dorm === "sokolovna" then dorm = "sokol" else dorm = dorm
+                    const matchesDorm = dorm === "sokolovna" ? room.dorm === "sokol" : room.dorm === dorm;
+                    return matchesGender && isAvailable && matchesDorm
+                        ? room : null;
                 })
             );
             setFilteredRooms(filtered.filter(room => room !== null) as Room[]);
@@ -59,6 +66,9 @@ const MainPage = () => {
 
     return (
         <div>
+            {/*<h1>*/}
+            {/*    ${dorm}*/}
+            {/*</h1>*/}
             <div className="relative mt-10 tablet:mt-0">
                 <Image
                     src="/images/mpage_hero.svg"
@@ -87,6 +97,7 @@ const MainPage = () => {
                             <RoomCard
                                 key={room.id}
                                 id={room.id}
+                                dorm={dorm}
                                 name={room.name}
                                 background={room.image}
                                 address={room.address}

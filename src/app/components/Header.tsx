@@ -4,9 +4,10 @@ import Image from 'next/image';
 import logo from '../../../public/logo.svg';
 import Button2 from "@/app/components/Button2";
 import Link from "next/link";
-import { usePathname } from 'next/navigation';
+import {useParams, usePathname} from 'next/navigation';
 
 const Header = () => {
+    const { dorm } = useParams();
     const pathname = usePathname();
     const isBlueBackground = /^\/rooms\/\d+\/reservation\/\d+$/.test(pathname);
     const isGayBlueBackground = pathname.includes('/rooms') && pathname.includes('/reservation') && pathname.includes('/end');
@@ -17,7 +18,7 @@ const Header = () => {
             <nav className="flex flex-row justify-between items-center font-montserrat w-full">
                 {/* Logo */}
                 <div className="relative w-10 h-10 tablet:w-14 tablet:h-14 flex-shrink-0">
-                    <Link href="/">
+                    <Link href={`/${dorm}`}>
                         <Image src={logo} alt="Logo" fill/>
                     </Link>
                 </div>

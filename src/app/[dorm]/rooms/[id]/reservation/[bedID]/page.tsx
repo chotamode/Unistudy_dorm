@@ -199,28 +199,25 @@ const Stage3Page = () => {
         <div className={"relative"}>
             <Layout>
                 {/*<BlueBackground/>*/}
-                {/*<ReservationBackground/>*/}
-                <div
-                    className={"flex flex-col laptop:flex-row justify-center items-center h-full laptop:h-screen bg-blue-100 rounded-3xl mx-0 laptop:mx-20 py-16 laptop:py-24 px-7 laptop:px-0 gap-1 laptop:gap-0 pt-6 laptop:pt-0"}>
+                <ReservationBackground/>
+                <div className={"flex flex-col laptop:flex-row justify-center items-center h-full laptop:h-screen bg-blue-100 rounded-3xl mx-0 laptop:mx-20 py-16 laptop:py-24 px-7 laptop:px-0 gap-1 laptop:gap-0 pt-6 laptop:pt-0"}>
 
                     {/* Контейнер с текстом, поверх фона */}
                     <div
-                        className="hidden laptop:flex relative flex-col w-full md:w-full justify-center pb-10 laptop:pb-0 items-center text-white h-full md:bg-transparent">
+                        className={"relative  flex flex-col w-full md:w-full justify-center pb-10 laptop:pb-0 items-center text-white h-full md:bg-transparent "}>
                         {/*Синий фон для десктопов*/}
                         <div
-                            className="md:flex flex-col w-full justify-center items-center text-white bg-bg-stage3 bg-[length:115%_120%] bg-no-repeat h-full bg-left mx-auto">
+                            className="hidden md:flex flex-col w-full justify-center items-center text-white bg-bg-stage3 bg-[length:115%_120%] bg-no-repeat h-full bg-left mx-auto">
                         </div>
-                        <h1 className="static laptop:absolute laptop:pb-20 laptop:mb-4 mt-10 text-center text-2xl zfold:text-xl phone14:text-3xl minibook:text-3xl desktop2:text-4xl font-medium z-10">
-                            Would you like to book a room?
+                        <h1 className="static laptop:absolute laptop:pb-20 laptop:mb-4 mt-10 text-2xl zfold:text-xl phone14:text-3xl minibook:text-3xl desktop2:text-5xl font-medium z-10">
+                            Here you can leave your
                         </h1>
-                        <h1 className="static laptop:absolute laptop:pt-20 laptop:mb-4 text-center text-2xl zfold:text-xl phone14:text-3xl minibook:text-3xl desktop2:text-4xl font-medium z-10">
-                            Leave your contact details and we will get back to you!
+                        <h1 className="static laptop:absolute laptop:pt-20 laptop:mb-4 text-2xl zfold:text-xl phone14:text-3xl minibook:text-3xl desktop2:text-5xl font-medium z-10">
+                            details for feedback!
                         </h1>
                     </div>
-
                     {/* Поля формы для обратной связи */}
-                    <div
-                        className={"w-full ml-3 laptop:ml-0 ipadmini:w-[80vw] laptop:w-1/2 flex justify-center items-center laptop:items-start z-30"}>
+                    <div className={"w-full ml-3 laptop:ml-0 ipadmini:w-[80vw] laptop:w-1/2 flex justify-center items-center laptop:items-start z-30"}>
                         <FeedbackForm/>
                     </div>
                 </div>

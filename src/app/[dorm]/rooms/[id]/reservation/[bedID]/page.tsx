@@ -96,6 +96,7 @@ const FeedbackForm = () => {
     }
 
     return (
+        // Анкета (или форма) для студентов
         <form onSubmit={handleSubmit}
               className="flex flex-col gap-4 laptop:gap-6 w-full laptop:w-[528px] bg-[#0F478D] rounded-2xl p-6 laptop:p-8 px-5 laptop:px-12 py-14 laptop:py-10 mt-20 ipadmini:mt-10 laptop:mt-0  mr-4 laptop:mr-16 mx-0 laptop:mx-auto justify-center laptop:justify-evenly">
             <div className={"flex flex-col desktop:flex-row gap-4 w-full z-20"}>

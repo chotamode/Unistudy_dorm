@@ -3,8 +3,10 @@ import logo from '../../../public/logo.svg';
 import fbLogo from '../../assets/social_media/fb_logo.svg';
 import instaLogo from '../../assets/social_media/inst_logo.svg';
 import Link from 'next/link';
+import {useParams} from 'next/navigation';
 
 const Footer = () => {
+    const { dorm } = useParams();
     return (
         <footer>
             <div
@@ -16,7 +18,7 @@ const Footer = () => {
                 <div className="flex flex-col md:flex-row justify-start items-start flex-wrap md:justify-between md:w-full">
                     <div className="flex flex-col laptop:flex-row flex-wrap justify-start items-start md:gap-2 lg:gap-20 minibook:gap-14 mr-10">
                         <div className="relative mb-5 md:mr-10 w-14 h-14 lg:w-20 lg:h-20 flex-shrink-0">
-                            <Link href="/">
+                            <Link href={`/${dorm}`}>
                                 <Image src={logo} alt="Logo" fill/>
                             </Link>
                         </div>

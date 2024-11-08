@@ -2,6 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {useParams, useSearchParams} from 'next/navigation';
+
 import Image from 'next/image';
 import Layout from "@/app/components/Layout";
 import Link from "next/link";
@@ -30,6 +31,8 @@ const BedSelect: React.FC = () => {
             fetchBeds().then(r => r);
         }
     }, [id]);
+
+    const { dorm } = useParams();
 
     return (
         <Layout>
@@ -72,7 +75,7 @@ const BedSelect: React.FC = () => {
 
                 {/* Кнопка назад */}
                 <div className="my-10">
-                    <Link href={`../rooms/${id}`}>
+                    <Link href={`/${dorm}`}>
                         <Button2 className="w-full md:w-60 mt-12 md:mt-0">
                             Go back
                         </Button2>

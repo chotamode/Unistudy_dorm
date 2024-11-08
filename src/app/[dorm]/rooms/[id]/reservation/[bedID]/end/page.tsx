@@ -8,7 +8,7 @@ import GoToMainPageButton from "@/app/components/GoMainPageButton";
 import Layout from "@/app/components/Layout";
 import Image from 'next/image';
 import geoIcon from '@/assets/geoIcon.svg';
-import { useParams } from "next/navigation";
+import { useParams} from "next/navigation";
 import { getRoomById } from "@/app/api/rooms";
 
 const Stage4Page = () => {
@@ -61,6 +61,8 @@ const Stage4Page = () => {
     if (!room) {
         return <div>Loading...</div>;
     }
+
+
 
     return (
         <Layout>

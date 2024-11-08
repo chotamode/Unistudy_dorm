@@ -15,7 +15,7 @@ import {useFormData, ReservationContextProvider} from "@/app/context/Reservation
 import Button2 from "@/app/components/Button2";
 
 const BedSelect: React.FC = () => {
-    const {id} = useParams();
+    const {dorm, id} = useParams();
     const [beds, setBeds] = useState<Bed[]>([]);
     const searchParams = useSearchParams();
     // const year = searchParams.get('year');
@@ -31,8 +31,6 @@ const BedSelect: React.FC = () => {
             fetchBeds().then(r => r);
         }
     }, [id]);
-
-    const { dorm } = useParams();
 
     return (
         <Layout>
@@ -75,7 +73,7 @@ const BedSelect: React.FC = () => {
 
                 {/* Кнопка назад */}
                 <div className="my-10">
-                    <Link href={`/${dorm}`}>
+                    <Link href={`/${dorm}/rooms/${id}`}>
                         <Button2 className="w-full md:w-60 mt-12 md:mt-0">
                             Go back
                         </Button2>

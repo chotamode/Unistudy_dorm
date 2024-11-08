@@ -64,12 +64,12 @@ const Stage4Page = () => {
 
     return (
         <Layout>
-            <div className={"flex flex-col justify-center items-center h-[47rem] bg-blue-100 rounded-0  tablet:rounded-3xl mx-0 sm:mx-10 md:mx-20 "}>
+            <div className={"flex flex-col justify-center items-center h-[47rem] bg-blue-100 rounded-0  tablet:rounded-3xl mx-0 surface:mx-10 laptop:mx-20 "}>
 
                 {/*контейнер с надписью */}
                 <div className={"flex flex-col justify-center items-center gap-2 mb-6 laptop:mb-10"}>
-                    <p className={"zfold:text-3xl phone:text-4xl surface:text-5xl laptop:text-6xl font-semibold text-center"}>Thank you! Our manager </p>
-                    <p className={"zfold:text-3xl phone:text-4xl surface:text-5xl laptop:text-6xl font-semibold text-center"}>will contact you shortly.</p>
+                    <p className={"zfold:text-3xl phone:text-4xl ipadmini:text-5xl laptop:text-6xl font-semibold text-center"}>Thank you! Our manager </p>
+                    <p className={"zfold:text-3xl phone:text-4xl ipadmini:text-5xl laptop:text-6xl font-semibold text-center"}>will contact you shortly.</p>
                 </div>
 
                     {/*контейнер с иконкой и адресом */}

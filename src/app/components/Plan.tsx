@@ -400,8 +400,8 @@ export const Plan: React.FC<PlanProps> = ({
             const svgCTM = svg.getScreenCTM();
             if (svgCTM) {
                 const screenPoint = point.matrixTransform(svgCTM);
-                const top = screenPoint.y - 300; // Подгонка по вертикали
-                const left = screenPoint.x - 20; // Подгонка по горизонтали
+                const top = screenPoint.y - 480; // Подгонка по вертикали
+                const left = screenPoint.x + 40; // Подгонка по горизонтали
                 return {top, left};
             }
 
@@ -459,7 +459,7 @@ export const Plan: React.FC<PlanProps> = ({
             {selectedBed && showMessage && !takenBedId &&
                 (
                     <div ref={messageRef}
-                         className="absolute  bg-white w-[23rem]  rounded-2xl shadow-2xl p-5  laptop:p-8 flex flex-col gap-1 laptop:gap-3 items-center left-1/2 md:left-auto transform -translate-x-1/2"
+                         className="absolute  bg-white w-[23rem] z-50  rounded-2xl shadow-2xl p-5  laptop:p-8 flex flex-col gap-1 laptop:gap-3 items-center left-1/2 md:left-auto transform -translate-x-1/2"
                          style={
                              isMobile
                                  ? {bottom: '-15rem', left: '50%', transform: 'translateX(-50%)'}

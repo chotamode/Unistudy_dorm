@@ -9,11 +9,14 @@ import {useFormData} from "@/app/context/ReservationContext";
 // import BlueBackground  from "@/app/components/BlueBackground";
 import ReservationBackground from "@/app/components/ReservationBackground";
 
+const phoneRegex = /^\+\d{1,3} \d{3} \d{3} \d{3}$/;
+
 const FeedbackForm = () => {
     const { bedID, id } = useParams();
     const router = useRouter();
     const today = new Date().toISOString().split('T')[0];
     const [consent, setConsentState] = useState(false);
+    const [phoneError, setPhoneError] = useState('');
 
     const {
         name, surname, phoneNumber, email, gender, dateOfBirth,
@@ -44,6 +47,11 @@ const FeedbackForm = () => {
                     break;
                 case 'phoneNumber':
                     setPhoneNumber(value);
+                    if (!phoneRegex.test(value)) {
+                        setPhoneError('Phone number must be in the format +code 111 111 111');
+                    } else {
+                        setPhoneError('');
+                    }
                     break;
                 case 'email':
                     setEmail(value);
@@ -59,6 +67,10 @@ const FeedbackForm = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (phoneError) {
+            console.error('Phone number format is incorrect');
+            return;
+        }
         console.log("Submitting form with data:", { name, surname, phoneNumber, email, gender, dateOfBirth });
 
         try {
@@ -96,7 +108,6 @@ const FeedbackForm = () => {
     }
 
     return (
-        // Анкета (или форма) для студентов
         <form onSubmit={handleSubmit}
               className="flex flex-col gap-4 laptop:gap-6 w-full laptop:w-[528px] bg-[#0F478D] rounded-2xl p-6 laptop:p-8 px-5 laptop:px-12 py-14 laptop:py-10 mt-20 ipadmini:mt-10 laptop:mt-0  mr-4 laptop:mr-16 mx-0 laptop:mx-auto justify-center laptop:justify-evenly">
             <div className={"flex flex-col desktop:flex-row gap-4 w-full z-20"}>
@@ -137,6 +148,7 @@ const FeedbackForm = () => {
                 className="p-2 border rounded-xl w-full h-12"
                 required
             />
+            {phoneError && <p className="text-red-500">{phoneError}</p>}
             <label className="block text-sm font-medium -mb-2 text-white" htmlFor="name">
                 Email<span className="text-red-500">*</span>
             </label>

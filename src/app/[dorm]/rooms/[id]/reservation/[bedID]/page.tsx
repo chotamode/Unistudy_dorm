@@ -146,6 +146,7 @@ const FeedbackForm = () => {
                 value={phoneNumber}
                 onChange={handleChange}
                 className="p-2 border rounded-xl w-full h-12"
+                inputMode="text"
                 required
             />
             {phoneError && <p className="text-red-500">{phoneError}</p>}

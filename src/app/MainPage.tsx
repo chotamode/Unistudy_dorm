@@ -82,7 +82,7 @@ const MainPage = () => {
                         <div className="text-white">Student housing rentals in Prague</div>
                         <div className="text-[#A6D0FF]"> — easy and convenient!</div>
                         <p className="hidden sm:block text-white mt-2 text-xs sm:text-xs md:text-sm lg:text-xl font-light sm:w-2/3 md:w-1/2 mx-auto">
-                            Three building reconstructed based on student&apos;s needs. Dormitory style accommodatoin, residences and apartments. Single, double, triple options and morel
+                            Three building reconstructed based on student&apos;s needs. Dormitory style accommodatoin, residences and apartments. Single, double, triple options and more!
                         </p>
                     </h1>
                 </div>

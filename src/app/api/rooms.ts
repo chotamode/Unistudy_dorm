@@ -1,6 +1,7 @@
 import {supabase} from '@/supabaseClient';
 import {Reservation} from '@/app/types';
 import {v4 as uuidv4} from 'uuid';
+import {createTask, updateTask} from "@/services/clickupService";
 
 export const getFirstRoomPhoto = async (roomId: number) => {
     const {data, error} = await supabase
@@ -214,6 +215,10 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
     return beds;
 };
 
+const formatDateForClickUp = (date: Date): number => {
+    return date.getTime();
+};
+
 export const createReservation = async (
     tenantName: string,
     tenantSurname: string,
@@ -228,7 +233,6 @@ export const createReservation = async (
 ) => {
     console.log('Creating reservation from:', from, 'to:', to);
 
-    // throw error if to or from date is not provided
     if (!from || !to) {
         console.error('Error: Please provide both from and to dates.');
         return { error: 'Please provide both from and to dates.' };
@@ -238,26 +242,29 @@ export const createReservation = async (
     const currentYear = today.getFullYear();
     const nextYear = currentYear + 1;
 
-    let startDate = from ? from : new Date(currentYear, 8, 1); // September 1st of the current year
-    const endDate = to ? to : new Date(nextYear, 7, 30); // August 30st of the next year
+    let startDate = from ? from : new Date(currentYear, 8, 1);
+    const endDate = to ? to : new Date(nextYear, 7, 30);
 
     console.log('Start date:', startDate, 'End date:', endDate);
 
     const reservationFrom = startDate.toDateString();
     const reservationTo = endDate.toDateString();
 
+    // get room address and name
+    const room = await getRoomById(roomId);
+    const roomAddress = room.address;
+    const roomName = room.name;
+
     console.log('Reservation from:', reservationFrom, 'to:', reservationTo);
 
-    // Fetch the room type for the specified period
     const roomType = await getRoomType(roomId, currentYear);
 
-    // Check if the tenant's gender matches the room's gender restriction
     if (roomType !== 'both' && roomType !== tenantGender) {
         console.error('Error: This room is reserved for a different gender during the specified period.');
         return { error: 'This room is reserved for a different gender during the specified period.' };
     }
 
-    const { data, error } = await supabase.rpc('create_reservation', {
+    const { data, error } = await supabase.rpc('create_reservation2', {
         tenant_name: tenantName,
         tenant_surname: tenantSurname,
         tenant_phone_number: tenantPhoneNumber,
@@ -273,6 +280,61 @@ export const createReservation = async (
     if (error) {
         console.error('Error creating reservation:', error);
         return null;
+    }
+
+    // Create ClickUp task
+    const clickUpTaskData = {
+        // name is id of reservation
+        name: `${data}`,
+        custom_fields: [
+            { id: 'aa36ae54-fbcd-46be-8755-00eea78c0453', value: tenantName },
+            { id: '9d9c2929-0935-44ef-b300-ce026881c972', value: tenantSurname },
+            { id: '724b3be8-4c56-4dda-9ff9-b871d262d7a6', value: tenantPhoneNumber },
+            { id: '0f119312-255f-4aa9-a067-264fc64ce888', value: tenantGender },
+            { id: '38ae1a4a-2274-4fa5-b7ac-cf01031596ff', value: tenantEmail },
+            {
+                id: 'c06ef56d-c695-4953-9940-e5a8ffa2ed1d',
+                value: formatDateForClickUp(new Date(tenantDateOfBirth)),
+                value_options: { time: false }
+            },
+            {
+                id: '86ecdc0f-c56f-4b5b-b222-094e18643189',
+                value: formatDateForClickUp(startDate),
+                value_options: { time: false }
+            },
+            {
+                id: '9fddb2a2-dec8-44f2-9505-147dfb5f5cce',
+                value: formatDateForClickUp(endDate),
+                value_options: { time: false }
+            },
+            {
+                id: '503ed757-3941-4624-8667-d8943b3567e1', value: 'Pending'
+            },
+            {
+                id: '6a125369-d189-4f10-a886-a9f3cf23a4d4', value: roomAddress
+            },
+            {
+                id: '520a5802-2944-4acf-887d-49fd83452876', value: roomName
+            }
+        ]
+    };
+
+    try {
+        const clickUpResponse = await createTask('901507270320', clickUpTaskData);
+        const taskId = clickUpResponse.id;
+
+        // Update reservation with task_id
+        const { data: updateData, error: updateError } = await supabase
+            .from('reservation')
+            .update({ task_id: taskId })
+            .eq('id', data);
+
+        if (updateError) {
+            console.error('Error updating reservation with task_id:', updateError);
+            return null;
+        }
+    } catch (error) {
+        console.error('Error creating ClickUp task:', error);
     }
 
     return data;
@@ -472,9 +534,22 @@ export const getReservations = async (): Promise<Reservation[]> => {
 };
 
 export const updateReservationStatus = async (reservationId: number, confirmed: boolean) => {
-    const {data, error} = await supabase
+    const { data: reservationData, error: reservationError } = await supabase
         .from('reservation')
-        .update({confirmed})
+        .select('task_id')
+        .eq('id', reservationId)
+        .single();
+
+    if (reservationError) {
+        console.error('Error fetching reservation:', reservationError);
+        return null;
+    }
+
+    const taskId = reservationData.task_id;
+
+    const { data, error } = await supabase
+        .from('reservation')
+        .update({ confirmed })
         .eq('id', reservationId);
 
     if (error) {
@@ -482,18 +557,44 @@ export const updateReservationStatus = async (reservationId: number, confirmed: 
         return null;
     }
 
+    try {
+        await updateTask(taskId, '503ed757-3941-4624-8667-d8943b3567e1', confirmed ? 'Confirmed' : 'Pending');
+    } catch (error) {
+        console.error('Error updating ClickUp task:', error);
+    }
+
     return data;
 };
 
 export const updateReservationDates = async (reservationId: number, from: string, to: string) => {
-    const {data, error} = await supabase
+    const { data: reservationData, error: reservationError } = await supabase
         .from('reservation')
-        .update({from, to})
+        .select('task_id')
+        .eq('id', reservationId)
+        .single();
+
+    if (reservationError) {
+        console.error('Error fetching reservation:', reservationError);
+        return null;
+    }
+
+    const taskId = reservationData.task_id;
+
+    const { data, error } = await supabase
+        .from('reservation')
+        .update({ from, to })
         .eq('id', reservationId);
 
     if (error) {
         console.error('Error updating reservation dates:', error);
         return null;
+    }
+
+    try {
+        await updateTask(taskId, '86ecdc0f-c56f-4b5b-b222-094e18643189', formatDateForClickUp(new Date(from)));
+        await updateTask(taskId, '9fddb2a2-dec8-44f2-9505-147dfb5f5cce', formatDateForClickUp(new Date(to)));
+    } catch (error) {
+        console.error('Error updating ClickUp task:', error);
     }
 
     return data;

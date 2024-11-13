@@ -109,11 +109,11 @@ const ReservationCard: React.FC<ReservationCardProps> = ({ reservation, roomToBe
                         {updatedReservation.tenant.date_of_birth}
                     </p>
                 </div>
-                <div>
-                    <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">
-                        {updatedReservation.bed ? `Bed ID: ${updatedReservation.bed.id}` : 'No bed assigned'}
-                    </p>
-                </div>
+                {/*<div>*/}
+                {/*    <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">*/}
+                {/*        {updatedReservation.bed ? `Bed ID: ${updatedReservation.bed.id}` : 'No bed assigned'}*/}
+                {/*    </p>*/}
+                {/*</div>*/}
                 {room && (
                     <>
                         <div>

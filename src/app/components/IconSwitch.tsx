@@ -35,7 +35,7 @@ const IconSwitch: React.FC<IconSwitchProps> = ({ activeIndex, onClick }) => {
     return (
         <div className="flex flex-col items-center">
             <h1 className="text-7xl font-normal text-black mb-8 text-center">
-                {activeIndex === 0 ? 'Rooms for boy\'s ' : 'Rooms for girl\'s'}
+                {activeIndex === 0 ? 'Rooms for boys ' : 'Rooms for girls'}
             </h1>
             <div
                 className="rounded-3xl bg-white flex justify-center items-center w-[360px] h-[200px] laptop:w-[450px] laptop:h-[240px]"

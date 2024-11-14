@@ -23,7 +23,7 @@ const Header = () => {
                     </Link>
                 </div>
                 <div className={"text-sm tablet:text-bold font-medium"}>
-                    <Link href="/contacts">
+                    <Link href={`/${dorm}/contacts`}>
                         <div className="text-black cursor-pointer">Contacts</div>
                     </Link>
                 </div>

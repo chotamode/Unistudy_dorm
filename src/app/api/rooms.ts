@@ -3,6 +3,130 @@ import {Reservation} from '@/app/types';
 import {v4 as uuidv4} from 'uuid';
 import {createTask, updateTask} from "@/services/clickupService";
 
+export const changePassword = async (userId: string, oldPassword: string, newPassword: string, confirmPassword: string) => {
+    if (newPassword !== confirmPassword) {
+        return { error: 'New password and confirmation do not match' };
+    }
+
+    // First, verify the old password
+    const { data: user, error: loginError } = await supabase.auth.signInWithPassword({
+        email: userId,
+        password: oldPassword,
+    });
+
+    if (loginError) {
+        console.error('Error verifying old password:', loginError);
+        return { error: 'Invalid old password' };
+    }
+
+    // If old password is correct, update to the new password
+    const { error: updateError } = await supabase.auth.updateUser({
+        password: newPassword,
+    });
+
+    if (updateError) {
+        console.error('Error updating password:', updateError);
+        return { error: 'Error updating password' };
+    }
+
+    return { success: true };
+};
+
+//TODO: Make auth even more secure by using JWT tokens
+export const login = async (email: string, password: string) => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+    });
+
+    if (error) {
+        console.error('Error logging in:', error);
+        return null;
+    }
+
+    return data;
+};
+
+export const isAdmin = async (userId: string): Promise<boolean> => {
+    try {
+        // console.log('Checking if user is admin:', userId);
+        const { data, error } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', userId)
+            .single();
+
+        if (error) {
+            console.error('Error fetching user role:', error);
+            return false;
+        }
+        // console.log('User role:', data.role);
+        return data.role === 'admin';
+    } catch (error) {
+        console.error('Unexpected error:', error);
+        return false;
+    }
+};
+
+export const updateRoomDetails = async (
+    // userId: string,
+    roomId: number, details: Partial<Room>) => {
+    // if (!await isAdmin(userId)) {
+    //     throw new Error('Unauthorized');
+    // }
+
+    const { data, error } = await supabase
+        .from('room')
+        .update(details)
+        .eq('id', roomId);
+
+    if (error) {
+        console.error('Error updating room details:', error);
+        return null;
+    }
+
+    return data;
+};
+
+export const updateReservationStatus = async (
+    // userId: string,
+                                              reservationId: number, confirmed: boolean) => {
+    // if (!await isAdmin(userId)) {
+    //     throw new Error('Unauthorized');
+    // }
+
+    const { data: reservationData, error: reservationError } = await supabase
+        .from('reservation')
+        .select('task_id')
+        .eq('id', reservationId)
+        .single();
+
+    if (reservationError) {
+        console.error('Error fetching reservation:', reservationError);
+        return null;
+    }
+
+    const taskId = reservationData.task_id;
+
+    const { data, error } = await supabase
+        .from('reservation')
+        .update({ confirmed })
+        .eq('id', reservationId);
+
+    if (error) {
+        console.error('Error updating reservation status:', error);
+        return null;
+    }
+
+    try {
+        await updateTask(taskId, '503ed757-3941-4624-8667-d8943b3567e1', confirmed ? 'Confirmed' : 'Pending');
+    } catch (error) {
+        console.error('Error updating ClickUp task:', error);
+    }
+
+    return data;
+};
+
 export const getFirstRoomPhoto = async (roomId: number) => {
     const {data, error} = await supabase
         .from('room')
@@ -289,7 +413,7 @@ export const createReservation = async (
         custom_fields: [
             { id: 'aa36ae54-fbcd-46be-8755-00eea78c0453', value: tenantName },
             { id: '9d9c2929-0935-44ef-b300-ce026881c972', value: tenantSurname },
-            { id: '724b3be8-4c56-4dda-9ff9-b871d262d7a6', value: tenantPhoneNumber },
+            { id: 'e43a8341-3f34-420e-bb1b-d88d378cfd4c', value: tenantPhoneNumber },
             { id: '0f119312-255f-4aa9-a067-264fc64ce888', value: tenantGender },
             { id: '38ae1a4a-2274-4fa5-b7ac-cf01031596ff', value: tenantEmail },
             {
@@ -533,39 +657,6 @@ export const getReservations = async (): Promise<Reservation[]> => {
     });
 };
 
-export const updateReservationStatus = async (reservationId: number, confirmed: boolean) => {
-    const { data: reservationData, error: reservationError } = await supabase
-        .from('reservation')
-        .select('task_id')
-        .eq('id', reservationId)
-        .single();
-
-    if (reservationError) {
-        console.error('Error fetching reservation:', reservationError);
-        return null;
-    }
-
-    const taskId = reservationData.task_id;
-
-    const { data, error } = await supabase
-        .from('reservation')
-        .update({ confirmed })
-        .eq('id', reservationId);
-
-    if (error) {
-        console.error('Error updating reservation status:', error);
-        return null;
-    }
-
-    try {
-        await updateTask(taskId, '503ed757-3941-4624-8667-d8943b3567e1', confirmed ? 'Confirmed' : 'Pending');
-    } catch (error) {
-        console.error('Error updating ClickUp task:', error);
-    }
-
-    return data;
-};
-
 export const updateReservationDates = async (reservationId: number, from: string, to: string) => {
     const { data: reservationData, error: reservationError } = await supabase
         .from('reservation')
@@ -595,20 +686,6 @@ export const updateReservationDates = async (reservationId: number, from: string
         await updateTask(taskId, '9fddb2a2-dec8-44f2-9505-147dfb5f5cce', formatDateForClickUp(new Date(to)));
     } catch (error) {
         console.error('Error updating ClickUp task:', error);
-    }
-
-    return data;
-};
-
-export const updateRoomDetails = async (roomId: number, details: Partial<Room>) => {
-    const {data, error} = await supabase
-        .from('room')
-        .update(details)
-        .eq('id', roomId);
-
-    if (error) {
-        console.error('Error updating room details:', error);
-        return null;
     }
 
     return data;

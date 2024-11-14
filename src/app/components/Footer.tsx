@@ -58,7 +58,7 @@ const Footer = () => {
                 <div className=" flex flex-row w-screen gap-4 flex-wrap justify-between">
 
                     <div className="flex flex-wrap flex-row px-0 max-phone:gap-4 gap-10">
-                        <p> &copy; Copyright 2024. UniStudy </p>
+                        <p> &copy; Copyright 2024. RoomRent </p>
 
 
                         <Link href="/legal/gdpr.pdf" target="_blank" rel="noopener noreferrer">

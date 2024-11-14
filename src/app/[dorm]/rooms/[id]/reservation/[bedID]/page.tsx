@@ -2,21 +2,18 @@
 
 import React, { useState } from 'react';
 import Layout from "@/app/components/Layout";
-import {useParams, useRouter} from "next/navigation";
-import {createReservation} from '@/app/api/rooms';
-import Link from "next/link";
-import {useFormData} from "@/app/context/ReservationContext";
-// import BlueBackground  from "@/app/components/BlueBackground";
+import { useParams, useRouter } from "next/navigation";
+import { createReservation } from '@/app/api/rooms';
+import { useFormData } from "@/app/context/ReservationContext";
 import ReservationBackground from "@/app/components/ReservationBackground";
-
-const phoneRegex = /^\+\d{1,3} \d{3} \d{3} \d{3}$/;
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 
 const FeedbackForm = () => {
     const { bedID, id } = useParams();
     const router = useRouter();
     const today = new Date().toISOString().split('T')[0];
     const [consent, setConsentState] = useState(false);
-    const [phoneError, setPhoneError] = useState('');
 
     const {
         name, surname, phoneNumber, email, gender, dateOfBirth,
@@ -25,6 +22,11 @@ const FeedbackForm = () => {
     } = useFormData();
 
     const [isSubmitted, setIsSubmitted] = useState(false);
+
+    const handlePhoneChange = (value: string, data: any, event: any, formattedValue: string) => {
+        const sanitizedValue = formattedValue.replace(/[()]/g, '');
+        setPhoneNumber(sanitizedValue);
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
@@ -45,14 +47,6 @@ const FeedbackForm = () => {
                 case 'surname':
                     setSurname(value);
                     break;
-                case 'phoneNumber':
-                    setPhoneNumber(value);
-                    if (!phoneRegex.test(value)) {
-                        setPhoneError('Phone number must be in the format +code 111 111 111');
-                    } else {
-                        setPhoneError('');
-                    }
-                    break;
                 case 'email':
                     setEmail(value);
                     break;
@@ -67,10 +61,6 @@ const FeedbackForm = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (phoneError) {
-            console.error('Phone number format is incorrect');
-            return;
-        }
         console.log("Submitting form with data:", { name, surname, phoneNumber, email, gender, dateOfBirth });
 
         try {
@@ -139,17 +129,17 @@ const FeedbackForm = () => {
             <label className="block text-sm font-medium -mb-2 text-white" htmlFor="name">
                 Phone Number<span className="text-red-500">*</span>
             </label>
-            <input
-                type="tel"
-                name="phoneNumber"
-                placeholder="Phone Number"
+            <PhoneInput
+                country={'us'}
                 value={phoneNumber}
-                onChange={handleChange}
-                className="p-2 border rounded-xl w-full h-12"
-                inputMode="text"
-                required
+                onChange={handlePhoneChange}
+                inputProps={{
+                    name: 'phoneNumber',
+                    required: true,
+                    autoFocus: true,
+                }}
+                containerClass="p-2 border rounded-xl w-full h-12"
             />
-            {phoneError && <p className="text-red-500">{phoneError}</p>}
             <label className="block text-sm font-medium -mb-2 text-white" htmlFor="name">
                 Email<span className="text-red-500">*</span>
             </label>
@@ -207,19 +197,15 @@ const FeedbackForm = () => {
     );
 };
 
-
 const Stage3Page = () => {
     return (
         <div className={"relative"}>
             <Layout>
-                {/*<BlueBackground/>*/}
                 <ReservationBackground/>
                 <div className={"flex flex-col laptop:flex-row justify-center items-center h-full laptop:h-screen bg-blue-100 rounded-3xl mx-0 laptop:mx-20 py-16 laptop:py-24 px-7 laptop:px-0 gap-1 laptop:gap-0 pt-6 laptop:pt-0"}>
 
-                    {/* Контейнер с текстом, поверх фона */}
                     <div
                         className={"relative  flex flex-col w-full md:w-full justify-center pb-10 laptop:pb-0 items-center text-white h-full md:bg-transparent "}>
-                        {/*Синий фон для десктопов*/}
                         <div
                             className="hidden md:flex flex-col w-full justify-center items-center text-white bg-bg-stage3 bg-[length:115%_120%] bg-no-repeat h-full bg-left mx-auto">
                         </div>
@@ -230,7 +216,6 @@ const Stage3Page = () => {
                             details for feedback!
                         </h1>
                     </div>
-                    {/* Поля формы для обратной связи */}
                     <div className={"w-full ml-3 laptop:ml-0 ipadmini:w-[80vw] laptop:w-1/2 flex justify-center items-center laptop:items-start z-30"}>
                         <FeedbackForm/>
                     </div>

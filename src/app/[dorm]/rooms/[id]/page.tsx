@@ -50,7 +50,11 @@ const RoomDetails: React.FC = () => {
     const [images, setImages] = useState<string[]>([]);
     const { year, gender } = useFormData();
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
+
 useEffect(() => {
+
     if (id) {
         const fetchRoom = async () => {
             const roomData = await getRoomById(Number(id));
@@ -83,6 +87,26 @@ useEffect(() => {
         fetchImages().then(r => r);
     }
 }, [id, year]);
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (isModalOpen) {
+                if (e.key === 'Escape') {
+                    setIsModalOpen(false);
+                } else if (e.key === 'ArrowRight') {
+                    setSelectedImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+                } else if (e.key === 'ArrowLeft') {
+                    setSelectedImageIndex((prevIndex) =>
+                        (prevIndex - 1 + images.length) % images.length
+                    );
+                }
+            }
+        };
+        document.addEventListener('keydown', handleKeyDown);
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [isModalOpen, images.length]);
 
     if (!room) {
         return <div>Loading...</div>;
@@ -119,7 +143,13 @@ useEffect(() => {
                         showStatus={false}
                     >
                         {images.map((url, index) => (
-                            <div className=" w-[350px] h-[230px] tablet:w-[590px] tablet:h-[520px]" key={index}>
+                            <div className=" cursor-pointer w-[350px] h-[230px] tablet:w-[590px] tablet:h-[520px]"
+                                 key={index}
+                                 onClick={() => {
+                                     setSelectedImageIndex(index);
+                                     setIsModalOpen(true);
+                                 }}
+                            >
                                 <img src={url} alt={`Room image ${index + 1}`} />
                             </div>
                         ))}
@@ -166,6 +196,62 @@ useEffect(() => {
                     {/*</YearGenderProvider>*/}
                 </div>
             </div>
+            {isModalOpen && (
+                <div
+                    className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 flex flex-col items-center justify-center z-50"
+                >
+                    <div
+                        className="relative"
+                    >
+                        <button
+                            className="absolute top-1 right-28 text-white text-5xl"
+                            onClick={() => setIsModalOpen(false)}
+                        >
+                            &times;
+                        </button>
+
+
+                        <img
+                            src={images[selectedImageIndex]}
+                            alt={`Room image ${selectedImageIndex + 1}`}
+                            className="w-[1280px] h-[720px] object-contain"
+                        />
+
+                        <button
+                            className="absolute top-1/2 left-28 transform -translate-y-1/2 text-white text-6xl p-2"
+                            onClick={() =>
+                                setSelectedImageIndex((prevIndex) =>
+                                    (prevIndex - 1 + images.length) % images.length
+                                )
+                            }
+                        >
+                            ‹
+                        </button>
+                        <button
+                            className="absolute top-1/2 right-28 transform -translate-y-1/2 text-white text-6xl p-2"
+                            onClick={() =>
+                                setSelectedImageIndex((prevIndex) => (prevIndex + 1) % images.length)
+                            }
+                        >
+                            ›
+                        </button>
+                    </div>
+
+                    <div className="flex overflow-x-auto mt-4">
+                        {images.map((url, index) => (
+                            <img
+                                key={index}
+                                src={url}
+                                alt={`Thumbnail ${index + 1}`}
+                                className={`w-20 h-20 object-cover mx-1 cursor-pointer ${
+                                    index === selectedImageIndex ? 'border-2 border-blue-500' : ''
+                                }`}
+                                onClick={() => setSelectedImageIndex(index)}
+                            />
+                        ))}
+                    </div>
+                </div>
+            )}
         </Layout>
     );
 };

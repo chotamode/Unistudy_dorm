@@ -198,13 +198,13 @@ useEffect(() => {
             </div>
             {isModalOpen && (
                 <div
-                    className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 flex flex-col items-center justify-center z-50"
+                    className="fixed inset-0 bg-black bg-opacity-80 flex flex-col items-center justify-center z-50"
                 >
                     <div
-                        className="relative"
+                        className="relative max-w-full max-h-full flex flex-col items-center"
                     >
                         <button
-                            className="absolute top-1 right-28 text-white text-5xl"
+                            className="absolute top-1 right-4 text-white text-5xl"
                             onClick={() => setIsModalOpen(false)}
                         >
                             &times;
@@ -214,11 +214,11 @@ useEffect(() => {
                         <img
                             src={images[selectedImageIndex]}
                             alt={`Room image ${selectedImageIndex + 1}`}
-                            className="w-[1280px] h-[720px] object-contain"
+                            className="w-full max-w-3xl h-auto object-contain" // Изменено: Сделано адаптивным
                         />
 
                         <button
-                            className="absolute top-1/2 left-28 transform -translate-y-1/2 text-white text-6xl p-2"
+                            className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white text-6xl p-2"
                             onClick={() =>
                                 setSelectedImageIndex((prevIndex) =>
                                     (prevIndex - 1 + images.length) % images.length
@@ -228,7 +228,7 @@ useEffect(() => {
                             ‹
                         </button>
                         <button
-                            className="absolute top-1/2 right-28 transform -translate-y-1/2 text-white text-6xl p-2"
+                            className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white text-6xl p-2"
                             onClick={() =>
                                 setSelectedImageIndex((prevIndex) => (prevIndex + 1) % images.length)
                             }

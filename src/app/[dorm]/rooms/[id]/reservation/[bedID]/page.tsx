@@ -225,7 +225,7 @@ const Stage3Page = () => {
                             details for feedback!
                         </h1>
                     </div>
-                    {/* Поля формы для обратной связи */}
+                    {/* Поля для обратной связи */}
                     <div className={"w-full ml-3 laptop:ml-0 ipadmini:w-[80vw] laptop:w-1/2 flex justify-center items-center laptop:items-start z-30"}>
                         <FeedbackForm/>
                     </div>

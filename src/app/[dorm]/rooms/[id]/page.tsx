@@ -207,7 +207,7 @@ const RoomDetails: React.FC = () => {
                         className="relative max-w-full max-h-full flex flex-col items-center"
                     >
                         <button
-                            className="absolute top-1 right-4 text-white text-5xl"
+                            className="absolute top-1 right-4 text-black text-5xl"
                             onClick={() => setIsModalOpen(false)}
                         >
                             &times;
@@ -221,7 +221,7 @@ const RoomDetails: React.FC = () => {
                         />
 
                         <button
-                            className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white text-6xl p-2"
+                            className="absolute top-1/2 left-4 transform -translate-y-1/2 text-black text-6xl p-2"
                             onClick={() =>
                                 setSelectedImageIndex((prevIndex) =>
                                     (prevIndex - 1 + images.length) % images.length
@@ -231,7 +231,7 @@ const RoomDetails: React.FC = () => {
                             ‹
                         </button>
                         <button
-                            className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white text-6xl p-2"
+                            className="absolute top-1/2 right-4 transform -translate-y-1/2 text-black text-6xl p-2"
                             onClick={() =>
                                 setSelectedImageIndex((prevIndex) => (prevIndex + 1) % images.length)
                             }

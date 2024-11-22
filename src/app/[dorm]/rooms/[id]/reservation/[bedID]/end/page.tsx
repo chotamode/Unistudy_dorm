@@ -83,7 +83,7 @@ const Stage4Page = () => {
                 </div>
 
                 {/*кнопка скачать документы*/}
-                <p className={"underline mb-5 zfold:text-sm"} onClick={generatePDF}>Downloading documents</p>
+                <p className={"underline cursor-pointer mb-5 zfold:text-sm"} onClick={generatePDF}>Downloading documents</p>
 
                 {/*кнопка назад*/}
                 <div className={"pr-0 laptop:pr-0 zfold:text-xs phonese:text-base"}>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Plan } from '@/app/components/Plan';
 import { Reservation, Bed, Room } from '@/app/types';
-import { getRoomById, updateReservationDates, updateReservationStatus } from '@/app/api/rooms';
+import { getRoomById, updateReservationDates, updateReservationStatus, deleteReservation } from '@/app/api/rooms';
 
 interface ReservationCardProps {
     reservation: Reservation;
@@ -41,6 +41,11 @@ const ReservationCard: React.FC<ReservationCardProps> = ({ reservation, roomToBe
             setReservation({ ...reservation, confirmed });
         };
 
+        const handleDeleteReservation = async () => {
+            await deleteReservation(reservation.id);
+            // Optionally, you can add logic to remove the reservation from the UI
+        };
+
         return {
             reservation,
             newFromDate,
@@ -50,6 +55,7 @@ const ReservationCard: React.FC<ReservationCardProps> = ({ reservation, roomToBe
             setNewToDate,
             saveDates,
             handleUpdateReservation,
+            handleDeleteReservation,
         };
     };
 
@@ -62,11 +68,21 @@ const ReservationCard: React.FC<ReservationCardProps> = ({ reservation, roomToBe
         setNewToDate,
         saveDates,
         handleUpdateReservation,
+        handleDeleteReservation,
     } = useReservation(reservation);
 
     return (
         <div key={updatedReservation.id}
-             className=" mb-4 w-[740px] flex flex-col gap-5 items-center rounded-admin-large h-fit pb-14 bg-[#EAF1F9] p-4  border ">
+             className="mb-4 w-[740px] flex flex-col gap-5 items-center rounded-admin-large h-fit pb-14 bg-[#EAF1F9] p-4 border relative">
+{/*<p>*/}
+{/*    {!reservation.deleted ? 'Deleted' : 'not del'}*/}
+{/*</p>*/}
+            <button
+                onClick={handleDeleteReservation}
+                className="absolute top-24 right-24 text-red-500"
+            >
+                &#x2715;
+            </button>
 
             <div className="w-[132px] mt-6 h-[132px]">
                 <Image
@@ -109,11 +125,6 @@ const ReservationCard: React.FC<ReservationCardProps> = ({ reservation, roomToBe
                         {updatedReservation.tenant.date_of_birth}
                     </p>
                 </div>
-                {/*<div>*/}
-                {/*    <p className="border-[#32648B] text-xs rounded-xl flex pl-5 justify-start items-center h-10 border-[1px]">*/}
-                {/*        {updatedReservation.bed ? `Bed ID: ${updatedReservation.bed.id}` : 'No bed assigned'}*/}
-                {/*    </p>*/}
-                {/*</div>*/}
                 {room && (
                     <>
                         <div>
@@ -130,7 +141,7 @@ const ReservationCard: React.FC<ReservationCardProps> = ({ reservation, roomToBe
                 )}
             </div>
 
-            <div className="flex flex-row justify-between my-5 items-center  w-[540px]">
+            <div className="flex flex-row justify-between my-5 items-center w-[540px]">
                 <div className="flex flex-col gap-4">
                     Reservation period
                     <div className="bg-[#FFFFFF] rounded-2xl mr-4 p-2">
@@ -178,13 +189,13 @@ const ReservationCard: React.FC<ReservationCardProps> = ({ reservation, roomToBe
             <div className="flex flex-row flex-wrap justify-center w-[540px] gap-4">
                 <button
                     onClick={() => handleUpdateReservation(true)}
-                    className="bg-[#0F478D]  w-64 h-16 text-white px-4 py-2 rounded-xl mr-2"
+                    className="bg-[#0F478D] w-64 h-16 text-white px-4 py-2 rounded-xl mr-2"
                 >
                     Confirm reservation
                 </button>
                 <button
                     onClick={() => handleUpdateReservation(false)}
-                    className="bg-[#0F478D] w-64 h-16 text-white px-4 py-2 rounded-xl"
+                    className="bg-[#0F478D] w-64 h-16 text-white px-14 py-2 rounded-xl"
                 >
                     Cancel reservation
                 </button>

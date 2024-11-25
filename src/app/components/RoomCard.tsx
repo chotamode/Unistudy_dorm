@@ -63,7 +63,13 @@ const RoomCard: React.FC<RoomCardProps> = ({
                         className="px-4 text-white filter z-10 relative font-semibold w-full h-full flex flex-col justify-end pb-6">
                         <h2 className="text-xxl font-black mb-2">{name}</h2>
                         <div className="text-adxs my-4">
-                            <p>{floor} | {apart_name}</p>
+                            {/*<p>{floor} | {apart_name}</p>*/}
+                            <p>
+                            {/*    if dorm === "sokolovna" then dorm = "sokol" else dorm = dorm*/}
+                                {dorm === "sokolovna" ? "Affordable private dorm in one of the safest parts of prague" : ""}
+                                {dorm === "castle" ? "10 minutes from prague castle and schwarzenberg palace" : ""}
+                                {dorm === "kamycka" ? "Sizes of apartments are from 18 to 56 square meters" : ""}
+                            </p>
                             <p>{gender === 'both' ? 'For boys and girls' : `For ${gender === 'male' ? 'boys' : 'girls'} only`}</p>
                         </div>
                         <Button2 className="h-10 w-40 text-xs">Book now</Button2>

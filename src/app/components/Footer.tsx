@@ -39,8 +39,8 @@ const Footer = () => {
 
                     <div className={"flex flex-col gap-3 lg:mt-0 mt-3 md:mt-10  md:w-auto w-60 text-sm lg:text-xl xl:text-xxl text-start xl:text-center font-medium"}>
                         <div className= " ">
-                            <p className=" w-60 ">+420 775 095 879</p>
-                            <p className=" w-60 ">+420 773 037 688</p>
+                            <p className=" w-60 ">+420 724 309 967</p>
+                            <p className=" w-60 ">+420 725 356 427</p>
                         </div>
                         <div className={"flex flex-row justify-start md:justify-end gap-x-2"}>
                            <div className="relative  w-6 h-6  lg:w-10 lg:h-10 xl:w-12 xl:h-12">

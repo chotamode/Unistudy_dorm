@@ -24,8 +24,8 @@ const contacts = () => {
                             <Image src={phoneIcon} alt="Phone icon"/>
                         </div>
                         <div className={"flex flex-col text-adxs tablet:text-lg justify-center items-center"}>
-                            <p>+420 775 095 879</p>
-                            <p>+420 773 037 688</p>
+                            <p>+420 724 309 967</p>
+                            <p>+420 725 356 427</p>
                             <p>Telegram</p>
                         </div>
                     </div>

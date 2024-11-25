@@ -88,6 +88,20 @@ export const updateRoomDetails = async (
     return data;
 };
 
+export const deleteReservation = async (reservationId: number) => {
+    const { data, error } = await supabase
+        .from('reservation')
+        .update({ deleted: true })
+        .eq('id', reservationId);
+
+    if (error) {
+        console.error('Error deleting reservation:', error);
+        return null;
+    }
+
+    return data;
+};
+
 export const updateReservationStatus = async (
     // userId: string,
                                               reservationId: number, confirmed: boolean) => {
@@ -622,7 +636,8 @@ export const getReservations = async (): Promise<Reservation[]> => {
                 phone,
                 gender,
                 date_of_birth
-            )
+            ),
+            deleted
         `);
 
     if (error) {
@@ -652,7 +667,8 @@ export const getReservations = async (): Promise<Reservation[]> => {
                 phone: reservation.tenant.phone,
                 gender: reservation.tenant.gender,
                 date_of_birth: reservation.tenant.date_of_birth
-            }
+            },
+            deleted: reservation.deleted
         };
     });
 };

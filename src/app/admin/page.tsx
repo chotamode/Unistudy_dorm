@@ -253,7 +253,7 @@ const AdminPage = () => {
                         {activeTab === 'reservations' && (
                             <div className="flex flex-row flex-wrap gap-5 ">
                                 <div className="flex justify-center flex-wrap mt-10 gap-5">
-                                    {reservations.map(reservation => (
+                                    {reservations.filter(reservation => reservation.deleted).map(reservation => (
                                         <ReservationCard
                                             key={reservation.id}
                                             reservation={reservation}

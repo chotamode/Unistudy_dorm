@@ -24,6 +24,7 @@ export interface Reservation {
     to: string;
     confirmed: boolean;
     bed?: Bed; // Make bed optional
+    deleted: boolean; // Make deleted optional
 }
 
 export type Bed = {

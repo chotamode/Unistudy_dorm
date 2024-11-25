@@ -79,7 +79,7 @@ const MainPage = () => {
                 />
                 <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center">
                     <h1 className="text-1xl phonexs:text-xl phone:text-2xl md:text-5xl lg:text-[4.2rem] xl:text-[5rem] font-bold text-black p-4 sm:p-12 md:p-16 rounded-xl text-center">
-                        <div className="text-white">Student housing rentals in Prague</div>
+                        <div className="text-white">Student housing in Prague</div>
                         <div className="text-[#A6D0FF]"> — easy and convenient!</div>
                         <p className="hidden sm:block text-white mt-2 text-xs sm:text-xs md:text-sm lg:text-xl font-light sm:w-2/3 md:w-1/2 mx-auto">
                             Three building reconstructed based on student&apos;s needs. Dormitory style accommodatoin, residences and apartments. Single, double, triple options and more!

@@ -22,7 +22,7 @@ const BedCard: React.FC<BedCardProps> = ({ bed, year, roomId }) => {
         const fetchAvailability = async () => {
             const beds = await getBedsByRoomId(roomId, year);
             const currentBed = beds.find(b => b.id === bed.id);
-            console.log("currentBed", currentBed);
+            // console.log("currentBed", currentBed);
             if (currentBed) {
                 const freePeriod = currentBed.availability;
                 setAvailability(freePeriod ? freePeriod : 'Not available');

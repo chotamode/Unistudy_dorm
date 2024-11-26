@@ -82,9 +82,9 @@ const FeedbackForm = () => {
                 reservationTo
             );
 
-            router.push(`../reservation/${bedID}/end`);
-
             console.log("Reservation result:", result);
+
+            router.push(`../reservation/${bedID}/end`);
 
             if (result) {
                 setIsSubmitted(true);

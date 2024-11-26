@@ -94,6 +94,24 @@ export const deleteReservation = async (reservationId: number) => {
         .update({ deleted: true })
         .eq('id', reservationId);
 
+    // set deleted field in clickup task
+    const { data: reservationData, error: reservationError } = await supabase
+        .from('reservation')
+        .select('task_id')
+        .eq('id', reservationId)
+        .single();
+
+    if (reservationError) {
+        console.error('Error fetching reservation:', reservationError);
+        return null;
+    }
+
+    try{
+        await updateTask(reservationData.task_id, '9325aca3-2a7f-4f60-aaec-c0e2126ce312', true);
+    } catch (error) {
+        console.error('Error updating ClickUp task', error);
+    }
+
     if (error) {
         console.error('Error deleting reservation:', error);
         return null;
@@ -136,6 +154,39 @@ export const updateReservationStatus = async (
         await updateTask(taskId, '503ed757-3941-4624-8667-d8943b3567e1', confirmed ? 'Confirmed' : 'Pending');
     } catch (error) {
         console.error('Error updating ClickUp task:', error);
+    }
+
+    // send reservation to Make
+    const reservation = await supabase
+        .from('reservation')
+        .select(`
+            id,
+            from,
+            to,
+            confirmed,
+            bed:bed (
+                id,
+                room,
+                cost
+            ),
+            tenant:reserved_by (
+                id,
+                name,
+                surname,
+                email,
+                phone,
+                gender,
+                date_of_birth
+            )
+        `)
+        .eq('id', reservationId)
+        .single();
+
+
+    if (confirmed) {
+        await sendDataToMake(makeWebHooks.approved, reservation);
+    }else{
+        await sendDataToMake(makeWebHooks.rejected, reservation);
     }
 
     return data;
@@ -395,7 +446,9 @@ export const createReservation = async (
 
     console.log('Reservation from:', reservationFrom, 'to:', reservationTo);
 
+    console.log('room id:', roomId, 'bed id:', bedId);
     const roomType = await getRoomType(roomId, currentYear);
+    console.log('Room type:', roomType);
 
     if (roomType !== 'both' && roomType !== tenantGender) {
         console.error('Error: This room is reserved for a different gender during the specified period.');
@@ -414,6 +467,8 @@ export const createReservation = async (
         reservation_from: reservationFrom,
         reservation_to: reservationTo
     });
+
+    console.log('Reservation data:', data);
 
     if (error) {
         console.error('Error creating reservation:', error);
@@ -453,10 +508,13 @@ export const createReservation = async (
             },
             {
                 id: '520a5802-2944-4acf-887d-49fd83452876', value: roomName
+            },
+            {
+                id: '9325aca3-2a7f-4f60-aaec-c0e2126ce312', value: false
             }
         ]
     };
-
+    console.log('ClickUp task data:', clickUpTaskData);
     try {
         const clickUpResponse = await createTask('901507270320', clickUpTaskData);
         const taskId = clickUpResponse.id;
@@ -475,6 +533,39 @@ export const createReservation = async (
         console.error('Error creating ClickUp task:', error);
     }
 
+    // send reservation to Make
+    // also contain information about tenant
+    // and room name
+    const reservation = await supabase
+        .from('reservation')
+        .select(`
+            id,
+            from,
+            to,
+            confirmed,
+            bed:bed (
+                id,
+                room,
+                cost
+            ),
+            tenant:reserved_by (
+                id,
+                name,
+                surname,
+                email,
+                phone,
+                gender,
+                date_of_birth
+            )
+        `)
+        .eq('id', data)
+        .single();
+
+    console.log('Sending reservation to Make:', reservation);
+
+    await sendDataToMake(makeWebHooks.new, reservation);
+
+    console.log('Reservation created successfully');
     return data;
 };
 
@@ -496,6 +587,7 @@ export const getRoomDetailsByRoomId = async (roomId: number) => {
 // if at least one bed has confirmed reservation in that period by female, return 'female'
 // if there are no confirmed reservations in that period, return 'both'
 export const getRoomType = async (roomId: number, year: number) => {
+    console.log('Getting room type for room:', roomId, 'year:', year);
     const beds = await getBedsByRoomId(roomId, year);
 
     const startDate = new Date(year, 8, 1);
@@ -505,11 +597,12 @@ export const getRoomType = async (roomId: number, year: number) => {
     const activeReservations = beds.flatMap(bed =>
         getActiveReservationsForPeriod(bed.reservations, period)
     );
+    console.log('active reservations:', activeReservations);
 
     const hasMale = activeReservations.some(reservation => reservation.gender === 'male');
     const hasFemale = activeReservations.some(reservation => reservation.gender === 'female');
 
-    console.log('room active reservations:', activeReservations);
+    // console.log('room active reservations:', activeReservations);
     if (hasMale) {
         return 'male';
     } else if (hasFemale) {
@@ -721,3 +814,28 @@ export const updateBedCost = async (bedId: number, cost: number) => {
     return data;
 };
 
+const makeWebHooks = {
+    new: "https://hook.eu2.make.com/wndwoobx84sxn7qhw35m6lerj413qccg",
+    approved: "https://hook.eu2.make.com/ttj93yp3wgzerzwaukliqffioq2i5ufk",
+    rejected: "https://hook.eu2.make.com/dm17nej3nsogx8487wiakz898ooxcjkl"
+}
+
+const sendDataToMake = async (url: string, data: any) => {
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Allow-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Actions': 'POST, OPTIONS, GET'
+            },
+            body: JSON.stringify(data)
+        });
+        console.log('Data sent to Make:', data);
+        console.log('Response:', response);
+        return response;
+    } catch (error) {
+        console.error('Error sending data to Make:', error);
+        return null;
+    }
+}

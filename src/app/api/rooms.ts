@@ -91,20 +91,22 @@ export const updateRoomDetails = async (
 export const deleteReservation = async (reservationId: number) => {
     const { data, error } = await supabase
         .from('reservation')
-        .update({ deleted: true })
+        .update({ deleted: true,
+            confirmed: false
+        })
         .eq('id', reservationId);
 
     // set deleted field in clickup task
-    const { data: reservationData, error: reservationError } = await supabase
-        .from('reservation')
-        .select('task_id')
-        .eq('id', reservationId)
-        .single();
-
-    if (reservationError) {
-        console.error('Error fetching reservation:', reservationError);
-        return null;
-    }
+    // const { data: reservationData, error: reservationError } = await supabase
+    //     .from('reservation')
+    //     .select('task_id')
+    //     .eq('id', reservationId)
+    //     .single();
+    //
+    // if (reservationError) {
+    //     console.error('Error fetching reservation:', reservationError);
+    //     return null;
+    // }
 
     // try{
     //     await updateTask(reservationData.task_id, '9325aca3-2a7f-4f60-aaec-c0e2126ce312', true);

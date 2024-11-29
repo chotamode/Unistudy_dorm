@@ -10,6 +10,8 @@ interface ReservationCardProps {
 }
 
 const ReservationCard: React.FC<ReservationCardProps> = ({ reservation, roomToBedsMap }) => {
+    const [isDeleted, setIsDeleted] = useState(false);
+
     const useReservation = (initialReservation: Reservation) => {
         const [reservation, setReservation] = useState(initialReservation);
         const [newFromDate, setNewFromDate] = useState(initialReservation.from);
@@ -43,7 +45,7 @@ const ReservationCard: React.FC<ReservationCardProps> = ({ reservation, roomToBe
 
         const handleDeleteReservation = async () => {
             await deleteReservation(reservation.id);
-            // Optionally, you can add logic to remove the reservation from the UI
+            setIsDeleted(true);
         };
 
         return {
@@ -71,12 +73,13 @@ const ReservationCard: React.FC<ReservationCardProps> = ({ reservation, roomToBe
         handleDeleteReservation,
     } = useReservation(reservation);
 
+    if (isDeleted) {
+        return null;
+    }
+
     return (
         <div key={updatedReservation.id}
              className="mb-4 w-[740px] flex flex-col gap-5 items-center rounded-admin-large h-fit pb-14 bg-[#EAF1F9] p-4 border relative">
-{/*<p>*/}
-{/*    {!reservation.deleted ? 'Deleted' : 'not del'}*/}
-{/*</p>*/}
             <button
                 onClick={handleDeleteReservation}
                 className="absolute top-24 right-24 text-red-500"

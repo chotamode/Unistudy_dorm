@@ -122,12 +122,7 @@ export const deleteReservation = async (reservationId: number) => {
     return data;
 };
 
-export const updateReservationStatus = async (
-    // userId: string,
-                                              reservationId: number, confirmed: boolean) => {
-    // if (!await isAdmin(userId)) {
-    //     throw new Error('Unauthorized');
-    // }
+export const updateReservationStatus = async (reservationId: number, confirmed: boolean) => {
 
     const { data: reservationData, error: reservationError } = await supabase
         .from('reservation')
@@ -139,8 +134,6 @@ export const updateReservationStatus = async (
         console.error('Error fetching reservation:', reservationError);
         return null;
     }
-
-    const taskId = reservationData.task_id;
 
     const { data, error } = await supabase
         .from('reservation')
@@ -824,7 +817,7 @@ const makeWebHooks = {
 
 const sendDataToMake = async (url: string, data: any) => {
 
-    if (!makeWebHooks.new || !makeWebHooks.approved || !makeWebHooks.rejected) {
+    if (!url) {
         throw new Error('One or more Make webhook URLs are not defined in the environment variables.');
     }
 

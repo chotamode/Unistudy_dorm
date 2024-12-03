@@ -410,167 +410,6 @@ const formatDateForClickUp = (date: Date): number => {
     return date.getTime();
 };
 
-export const createReservation = async (
-    tenantName: string,
-    tenantSurname: string,
-    tenantPhoneNumber: string,
-    tenantGender: string,
-    tenantEmail: string,
-    tenantDateOfBirth: string,
-    roomId: number,
-    bedId: number,
-    from?: Date,
-    to?: Date
-) => {
-    console.log('Creating reservation from:', from, 'to:', to);
-
-    if (!from || !to) {
-        console.error('Error: Please provide both from and to dates.');
-        return { error: 'Please provide both from and to dates.' };
-    }
-
-    const today = new Date();
-    const currentYear = today.getFullYear();
-    const nextYear = currentYear + 1;
-
-    let startDate = from ? from : new Date(currentYear, 8, 1);
-    const endDate = to ? to : new Date(nextYear, 7, 30);
-
-    console.log('Start date:', startDate, 'End date:', endDate);
-
-    const reservationFrom = startDate.toDateString();
-    const reservationTo = endDate.toDateString();
-
-    // get room address and name
-    const room = await getRoomById(roomId);
-    const roomAddress = room.address;
-    const roomName = room.name;
-
-    console.log('Reservation from:', reservationFrom, 'to:', reservationTo);
-
-    console.log('room id:', roomId, 'bed id:', bedId);
-    const roomType = await getRoomType(roomId, currentYear);
-    console.log('Room type:', roomType);
-
-    if (roomType !== 'both' && roomType !== tenantGender) {
-        console.error('Error: This room is reserved for a different gender during the specified period.');
-        return { error: 'This room is reserved for a different gender during the specified period.' };
-    }
-
-    const { data, error } = await supabase.rpc('create_reservation2', {
-        tenant_name: tenantName,
-        tenant_surname: tenantSurname,
-        tenant_phone_number: tenantPhoneNumber,
-        tenant_gender: tenantGender,
-        tenant_email: tenantEmail,
-        tenant_date_of_birth: tenantDateOfBirth,
-        room_id: roomId,
-        bed_id: bedId,
-        reservation_from: reservationFrom,
-        reservation_to: reservationTo
-    });
-
-    console.log('Reservation data:', data);
-
-    if (error) {
-        console.error('Error creating reservation:', error);
-        return null;
-    }
-
-    // Create ClickUp task
-    // const clickUpTaskData = {
-    //     // name is id of reservation
-    //     name: `${data}`,
-    //     custom_fields: [
-    //         { id: 'aa36ae54-fbcd-46be-8755-00eea78c0453', value: tenantName },
-    //         { id: '9d9c2929-0935-44ef-b300-ce026881c972', value: tenantSurname },
-    //         { id: 'e43a8341-3f34-420e-bb1b-d88d378cfd4c', value: tenantPhoneNumber },
-    //         { id: '0f119312-255f-4aa9-a067-264fc64ce888', value: tenantGender },
-    //         { id: '38ae1a4a-2274-4fa5-b7ac-cf01031596ff', value: tenantEmail },
-    //         {
-    //             id: 'c06ef56d-c695-4953-9940-e5a8ffa2ed1d',
-    //             value: formatDateForClickUp(new Date(tenantDateOfBirth)),
-    //             value_options: { time: false }
-    //         },
-    //         {
-    //             id: '86ecdc0f-c56f-4b5b-b222-094e18643189',
-    //             value: formatDateForClickUp(startDate),
-    //             value_options: { time: false }
-    //         },
-    //         {
-    //             id: '9fddb2a2-dec8-44f2-9505-147dfb5f5cce',
-    //             value: formatDateForClickUp(endDate),
-    //             value_options: { time: false }
-    //         },
-    //         {
-    //             id: '503ed757-3941-4624-8667-d8943b3567e1', value: 'Pending'
-    //         },
-    //         {
-    //             id: '6a125369-d189-4f10-a886-a9f3cf23a4d4', value: roomAddress
-    //         },
-    //         {
-    //             id: '520a5802-2944-4acf-887d-49fd83452876', value: roomName
-    //         },
-    //         {
-    //             id: '9325aca3-2a7f-4f60-aaec-c0e2126ce312', value: false
-    //         }
-    //     ]
-    // };
-    // console.log('ClickUp task data:', clickUpTaskData);
-    // try {
-    //     const clickUpResponse = await createTask('901507270320', clickUpTaskData);
-    //     const taskId = clickUpResponse.id;
-    //
-    //     // Update reservation with task_id
-    //     const { data: updateData, error: updateError } = await supabase
-    //         .from('reservation')
-    //         .update({ task_id: taskId })
-    //         .eq('id', data);
-    //
-    //     if (updateError) {
-    //         console.error('Error updating reservation with task_id:', updateError);
-    //         return null;
-    //     }
-    // } catch (error) {
-    //     console.error('Error creating ClickUp task:', error);
-    // }
-
-    // send reservation to Make
-    // also contain information about tenant
-    // and room name
-    const reservation = await supabase
-        .from('reservation')
-        .select(`
-            id,
-            from,
-            to,
-            confirmed,
-            bed:bed (
-                id,
-                room,
-                cost
-            ),
-            tenant:reserved_by (
-                id,
-                name,
-                surname,
-                email,
-                phone,
-                gender,
-                date_of_birth
-            )
-        `)
-        .eq('id', data)
-        .single();
-
-    console.log('Sending reservation to Make:', reservation);
-
-    await sendDataToMake(makeWebHooks.new, reservation);
-
-    console.log('Reservation created successfully');
-    return data;
-};
-
 export const getRoomDetailsByRoomId = async (roomId: number) => {
     const {data, error} = await supabase
         .from('room_details')
@@ -816,13 +655,179 @@ export const updateBedCost = async (bedId: number, cost: number) => {
     return data;
 };
 
+export const createReservation = async (
+    tenantName: string,
+    tenantSurname: string,
+    tenantPhoneNumber: string,
+    tenantGender: string,
+    tenantEmail: string,
+    tenantDateOfBirth: string,
+    roomId: number,
+    bedId: number,
+    from?: Date,
+    to?: Date
+) => {
+    console.log('Creating reservation from:', from, 'to:', to);
+
+    if (!from || !to) {
+        console.error('Error: Please provide both from and to dates.');
+        return { error: 'Please provide both from and to dates.' };
+    }
+
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const nextYear = currentYear + 1;
+
+    let startDate = from ? from : new Date(currentYear, 8, 1);
+    const endDate = to ? to : new Date(nextYear, 7, 30);
+
+    console.log('Start date:', startDate, 'End date:', endDate);
+
+    const reservationFrom = startDate.toDateString();
+    const reservationTo = endDate.toDateString();
+
+    // get room address and name
+    const room = await getRoomById(roomId);
+    const roomAddress = room.address;
+    const roomName = room.name;
+
+    console.log('Reservation from:', reservationFrom, 'to:', reservationTo);
+
+    console.log('room id:', roomId, 'bed id:', bedId);
+    const roomType = await getRoomType(roomId, currentYear);
+    console.log('Room type:', roomType);
+
+    if (roomType !== 'both' && roomType !== tenantGender) {
+        console.error('Error: This room is reserved for a different gender during the specified period.');
+        return { error: 'This room is reserved for a different gender during the specified period.' };
+    }
+
+    const { data, error } = await supabase.rpc('create_reservation2', {
+        tenant_name: tenantName,
+        tenant_surname: tenantSurname,
+        tenant_phone_number: tenantPhoneNumber,
+        tenant_gender: tenantGender,
+        tenant_email: tenantEmail,
+        tenant_date_of_birth: tenantDateOfBirth,
+        room_id: roomId,
+        bed_id: bedId,
+        reservation_from: reservationFrom,
+        reservation_to: reservationTo
+    });
+
+    console.log('Reservation data:', data);
+
+    if (error) {
+        console.error('Error creating reservation:', error);
+        return null;
+    }
+
+    // Create ClickUp task
+    // const clickUpTaskData = {
+    //     // name is id of reservation
+    //     name: `${data}`,
+    //     custom_fields: [
+    //         { id: 'aa36ae54-fbcd-46be-8755-00eea78c0453', value: tenantName },
+    //         { id: '9d9c2929-0935-44ef-b300-ce026881c972', value: tenantSurname },
+    //         { id: 'e43a8341-3f34-420e-bb1b-d88d378cfd4c', value: tenantPhoneNumber },
+    //         { id: '0f119312-255f-4aa9-a067-264fc64ce888', value: tenantGender },
+    //         { id: '38ae1a4a-2274-4fa5-b7ac-cf01031596ff', value: tenantEmail },
+    //         {
+    //             id: 'c06ef56d-c695-4953-9940-e5a8ffa2ed1d',
+    //             value: formatDateForClickUp(new Date(tenantDateOfBirth)),
+    //             value_options: { time: false }
+    //         },
+    //         {
+    //             id: '86ecdc0f-c56f-4b5b-b222-094e18643189',
+    //             value: formatDateForClickUp(startDate),
+    //             value_options: { time: false }
+    //         },
+    //         {
+    //             id: '9fddb2a2-dec8-44f2-9505-147dfb5f5cce',
+    //             value: formatDateForClickUp(endDate),
+    //             value_options: { time: false }
+    //         },
+    //         {
+    //             id: '503ed757-3941-4624-8667-d8943b3567e1', value: 'Pending'
+    //         },
+    //         {
+    //             id: '6a125369-d189-4f10-a886-a9f3cf23a4d4', value: roomAddress
+    //         },
+    //         {
+    //             id: '520a5802-2944-4acf-887d-49fd83452876', value: roomName
+    //         },
+    //         {
+    //             id: '9325aca3-2a7f-4f60-aaec-c0e2126ce312', value: false
+    //         }
+    //     ]
+    // };
+    // console.log('ClickUp task data:', clickUpTaskData);
+    // try {
+    //     const clickUpResponse = await createTask('901507270320', clickUpTaskData);
+    //     const taskId = clickUpResponse.id;
+    //
+    //     // Update reservation with task_id
+    //     const { data: updateData, error: updateError } = await supabase
+    //         .from('reservation')
+    //         .update({ task_id: taskId })
+    //         .eq('id', data);
+    //
+    //     if (updateError) {
+    //         console.error('Error updating reservation with task_id:', updateError);
+    //         return null;
+    //     }
+    // } catch (error) {
+    //     console.error('Error creating ClickUp task:', error);
+    // }
+
+    // send reservation to Make
+    // also contain information about tenant
+    // and room name
+    const reservation = await supabase
+        .from('reservation')
+        .select(`
+            id,
+            from,
+            to,
+            confirmed,
+            bed:bed (
+                id,
+                room,
+                cost
+            ),
+            tenant:reserved_by (
+                id,
+                name,
+                surname,
+                email,
+                phone,
+                gender,
+                date_of_birth
+            )
+        `)
+        .eq('id', data)
+        .single();
+
+    console.log('Sending reservation to Make:', reservation);
+
+    await sendDataToMake(makeWebHooks.new, reservation);
+
+    console.log('Reservation created successfully');
+    return data;
+};
+
 const makeWebHooks = {
-    new: "https://hook.eu2.make.com/wndwoobx84sxn7qhw35m6lerj413qccg",
-    approved: "https://hook.eu2.make.com/ttj93yp3wgzerzwaukliqffioq2i5ufk",
-    rejected: "https://hook.eu2.make.com/dm17nej3nsogx8487wiakz898ooxcjkl"
-}
+    new: process.env.MAKE_WEBHOOK_NEW || '',
+    approved: process.env.MAKE_WEBHOOK_APPROVED || '',
+    rejected: process.env.MAKE_WEBHOOK_REJECTED || ''
+};
 
 const sendDataToMake = async (url: string, data: any) => {
+
+    if (!makeWebHooks.new || !makeWebHooks.approved || !makeWebHooks.rejected) {
+        throw new Error('One or more Make webhook URLs are not defined in the environment variables.');
+    }
+
     try {
         const response = await fetch(url, {
             method: 'POST',

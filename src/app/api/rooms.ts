@@ -3,6 +3,12 @@ import {Reservation} from '@/app/types';
 import {v4 as uuidv4} from 'uuid';
 import {createTask, updateTask} from "@/services/clickupService";
 
+const makeWebHooks = {
+    new: process.env.MAKE_WEBHOOK_NEW,
+    approved: process.env.MAKE_WEBHOOK_APPROVED,
+    rejected: process.env.MAKE_WEBHOOK_REJECTED
+};
+
 export const changePassword = async (userId: string, oldPassword: string, newPassword: string, confirmPassword: string) => {
     if (newPassword !== confirmPassword) {
         return { error: 'New password and confirmation do not match' };
@@ -117,71 +123,6 @@ export const deleteReservation = async (reservationId: number) => {
     if (error) {
         console.error('Error deleting reservation:', error);
         return null;
-    }
-
-    return data;
-};
-
-export const updateReservationStatus = async (reservationId: number, confirmed: boolean) => {
-
-    const { data: reservationData, error: reservationError } = await supabase
-        .from('reservation')
-        .select('task_id')
-        .eq('id', reservationId)
-        .single();
-
-    if (reservationError) {
-        console.error('Error fetching reservation:', reservationError);
-        return null;
-    }
-
-    const { data, error } = await supabase
-        .from('reservation')
-        .update({ confirmed })
-        .eq('id', reservationId);
-
-    if (error) {
-        console.error('Error updating reservation status:', error);
-        return null;
-    }
-
-    // try {
-    //     await updateTask(taskId, '503ed757-3941-4624-8667-d8943b3567e1', confirmed ? 'Confirmed' : 'Pending');
-    // } catch (error) {
-    //     console.error('Error updating ClickUp task:', error);
-    // }
-
-    // send reservation to Make
-    const reservation = await supabase
-        .from('reservation')
-        .select(`
-            id,
-            from,
-            to,
-            confirmed,
-            bed:bed (
-                id,
-                room,
-                cost
-            ),
-            tenant:reserved_by (
-                id,
-                name,
-                surname,
-                email,
-                phone,
-                gender,
-                date_of_birth
-            )
-        `)
-        .eq('id', reservationId)
-        .single();
-
-
-    if (confirmed) {
-        await sendDataToMake(makeWebHooks.approved, reservation);
-    }else{
-        await sendDataToMake(makeWebHooks.rejected, reservation);
     }
 
     return data;
@@ -802,23 +743,83 @@ export const createReservation = async (
         .single();
 
     console.log('Sending reservation to Make:', reservation);
+    console.log('Webhook:', makeWebHooks.new);
 
-    await sendDataToMake(makeWebHooks.new, reservation);
+    await sendDataToMake(reservation, makeWebHooks.new);
 
     console.log('Reservation created successfully');
     return data;
 };
 
-const makeWebHooks = {
-    new: process.env.MAKE_WEBHOOK_NEW || '',
-    approved: process.env.MAKE_WEBHOOK_APPROVED || '',
-    rejected: process.env.MAKE_WEBHOOK_REJECTED || ''
+export const updateReservationStatus = async (reservationId: number, confirmed: boolean) => {
+
+    const { data: reservationData, error: reservationError } = await supabase
+        .from('reservation')
+        .select('task_id')
+        .eq('id', reservationId)
+        .single();
+
+    if (reservationError) {
+        console.error('Error fetching reservation:', reservationError);
+        return null;
+    }
+
+    const { data, error } = await supabase
+        .from('reservation')
+        .update({ confirmed })
+        .eq('id', reservationId);
+
+    if (error) {
+        console.error('Error updating reservation status:', error);
+        return null;
+    }
+
+    // try {
+    //     await updateTask(taskId, '503ed757-3941-4624-8667-d8943b3567e1', confirmed ? 'Confirmed' : 'Pending');
+    // } catch (error) {
+    //     console.error('Error updating ClickUp task:', error);
+    // }
+
+    // send reservation to Make
+    const reservation = await supabase
+        .from('reservation')
+        .select(`
+            id,
+            from,
+            to,
+            confirmed,
+            bed:bed (
+                id,
+                room,
+                cost
+            ),
+            tenant:reserved_by (
+                id,
+                name,
+                surname,
+                email,
+                phone,
+                gender,
+                date_of_birth
+            )
+        `)
+        .eq('id', reservationId)
+        .single();
+
+
+    if (confirmed) {
+        await sendDataToMake(reservation, makeWebHooks.approved);
+    }else{
+        await sendDataToMake(reservation, makeWebHooks.rejected);
+    }
+
+    return data;
 };
 
-const sendDataToMake = async (url: string, data: any) => {
-
-    if (!url) {
-        throw new Error('One or more Make webhook URLs are not defined in the environment variables.');
+const sendDataToMake = async (data: any, url?: string) => {
+    console.log("URL" + url)
+    if(!url){
+        throw new Error('URL is not provided');
     }
 
     try {

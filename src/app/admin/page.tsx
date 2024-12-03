@@ -23,6 +23,7 @@ import { Bed as TypesBed } from '@/app/types';
 import freeBed from '../../assets/beds/free_bed.svg';
 import deleteimg from '../../assets/delete.svg';
 import ReservationCard from "@/app/components/ReservationCard";
+import ReservationTable from "@/app/components/ReservationTable";
 
 const AdminPage = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -138,10 +139,14 @@ const AdminPage = () => {
     };
 
     const handleEditRoom = async (room: Room) => {
-        setEditRoomId(room.id);
-        setNewRoomDetails(room);
-        const bedsData = await getBedsByRoomId(room.id);
-        setBeds(bedsData);
+        if (editRoomId === room.id) {
+            setEditRoomId(null);
+        } else {
+            setEditRoomId(room.id);
+            setNewRoomDetails(room);
+            const bedsData = await getBedsByRoomId(room.id);
+            setBeds(bedsData);
+        }
     };
 
     const handleSaveRoomDetails = async () => {
@@ -251,17 +256,20 @@ const AdminPage = () => {
                             </button>
                         </div>
                         {activeTab === 'reservations' && (
-                            <div className="flex flex-row flex-wrap gap-5 ">
-                                <div className="flex justify-center flex-wrap mt-10 gap-5">
-                                    {reservations.filter(reservation => !reservation.deleted).map(reservation => (
-                                        <ReservationCard
-                                            key={reservation.id}
-                                            reservation={reservation}
-                                            roomToBedsMap={roomToBedsMap}
-                                        />
-                                    ))}
-                                </div>
+                            <div className="mt-10">
+                                <ReservationTable reservations={reservations} roomToBedsMap={roomToBedsMap}/>
                             </div>
+                            // <div className="flex flex-row flex-wrap gap-5 ">
+                            //     <div className="flex justify-center flex-wrap mt-10 gap-5">
+                            //         {reservations.filter(reservation => !reservation.deleted).map(reservation => (
+                            //             <ReservationCard
+                            //                 key={reservation.id}
+                            //                 reservation={reservation}
+                            //                 roomToBedsMap={roomToBedsMap}
+                            //             />
+                            //         ))}
+                            //     </div>
+                            // </div>
                         )}
                         {activeTab === 'rooms' && (
                             <div>

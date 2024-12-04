@@ -67,6 +67,13 @@ const AdminPage = () => {
         roomsByDormitory['castle'].reverse();
     }
 
+    const updateReservationInState = (updatedReservation: Reservation) => {
+        setReservations(prevReservations =>
+            prevReservations.map(reservation =>
+                reservation.id === updatedReservation.id ? updatedReservation : reservation
+            )
+        );
+    };
 
     const handleChangePassword = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -279,17 +286,6 @@ const AdminPage = () => {
                             <div className="mt-10">
                                 <ReservationTable reservations={reservations} roomToBedsMap={roomToBedsMap}/>
                             </div>
-                            // <div className="flex flex-row flex-wrap gap-5 ">
-                            //     <div className="flex justify-center flex-wrap mt-10 gap-5">
-                            //         {reservations.filter(reservation => !reservation.deleted).map(reservation => (
-                            //             <ReservationCard
-                            //                 key={reservation.id}
-                            //                 reservation={reservation}
-                            //                 roomToBedsMap={roomToBedsMap}
-                            //             />
-                            //         ))}
-                            //     </div>
-                            // </div>
                         )}
                         {activeTab === 'rooms' && (
                             <div>
@@ -550,42 +546,15 @@ const RoomListItem: React.FC<RoomListItemProps> = ({
                         <h3 className="text-xl font-bold mt-4">Beds</h3>
                         <div className="flex flex-row gap-4">
                             {beds.map(bed => (
-                                <div key={bed.id} className="mb-2 w-42 flex flex-col gap-1 p-2 border rounded">
-                                    <Image
-                                        src={freeBed}
-                                        alt="Bed"
-                                        objectFit="cover"
-                                        width={75}
-                                        height={75}
-                                    />
-                                    <p><strong>Bed ID:</strong> {bed.id}</p>
-                                    <p><strong>Cost:</strong> {bed.cost}</p>
-                                    <button
-                                        onClick={() => handleEditBed(bed)}
-                                        className="bg-[#0F478D] text-white px-4 py-2 rounded-xl"
-                                    >
-                                        Edit Bed
-                                    </button>
-                                    {editBedId === bed.id && (
-                                        <div className="mt-2">
-                                            <label>
-                                                Cost:
-                                                <input
-                                                    type="number"
-                                                    value={newBedCost ?? ''}
-                                                    onChange={(e) => setNewBedCost(Number(e.target.value))}
-                                                    className="ml-2 p-2 border rounded"
-                                                />
-                                            </label>
-                                            <button
-                                                onClick={handleSaveBedDetails}
-                                                className="bg-[#0F478D] mt-3 text-white px-4 py-2 rounded-xl ml-4"
-                                            >
-                                                Save
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
+                                <BedItem
+                                    key={bed.id}
+                                    bed={bed}
+                                    editBedId={editBedId}
+                                    newBedCost={newBedCost}
+                                    handleEditBed={handleEditBed}
+                                    handleSaveBedDetails={handleSaveBedDetails}
+                                    setNewBedCost={setNewBedCost}
+                                />
                             ))}
                         </div>
                     </div>
@@ -594,3 +563,78 @@ const RoomListItem: React.FC<RoomListItemProps> = ({
         </li>
     );
 };
+
+interface BedItemProps {
+    bed: {
+        id: number;
+        cost: number;
+        room: number;
+    };
+    editBedId: number | null;
+    newBedCost: number | null;
+    handleEditBed: (bed: any) => void;
+    handleSaveBedDetails: () => void;
+    setNewBedCost: (cost: number) => void;
+}
+
+const BedItem: React.FC<BedItemProps> = ({
+                                             bed,
+                                             editBedId,
+                                             newBedCost,
+                                             handleEditBed,
+                                             handleSaveBedDetails,
+                                             setNewBedCost,
+                                         }) => {
+    const [isHovered, setIsHovered] = useState(false);
+
+    return (
+        <div key={bed.id} className="mb-2 w-42 flex flex-col gap-1 p-2 border rounded">
+            <div
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className="relative"
+            >
+                <Image
+                    src={freeBed}
+                    alt="Bed"
+                    objectFit="cover"
+                    width={75}
+                    height={75}
+                />
+                {isHovered && (
+                    <div className="absolute w-80 h-60 mt-2 bg-white border-2 border-gray-800 shadow-lg z-10" style={{ left: '-20rem' }}>
+                        <Plan beds={[bed]} takenBedId={bed.id} id={bed.room} />
+                    </div>
+                )}
+            </div>
+            <p><strong>Bed ID:</strong> {bed.id}</p>
+            <p><strong>Cost:</strong> {bed.cost}</p>
+            <button
+                onClick={() => handleEditBed(bed)}
+                className="bg-[#0F478D] text-white px-4 py-2 rounded-xl"
+            >
+                Edit Bed
+            </button>
+            {editBedId === bed.id && (
+                <div className="mt-2">
+                    <label>
+                        Cost:
+                        <input
+                            type="number"
+                            value={newBedCost ?? ''}
+                            onChange={(e) => setNewBedCost(Number(e.target.value))}
+                            className="ml-2 p-2 border rounded"
+                        />
+                    </label>
+                    <button
+                        onClick={handleSaveBedDetails}
+                        className="bg-[#0F478D] mt-3 text-white px-4 py-2 rounded-xl ml-4"
+                    >
+                        Save
+                    </button>
+                </div>
+            )}
+        </div>
+    );
+};
+

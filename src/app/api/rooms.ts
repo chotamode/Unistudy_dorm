@@ -288,7 +288,8 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
                 to,
                 confirmed,
                 reserved_by
-            )
+            ),
+            dorm
         `)
         .eq('room', roomId);
 
@@ -304,7 +305,9 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
             cost: bed.cost,
             occupied: false,
             availability: undefined,
-            reservations: [] // Ensure reservations property is always defined
+            reservations: [],
+            dorm: bed.dorm
+            // Ensure reservations property is always defined
         }));
     }
 
@@ -333,7 +336,8 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
             occupied,
             availability: freePeriod.freeDays < 30 ? undefined :
                 `${freePeriod.from.toLocaleDateString('en-GB')} - ${freePeriod.to.toLocaleDateString('en-GB')}`,
-            reservations // Ensure reservations property is included
+            reservations,
+            dorm: bed.dorm
         };
     }));
 
@@ -484,7 +488,7 @@ export const checkBedAvailability = async (bedId: number, from: Date, to: Date) 
 };
 
 export const getReservations = async (): Promise<Reservation[]> => {
-    const {data, error} = await supabase
+    const { data, error } = await supabase
         .from('reservation')
         .select(`
             id,
@@ -493,8 +497,13 @@ export const getReservations = async (): Promise<Reservation[]> => {
             confirmed,
             bed:bed (
                 id,
-                room,
-                cost
+                cost,
+                room:room (
+                    id,
+                    dorm,
+                    address,
+                    name
+                )
             ),
             tenant:reserved_by (
                 id,
@@ -506,7 +515,8 @@ export const getReservations = async (): Promise<Reservation[]> => {
                 date_of_birth
             ),
             deleted
-        `);
+        `)
+        .eq('deleted', false);
 
     if (error) {
         console.error('Error fetching reservations:', error);
@@ -516,8 +526,9 @@ export const getReservations = async (): Promise<Reservation[]> => {
     return data.map((reservation: any) => {
         const bed = reservation.bed ? {
             id: reservation.bed.id,
-            room: reservation.bed.room,
-            cost: reservation.bed.cost
+            room: reservation.bed.room.id,
+            cost: reservation.bed.cost,
+            dorm: reservation.bed.room.dorm,
         } : undefined;
 
         return {

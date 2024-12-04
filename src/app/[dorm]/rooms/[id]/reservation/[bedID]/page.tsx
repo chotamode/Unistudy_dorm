@@ -193,7 +193,7 @@ const FeedbackForm = () => {
                     className="mr-2 w-5 h-5 rounded-full border-2 border-white bg-transparent cursor-pointer"
                     required
                 />
-                I agree to data processing
+                I agree to data processing<span className="text-red-500">*</span>
             </label>
             <button type="submit" className="hidden md:block p-2 bg-blue-500 text-white rounded">Confirm</button>
             <button type="submit" className="md:hidden p-2 w-1/2 bg-white text-black font-bold rounded-3xl">Confirm

@@ -40,7 +40,7 @@ export type Bed = {
         confirmed: boolean;
         gender: string;
     }[];
-    dorm: string; // Add the dorm property
+    dorm?: string; // Add the dorm property
 };
 
 export type Room = {

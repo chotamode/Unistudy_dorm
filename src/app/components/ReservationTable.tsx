@@ -140,29 +140,57 @@ const ReservationRow: React.FC<{ initialReservation: Reservation, roomToBedsMap:
 };
 
 const ReservationTable: React.FC<ReservationTableProps> = ({ reservations, roomToBedsMap }) => {
+    const [selectedDormitory, setSelectedDormitory] = useState<string | null>(null);
+
+    const dormitories = ["castle", "sokol", "kamycka"];
+
+    const filteredReservations = selectedDormitory
+        ? reservations.filter(reservation => reservation.bed?.dorm === selectedDormitory && !reservation.deleted)
+        : reservations.filter(reservation => !reservation.deleted);
+
+
     return (
-        <table className="min-w-full bg-white text-xs sm:text-sm md:text-base">
-            <thead>
-                <tr>
-                    <th className="py-0">Actions</th>
-                    <th className="py-0">Name</th>
-                    <th className="py-0">Phone</th>
-                    <th className="py-0">Email</th>
-                    <th className="py-0">Gender</th>
-                    <th className="py-0">Date of Birth</th>
-                    <th className="py-0">Room Name</th>
-                    <th className="py-0">Room Address</th>
-                    <th className="py-0" colSpan={2}>Reservation Period</th>
-                    <th className="py-0">Status</th>
-                    <th className="py-0">Plan</th>
-                </tr>
-            </thead>
-            <tbody className="text-xs sm:text-sm md:text-base">
-                {reservations.filter(reservation => !reservation.deleted).map((initialReservation) => (
-                    <ReservationRow key={initialReservation.id} initialReservation={initialReservation} roomToBedsMap={roomToBedsMap} />
+        <div>
+            <div className="flex space-x-4 mb-4">
+                {dormitories.map(dormitory => (
+                    <button
+                        key={dormitory}
+                        onClick={() => setSelectedDormitory(dormitory)}
+                        className={`px-4 py-2 rounded ${selectedDormitory === dormitory ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                    >
+                        {dormitory}
+                    </button>
                 ))}
-            </tbody>
-        </table>
+                <button
+                    onClick={() => setSelectedDormitory(null)}
+                    className={`px-4 py-2 rounded ${selectedDormitory === null ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                >
+                    All
+                </button>
+            </div>
+            <table className="min-w-full bg-white text-xs sm:text-sm md:text-base">
+                <thead>
+                    <tr>
+                        <th className="py-0">Actions</th>
+                        <th className="py-0">Name</th>
+                        <th className="py-0">Phone</th>
+                        <th className="py-0">Email</th>
+                        <th className="py-0">Gender</th>
+                        <th className="py-0">Date of Birth</th>
+                        <th className="py-0">Room Name</th>
+                        <th className="py-0">Room Address</th>
+                        <th className="py-0" colSpan={2}>Reservation Period</th>
+                        <th className="py-0">Status</th>
+                        <th className="py-0">Plan</th>
+                    </tr>
+                </thead>
+                <tbody className="text-xs sm:text-sm md:text-base">
+                    {filteredReservations.filter(reservation => !reservation.deleted).map((initialReservation) => (
+                        <ReservationRow key={initialReservation.id} initialReservation={initialReservation} roomToBedsMap={roomToBedsMap} />
+                    ))}
+                </tbody>
+            </table>
+        </div>
     );
 };
 

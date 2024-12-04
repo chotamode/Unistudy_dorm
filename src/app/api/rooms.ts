@@ -288,8 +288,7 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
                 to,
                 confirmed,
                 reserved_by
-            ),
-            dorm
+            )
         `)
         .eq('room', roomId);
 
@@ -306,7 +305,7 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
             occupied: false,
             availability: undefined,
             reservations: [],
-            dorm: bed.dorm
+            // dorm: bed.dorm
             // Ensure reservations property is always defined
         }));
     }
@@ -337,7 +336,7 @@ export const getBedsByRoomId = async (roomId: number, year?: number) => {
             availability: freePeriod.freeDays < 30 ? undefined :
                 `${freePeriod.from.toLocaleDateString('en-GB')} - ${freePeriod.to.toLocaleDateString('en-GB')}`,
             reservations,
-            dorm: bed.dorm
+            // dorm: bed.dorm
         };
     }));
 

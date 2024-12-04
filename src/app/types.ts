@@ -44,4 +44,5 @@ export type Room = {
     mini_description: string;
     area: number;
     floor: number;
+    dorm: string;
 };

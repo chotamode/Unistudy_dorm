@@ -141,7 +141,7 @@ const ReservationRow: React.FC<{ initialReservation: Reservation, roomToBedsMap:
 
 const ReservationTable: React.FC<ReservationTableProps> = ({ reservations, roomToBedsMap }) => {
     return (
-        <table className="min-w-full bg-white">
+        <table className="min-w-full bg-white text-xs sm:text-sm md:text-base">
             <thead>
                 <tr>
                     <th className="py-0">Actions</th>
@@ -157,7 +157,7 @@ const ReservationTable: React.FC<ReservationTableProps> = ({ reservations, roomT
                     <th className="py-0">Plan</th>
                 </tr>
             </thead>
-            <tbody className="text-s">
+            <tbody className="text-xs sm:text-sm md:text-base">
                 {reservations.filter(reservation => !reservation.deleted).map((initialReservation) => (
                     <ReservationRow key={initialReservation.id} initialReservation={initialReservation} roomToBedsMap={roomToBedsMap} />
                 ))}

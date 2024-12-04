@@ -24,13 +24,23 @@ export interface Reservation {
     to: string;
     confirmed: boolean;
     bed?: Bed; // Make bed optional
-    deleted: boolean; // Make deleted optional
+    deleted?: boolean; // Make deleted optional
+    room?: Room; // Add the room property
 }
 
 export type Bed = {
-    cost: number;
     id: number;
     room: number;
+    cost: number;
+    occupied?: boolean;
+    availability?: string;
+    reservations?: {
+        from: Date;
+        to: Date;
+        confirmed: boolean;
+        gender: string;
+    }[];
+    dorm?: string; // Add the dorm property
 };
 
 export type Room = {

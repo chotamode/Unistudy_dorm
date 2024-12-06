@@ -546,6 +546,7 @@ export const getReservations = async (): Promise<Reservation[]> => {
                 gender: reservation.tenant.gender,
                 date_of_birth: reservation.tenant.date_of_birth
             },
+            room_name: reservation.bed ? reservation.bed.room.name : null,
             deleted: reservation.deleted
         };
     });
@@ -849,4 +850,18 @@ const sendDataToMake = async (data: any, url?: string) => {
         console.error('Error sending data to Make:', error);
         return null;
     }
+}
+
+export const getAllRoomNamesByDorm = async (dorm: string) => {
+    const { data, error } = await supabase
+        .from('room')
+        .select('name')
+        .eq('dorm', dorm);
+
+    if (error) {
+        console.error('Error fetching room names:', error);
+        return [];
+    }
+
+    return data;
 }

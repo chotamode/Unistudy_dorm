@@ -26,6 +26,7 @@ export interface Reservation {
     bed?: Bed; // Make bed optional
     deleted?: boolean; // Make deleted optional
     room?: Room; // Add the room property
+    room_name?: string; // Add the room_name property
 }
 
 export type Bed = {

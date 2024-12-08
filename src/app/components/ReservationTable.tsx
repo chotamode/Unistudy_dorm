@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Reservation, Bed, Room } from '@/app/types';
-import { getRoomById, updateReservationDates, updateReservationStatus, deleteReservation } from '@/app/api/rooms';
+import { getRoomById, updateReservationDates, updateReservationStatus, deleteReservation, getAllRoomNamesByDorm } from '@/app/api/rooms';
 import { Plan } from '@/app/components/Plan';
 
 interface ReservationTableProps {
@@ -141,13 +141,31 @@ const ReservationRow: React.FC<{ initialReservation: Reservation, roomToBedsMap:
 
 const ReservationTable: React.FC<ReservationTableProps> = ({ reservations, roomToBedsMap }) => {
     const [selectedDormitory, setSelectedDormitory] = useState<string | null>(null);
+    const [selectedGender, setSelectedGender] = useState<string | null>(null);
+    const [roomNames, setRoomNames] = useState<string[]>([]);
+    const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchRoomNames = async () => {
+            if (selectedDormitory) {
+                const names = await getAllRoomNamesByDorm(selectedDormitory);
+                setRoomNames(names.map(room => room.name));
+            } else {
+                setRoomNames([]);
+            }
+        };
+        fetchRoomNames();
+    }, [selectedDormitory]);
 
     const dormitories = ["castle", "sokol", "kamycka"];
+    const genders = ["male", "female"];
 
-    const filteredReservations = selectedDormitory
-        ? reservations.filter(reservation => reservation.bed?.dorm === selectedDormitory && !reservation.deleted)
-        : reservations.filter(reservation => !reservation.deleted);
-
+    const filteredReservations = reservations.filter(reservation => {
+        const matchesDormitory = selectedDormitory ? reservation.bed?.dorm === selectedDormitory : true;
+        const matchesGender = selectedGender ? reservation.tenant.gender === selectedGender : true;
+        const matchesRoom = selectedRoom ? reservation.room_name === selectedRoom : true;
+        return matchesDormitory && matchesGender && matchesRoom && !reservation.deleted;
+    });
 
     return (
         <div>
@@ -168,6 +186,34 @@ const ReservationTable: React.FC<ReservationTableProps> = ({ reservations, roomT
                     All
                 </button>
             </div>
+            <div className="flex space-x-4 mb-4">
+                {genders.map(gender => (
+                    <button
+                        key={gender}
+                        onClick={() => setSelectedGender(gender)}
+                        className={`px-4 py-2 rounded ${selectedGender === gender ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                    >
+                        {gender}
+                    </button>
+                ))}
+                <button
+                    onClick={() => setSelectedGender(null)}
+                    className={`px-4 py-2 rounded ${selectedGender === null ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                >
+                    All
+                </button>
+            </div>
+            <div className="flex space-x-4 mb-4">
+                <select
+                    onChange={(e) => setSelectedRoom(e.target.value)}
+                    className="px-4 py-2 rounded bg-gray-200"
+                >
+                    <option value="">All Rooms</option>
+                    {roomNames.map(room => (
+                        <option key={room} value={room}>{room}</option>
+                    ))}
+                </select>
+            </div>
             <table className="min-w-full bg-white text-xs sm:text-sm md:text-base">
                 <thead>
                     <tr>
@@ -185,7 +231,7 @@ const ReservationTable: React.FC<ReservationTableProps> = ({ reservations, roomT
                     </tr>
                 </thead>
                 <tbody className="text-xs sm:text-sm md:text-base">
-                    {filteredReservations.filter(reservation => !reservation.deleted).map((initialReservation) => (
+                    {filteredReservations.map((initialReservation) => (
                         <ReservationRow key={initialReservation.id} initialReservation={initialReservation} roomToBedsMap={roomToBedsMap} />
                     ))}
                 </tbody>

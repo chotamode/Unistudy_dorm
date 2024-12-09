@@ -47,13 +47,14 @@ const MainPage = () => {
                 rooms.map(async (room) => {
                     const isAvailable = await getRoomAvailability(room.id, year);
                     const matchesGender = room.roomType === gender || room.roomType === 'both';
-                    // if dorm === "sokolovna" then dorm = "sokol" else dorm = dorm
                     const matchesDorm = dorm === "sokolovna" ? room.dorm === "sokol" : room.dorm === dorm;
-                    return matchesGender && isAvailable && matchesDorm
-                        ? room : null;
+                    return matchesGender && isAvailable && matchesDorm ? room : null;
                 })
             );
-            setFilteredRooms(filtered.filter(room => room !== null) as Room[]);
+            const sortedFilteredRooms = filtered
+                .filter(room => room !== null)
+                .sort((a, b) => a!.name.localeCompare(b!.name));
+            setFilteredRooms(sortedFilteredRooms as Room[]);
         };
         filterRooms();
     }, [rooms, gender, year]);

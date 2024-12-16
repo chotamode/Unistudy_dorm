@@ -6,7 +6,8 @@ interface YearSwitchProps {
 }
 
 const YearSwitch: React.FC<YearSwitchProps> = ({ activeIndex, onClick }) => {
-    const currentYear = new Date().getFullYear();
+    const today = new Date();
+    const currentYear = today.getMonth() >= 8 ? today.getFullYear() : today.getFullYear() - 1;
     const nextYear = currentYear + 1;
     const [positions, setPositions] = useState<string[]>(['0rem', '0rem']);
     const buttonRefs = useRef<HTMLButtonElement[]>([]);

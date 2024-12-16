@@ -14,6 +14,7 @@ const useReservation = (initialReservation: Reservation) => {
     const [newToDate, setNewToDate] = React.useState(initialReservation.to);
     const [room, setRoom] = React.useState<Room | null>(null);
 
+
     React.useEffect(() => {
         setNewFromDate(initialReservation.from);
         setNewToDate(initialReservation.to);
@@ -144,12 +145,14 @@ const ReservationTable: React.FC<ReservationTableProps> = ({ reservations, roomT
     const [selectedGender, setSelectedGender] = useState<string | null>(null);
     const [roomNames, setRoomNames] = useState<string[]>([]);
     const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
+    const [phoneSearch, setPhoneSearch] = useState<string>('');
 
     useEffect(() => {
         const fetchRoomNames = async () => {
             if (selectedDormitory) {
                 const names = await getAllRoomNamesByDorm(selectedDormitory);
-                setRoomNames(names.map(room => room.name));
+                const sortedNames = names.map(room => room.name).sort((a, b) => a.localeCompare(b));
+                setRoomNames(sortedNames);
             } else {
                 setRoomNames([]);
             }
@@ -160,15 +163,46 @@ const ReservationTable: React.FC<ReservationTableProps> = ({ reservations, roomT
     const dormitories = ["castle", "sokol", "kamycka"];
     const genders = ["male", "female"];
 
+    const [selectedYear, setSelectedYear] = useState<number | null>(null);
+
     const filteredReservations = reservations.filter(reservation => {
         const matchesDormitory = selectedDormitory ? reservation.bed?.dorm === selectedDormitory : true;
         const matchesGender = selectedGender ? reservation.tenant.gender === selectedGender : true;
         const matchesRoom = selectedRoom ? reservation.room_name === selectedRoom : true;
-        return matchesDormitory && matchesGender && matchesRoom && !reservation.deleted;
+
+        const reservationFrom = new Date(reservation.from);
+        const reservationTo = new Date(reservation.to);
+        const yearStart = selectedYear ? new Date(selectedYear, 8, 1) : null; // 1 сентября выбранного года
+        const yearEnd = selectedYear ? new Date(selectedYear + 1, 8, 1) : null; // 1 сентября следующего года
+
+        const matchesYear = selectedYear && yearStart && yearEnd
+            ? (reservationFrom < yearEnd && reservationTo >= yearStart)
+            : true;
+
+const escapeRegExp = (string: string) => {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+};
+
+const phoneRegex = new RegExp(`^\\+?${escapeRegExp(phoneSearch)}`);
+const matchesPhone = phoneSearch ? phoneRegex.test(reservation.tenant.phone) : true;
+
+        return matchesDormitory && matchesGender && matchesRoom && matchesYear && matchesPhone && !reservation.deleted;
     });
 
     return (
         <div>
+            <div className="flex space-x-4 mb-4">
+                <select
+                    value={selectedYear ?? ''}
+                    onChange={(e) => setSelectedYear(Number(e.target.value))}
+                    className="px-4 py-2 rounded bg-gray-200"
+                >
+                    <option value="">Select Year</option>
+                    {Array.from({length: 11}, (_, i) => 2024 + i).map(year => (
+                        <option key={year} value={year}>{year}</option>
+                    ))}
+                </select>
+            </div>
             <div className="flex space-x-4 mb-4">
                 {dormitories.map(dormitory => (
                     <button
@@ -214,26 +248,36 @@ const ReservationTable: React.FC<ReservationTableProps> = ({ reservations, roomT
                     ))}
                 </select>
             </div>
+            <div className="flex space-x-4 mb-4">
+                <input
+                    type="text"
+                    value={phoneSearch}
+                    onChange={(e) => setPhoneSearch(e.target.value)}
+                    placeholder="Search by phone"
+                    className="px-4 py-2 rounded bg-gray-200"
+                />
+            </div>
             <table className="min-w-full bg-white text-xs sm:text-sm md:text-base">
                 <thead>
-                    <tr>
-                        <th className="py-0">Actions</th>
-                        <th className="py-0">Name</th>
-                        <th className="py-0">Phone</th>
-                        <th className="py-0">Email</th>
-                        <th className="py-0">Gender</th>
-                        <th className="py-0">Date of Birth</th>
-                        <th className="py-0">Room Name</th>
-                        <th className="py-0">Room Address</th>
-                        <th className="py-0" colSpan={2}>Reservation Period</th>
-                        <th className="py-0">Status</th>
-                        <th className="py-0">Plan</th>
-                    </tr>
+                <tr>
+                    <th className="py-0">Actions</th>
+                    <th className="py-0">Name</th>
+                    <th className="py-0">Phone</th>
+                    <th className="py-0">Email</th>
+                    <th className="py-0">Gender</th>
+                    <th className="py-0">Date of Birth</th>
+                    <th className="py-0">Room Name</th>
+                    <th className="py-0">Room Address</th>
+                    <th className="py-0" colSpan={2}>Reservation Period</th>
+                    <th className="py-0">Status</th>
+                    <th className="py-0">Plan</th>
+                </tr>
                 </thead>
                 <tbody className="text-xs sm:text-sm md:text-base">
-                    {filteredReservations.map((initialReservation) => (
-                        <ReservationRow key={initialReservation.id} initialReservation={initialReservation} roomToBedsMap={roomToBedsMap} />
-                    ))}
+                {filteredReservations.map((initialReservation) => (
+                    <ReservationRow key={initialReservation.id} initialReservation={initialReservation}
+                                    roomToBedsMap={roomToBedsMap}/>
+                ))}
                 </tbody>
             </table>
         </div>

@@ -145,6 +145,7 @@ const ReservationTable: React.FC<ReservationTableProps> = ({ reservations, roomT
     const [selectedGender, setSelectedGender] = useState<string | null>(null);
     const [roomNames, setRoomNames] = useState<string[]>([]);
     const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
+    const [phoneSearch, setPhoneSearch] = useState<string>('');
 
     useEffect(() => {
         const fetchRoomNames = async () => {
@@ -162,7 +163,7 @@ const ReservationTable: React.FC<ReservationTableProps> = ({ reservations, roomT
     const dormitories = ["castle", "sokol", "kamycka"];
     const genders = ["male", "female"];
 
-const [selectedYear, setSelectedYear] = useState<number | null>(null);
+    const [selectedYear, setSelectedYear] = useState<number | null>(null);
 
     const filteredReservations = reservations.filter(reservation => {
         const matchesDormitory = selectedDormitory ? reservation.bed?.dorm === selectedDormitory : true;
@@ -178,7 +179,14 @@ const [selectedYear, setSelectedYear] = useState<number | null>(null);
             ? (reservationFrom < yearEnd && reservationTo >= yearStart)
             : true;
 
-        return matchesDormitory && matchesGender && matchesRoom && matchesYear && !reservation.deleted;
+const escapeRegExp = (string: string) => {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+};
+
+const phoneRegex = new RegExp(`^\\+?${escapeRegExp(phoneSearch)}`);
+const matchesPhone = phoneSearch ? phoneRegex.test(reservation.tenant.phone) : true;
+
+        return matchesDormitory && matchesGender && matchesRoom && matchesYear && matchesPhone && !reservation.deleted;
     });
 
     return (
@@ -239,6 +247,15 @@ const [selectedYear, setSelectedYear] = useState<number | null>(null);
                         <option key={room} value={room}>{room}</option>
                     ))}
                 </select>
+            </div>
+            <div className="flex space-x-4 mb-4">
+                <input
+                    type="text"
+                    value={phoneSearch}
+                    onChange={(e) => setPhoneSearch(e.target.value)}
+                    placeholder="Search by phone"
+                    className="px-4 py-2 rounded bg-gray-200"
+                />
             </div>
             <table className="min-w-full bg-white text-xs sm:text-sm md:text-base">
                 <thead>

@@ -48,6 +48,7 @@ import freeBed from "@/assets/beds/free_bed.svg";
 import Link from "next/link";
 import Button2 from "@/app/components/Button2";
 import {useFormData, ReservationContextProvider} from '@/app/context/ReservationContext';
+import { getRoomById } from '@/app/api/rooms.ts';
 
 export interface Bed {
     id: number;
@@ -68,7 +69,7 @@ interface PlanProps {
     id?: number;
 }
 
-const plansMapping: { [key: string]: string } = {
+export const plansMapping: { [key: string]: string } = {
 
     //sokol plans
 
@@ -329,6 +330,16 @@ export const Plan: React.FC<PlanProps> = ({
 
     const {year, gender, setReservationFrom, setReservationTo} = useFormData();
 
+    const [roomName, setRoomName] = useState<string>('');
+
+    useEffect(() => {
+        const fetchRoomName = async () => {
+            const room = await getRoomById(Number(id));
+            setRoomName(room?.name || 'Room');
+        };
+        fetchRoomName();
+    }, [id]);
+
     const params = useParams();
     if (id === '1') {
         id = params.id as string;
@@ -428,64 +439,61 @@ export const Plan: React.FC<PlanProps> = ({
     }, []);
 
     return (
-
         <div className="relative w-full h-full">
-            <svg ref={svgRef} className="absolute inset-0 w-full h-full" viewBox="0 0 100 100"
-                 preserveAspectRatio="xMidYMid meet">
-                <image href={planImage.src} width="100%" height="100%"/>
+            <svg ref={svgRef} className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+                <image href={planImage.src} width="100%" height="100%" />
+                <text x="2" y="5" fontSize="4" fill="red" fontWeight={"bold"}>
+                    {roomName}
+                </text>
                 {bedsForPlan.map((bed) => (
-                    <image
-                        key={bed.id}
-                        href={bed.occupied || takenBedId === bed.id
-                            ? (bed.horizontal ? occupiedHorizontalBed.src : occupiedBed.src)
-                            : (selectedBed?.id === bed.id && !takenBedId
-                                ? (bed.horizontal ? chosenHorizontalBed.src : chosenBed.src)
-                                : (bed.horizontal ? freeHorizontalBed.src : freeBed.src))}
-                        x={bed.x}
-                        y={bed.y}
-                        width={bed.plan === 'small'
-                            ? (bed.horizontal ? 8 : 16)
-                            : (bed.horizontal ? 10 : 20)}
-
-                        height={bed.plan === 'small'
-                            ? (bed.horizontal ? 16 : 8)
-                            : (bed.horizontal ? 20 : 10)}
-                        onClick={() => handleBedClick(bed)}
-                        className="cursor-pointer"
-                    />
+                    <g key={bed.id}>
+                        <image
+                            href={bed.occupied || takenBedId === bed.id
+                                ? (bed.horizontal ? occupiedHorizontalBed.src : occupiedBed.src)
+                                : (selectedBed?.id === bed.id && !takenBedId
+                                    ? (bed.horizontal ? chosenHorizontalBed.src : chosenBed.src)
+                                    : (bed.horizontal ? freeHorizontalBed.src : freeBed.src))}
+                            x={bed.x}
+                            y={bed.y}
+                            width={bed.plan === 'small'
+                                ? (bed.horizontal ? 8 : 16)
+                                : (bed.horizontal ? 10 : 20)}
+                            height={bed.plan === 'small'
+                                ? (bed.horizontal ? 16 : 8)
+                                : (bed.horizontal ? 20 : 10)}
+                            onClick={() => handleBedClick(bed)}
+                            className="cursor-pointer"
+                        />
+                        <text x={bed.x} y={bed.y + (bed.horizontal ? 18 : 10)} fontSize="5" fill="red" fontWeight="bold">
+                            ID: {bed.id}
+                        </text>
+                    </g>
                 ))}
-
             </svg>
-            {selectedBed && showMessage && !takenBedId &&
-                (
-                    <div ref={messageRef}
-                         className="absolute  bg-white w-[23rem] z-50  rounded-2xl shadow-2xl p-5  laptop:p-8 flex flex-col gap-1 laptop:gap-3 items-center left-1/2 md:left-auto transform -translate-x-1/2"
-                         style={
-                             isMobile
-                                 ? {bottom: '-15rem', left: '50%', transform: 'translateX(-50%)'}
-                                 : getMessagePosition()
-                         }>
-
-                        <p className={"text-xl ipadmini:text-2xl laptop:text-3xl font-normal text-center"}>
-                            The bed is free!
-                        </p>
-
-                        <p className={"text-xl ipadmini:text-2xl laptop:text-2xl font-normal text-center"}>
-                            {selectedBed?.availability ?? 'No availability information'}
-                        </p>
-
-                        <p className={"text-xl ipadmini:text-2xl laptop:text-3xl font-normal text-center"}>
-                            {selectedBed?.cost ?? 'No cost information'} Kč
-                        </p>
-
-                        <Link href={`../${id}/reservation/${selectedBed.id}`}>
-                            <Button2 className={"w-28 h-12 mt-2"} color={"bg-[#14803F]"}>
-                                Book
-                            </Button2>
-                        </Link>
-                    </div>
-                )}
+            {selectedBed && showMessage && !takenBedId && (
+                <div ref={messageRef}
+                     className="absolute bg-white w-[23rem] z-50 rounded-2xl shadow-2xl p-5 laptop:p-8 flex flex-col gap-1 laptop:gap-3 items-center left-1/2 md:left-auto transform -translate-x-1/2"
+                     style={
+                         isMobile
+                             ? { bottom: '-15rem', left: '50%', transform: 'translateX(-50%)' }
+                             : getMessagePosition()
+                     }>
+                    <p className={"text-xl ipadmini:text-2xl laptop:text-3xl font-normal text-center"}>
+                        The bed is free!
+                    </p>
+                    <p className={"text-xl ipadmini:text-2xl laptop:text-2xl font-normal text-center"}>
+                        {selectedBed?.availability ?? 'No availability information'}
+                    </p>
+                    <p className={"text-xl ipadmini:text-2xl laptop:text-3xl font-normal text-center"}>
+                        {selectedBed?.cost ?? 'No cost information'} Kč
+                    </p>
+                    <Link href={`../${id}/reservation/${selectedBed.id}`}>
+                        <Button2 className={"w-28 h-12 mt-2"} color={"bg-[#14803F]"}>
+                            Book
+                        </Button2>
+                    </Link>
+                </div>
+            )}
         </div>
-        // </div>
     );
 };
